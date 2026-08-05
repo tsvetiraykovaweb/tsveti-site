@@ -5,6 +5,27 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Vercel deploy triggered successfully
+
+**Status:** Empty commit `698cd83` triggered Vercel production deploy for `tsveti.raykova`. Git connection confirmed OK.
+
+### Completed
+- Confirmed Git Settings: connected to `tsvetiraykovaweb/tsveti-site`
+- Pushed empty commit to trigger deploy
+- GitHub status from vercel[bot]: **Deployment has completed** (success)
+- Dashboard: https://vercel.com/tsveti/tsveti.raykova/EU2qLuxww3AAsUdo6xiAYZEBEiuH
+
+### Note
+- Earlier push `de5501b` did not create a visible deploy immediately; empty trigger commit resolved it.
+- Yellow warning on project sidebar still unexplained — check Domains / Deployment Protection / env.
+
+### Pending
+- Confirm env vars on Vercel
+- Production public URL + disable Deployment Protection if needed
+- Supabase Auth URLs
+
+---
+
 ## 2026-08-05 — Supabase project linked; push deploy via GitHub
 
 **Status:** Supabase project `jnvbsiydahnkfpkdhkps` configured locally; `.env.local` present (not committed); push to trigger Vercel.
