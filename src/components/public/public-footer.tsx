@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { PublicContainer } from "./public-container";
-import { PUBLIC_CONSULTATION_PATH } from "@/lib/cms/public-paths";
+import {
+  PUBLIC_ABOUT_PATH,
+  PUBLIC_CONSULTATION_PATH,
+  PUBLIC_CONTACT_PATH,
+  PUBLIC_PRIVACY_PATH,
+} from "@/lib/cms/public-paths";
 
 type Props = {
   officialName: string;
@@ -19,13 +24,13 @@ export function PublicFooter({
 }: Props) {
   return (
     <footer className="mt-auto border-t border-border bg-bg-secondary">
-      <PublicContainer className="flex flex-col gap-4 py-10 sm:flex-row sm:items-start sm:justify-between">
+      <PublicContainer className="flex flex-col gap-8 py-10 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="font-heading text-xl text-primary">{officialName}</p>
           <p className="mt-1 text-sm text-text-muted">
             Спокойна естествена експертност
           </p>
-          <p className="mt-3 text-sm">
+          <p className="mt-4 text-sm">
             <Link
               href={PUBLIC_CONSULTATION_PATH}
               className="text-accent underline-offset-4 hover:underline"
@@ -34,6 +39,22 @@ export function PublicFooter({
             </Link>
           </p>
         </div>
+
+        <nav
+          className="flex flex-col gap-2 text-sm text-text-muted"
+          aria-label="Връзки в долния колонтитул"
+        >
+          <Link href={PUBLIC_ABOUT_PATH} className="hover:text-primary">
+            За Цвети
+          </Link>
+          <Link href={PUBLIC_CONTACT_PATH} className="hover:text-primary">
+            Контакти
+          </Link>
+          <Link href={PUBLIC_PRIVACY_PATH} className="hover:text-primary">
+            Политика за поверителност
+          </Link>
+        </nav>
+
         <div className="space-y-1 text-sm text-text-muted">
           {phone ? <p>{phone}</p> : null}
           {email ? (

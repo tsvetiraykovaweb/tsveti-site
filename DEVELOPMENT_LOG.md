@@ -5,6 +5,74 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — About, Contacts, Privacy + SEO (sitemap/robots)
+
+**Status:** Public About/Contact/Privacy pages live; nav/footer updated; sitemap + robots added. Admin consultation inbox already existed from prior entry.
+
+### Pre-change summary
+- Public `/`, `/uslugi/[slug]`, `/bezplatna-konsultatsia` + admin CMS + consultation admin.
+- Missing dedicated `/za-cveti`, `/kontakti`, `/politika-za-poveritelnost`, sitemap/robots.
+
+### Part 1 — Admin consultation (already shipped)
+- `/admin/consultation-requests` + `/[id]` with status updates (unchanged this pass).
+
+### Part 2 — `/za-cveti`
+- Intro, story placeholder, approach, values, qualification placeholders
+- Image slots via `CmsImageSlot`
+- CTA → `/bezplatna-konsultatsia`
+- No invented education/certificates/titles
+
+### Part 3 — `/kontakti`
+- Phone/email/social from `site_settings`
+- CTA + emergency/urgent medical disclaimer
+- Link to privacy draft
+
+### Part 4 — `/politika-za-poveritelnost`
+- Bulgarian draft privacy placeholder (form data, purpose, no sensitive medical details, legal review needed)
+- `robots: noindex` on page metadata
+
+### Part 5 — Nav / footer
+- За Цвети → `/za-cveti`; Контакти → `/kontakti`
+- Footer: За Цвети, Контакти, Политика, consultation CTA
+
+### Part 6 — SEO
+- `metadataBase` from `NEXT_PUBLIC_SITE_URL`
+- `src/app/sitemap.ts` — public routes + published services only (no `/admin`)
+- `src/app/robots.ts` — disallow `/admin`
+- Admin root layout: `robots: noindex,nofollow`
+- Page metadata on new routes; existing pages already had titles
+
+### Privacy notes
+- Consultation requests remain admin-only
+- Privacy page marked as draft / not final legal advice
+
+### Files
+- `src/app/za-cveti/page.tsx`, `kontakti/page.tsx`, `politika-za-poveritelnost/page.tsx`
+- `src/app/sitemap.ts`, `robots.ts`, `admin/layout.tsx`, `layout.tsx`
+- `src/lib/cms/public-nav.ts`, `public-paths.ts`
+- `src/components/public/public-footer.tsx`, `src/app/page.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; includes `/za-cveti`, `/kontakti`, `/politika-za-poveritelnost`, `/sitemap.xml`, `/robots.txt`
+
+### Manual checks
+1. `/admin/consultation-requests`
+2. `/za-cveti`, `/kontakti`, `/politika-za-poveritelnost`
+3. `/sitemap.xml`, `/robots.txt`
+4. Public nav: За Цвети / Контакти
+5. `/admin` disallowed / noindex
+
+### Remaining / next
+- Fill real About qualifications via CMS (no inventions)
+- Legal review of privacy draft
+- Media upload/optimization pipeline
+- Email notifications for new consultation requests
+- Optionally publish FAQ/testimonials when real content exists
+
+---
+
 ## 2026-08-05 — Admin consultation requests list/detail
 
 **Status:** Admins can list and open consultation requests and update status. Public cannot read requests (RLS + protected layout).

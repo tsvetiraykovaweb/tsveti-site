@@ -1,4 +1,4 @@
-import { publicServicePath } from "@/lib/cms/public-paths";
+import { publicServicePath, PUBLIC_ABOUT_PATH, PUBLIC_CONTACT_PATH } from "@/lib/cms/public-paths";
 
 /** Concise top-level nav labels for known service slugs (no dropdown). */
 export const NAV_SERVICE_LABELS: Record<string, string> = {
@@ -36,8 +36,8 @@ export function buildPublicNavItems(
   return [
     { href: "/", label: "Начало" },
     ...serviceItems,
-    { href: "/#about", label: "За Цвети" },
+    { href: PUBLIC_ABOUT_PATH, label: "За Цвети" },
     { href: "/#faq", label: "Въпроси" },
-    { href: "/#contact", label: "Контакти" },
+    { href: PUBLIC_CONTACT_PATH, label: "Контакти" },
   ];
 }

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getPublicHomeContent } from "@/lib/cms/public-content";
+import {
+  PUBLIC_ABOUT_PATH,
+  PUBLIC_CONTACT_PATH,
+} from "@/lib/cms/public-paths";
 import { PublicContainer } from "@/components/public/public-container";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
@@ -102,6 +107,14 @@ export default async function HomePage() {
                 className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-text-muted [&_p]:mb-4"
                 dangerouslySetInnerHTML={{ __html: home.introHtml }}
               />
+              <p className="mt-6 text-sm">
+                <Link
+                  href={PUBLIC_ABOUT_PATH}
+                  className="text-accent underline-offset-4 hover:underline"
+                >
+                  Повече за Цвети
+                </Link>
+              </p>
             </div>
             <CmsImageSlot image={home.aboutImage} />
           </PublicContainer>
@@ -172,6 +185,14 @@ export default async function HomePage() {
                 <p>Контактните данни ще бъдат добавени от настройките.</p>
               ) : null}
             </div>
+            <p className="mt-6 text-sm">
+              <Link
+                href={PUBLIC_CONTACT_PATH}
+                className="text-accent underline-offset-4 hover:underline"
+              >
+                Към страница Контакти
+              </Link>
+            </p>
           </PublicContainer>
         </section>
       </main>

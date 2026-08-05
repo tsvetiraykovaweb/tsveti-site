@@ -4,6 +4,10 @@ export const PUBLIC_USLUGI_BASE = "/uslugi";
 /** Public consultation request form (BG transliteration). */
 export const PUBLIC_CONSULTATION_PATH = "/bezplatna-konsultatsia";
 
+export const PUBLIC_ABOUT_PATH = "/za-cveti";
+export const PUBLIC_CONTACT_PATH = "/kontakti";
+export const PUBLIC_PRIVACY_PATH = "/politika-za-poveritelnost";
+
 const LEGACY_CONSULTATION_HREFS = new Set([
   "#consultation",
   "/#consultation",
@@ -30,4 +34,11 @@ export function normalizePublicCtaHref(
     return PUBLIC_CONSULTATION_PATH;
   }
   return trimmed;
+}
+
+/** Absolute site origin without trailing slash. */
+export function getSiteOrigin(): string {
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
+  return raw.replace(/\/$/, "");
 }

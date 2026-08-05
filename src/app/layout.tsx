@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { brand } from "@/lib/brand";
+import { getSiteOrigin } from "@/lib/cms/public-paths";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -18,6 +19,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteOrigin()),
   title: {
     default: brand.officialName,
     template: `%s · ${brand.officialName}`,
