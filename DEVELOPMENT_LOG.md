@@ -5,6 +5,30 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Migration applied + first admin confirmed
+
+**Status:** Cloud Supabase schema applied; first admin user created and login verified by user (“готово”).
+
+### Confirmed by user
+- SQL migration ran successfully (after order fix).
+- Auth user + `admin_profiles` row created.
+- Admin login flow works end-to-end.
+
+### Still pending (product)
+- Full CMS CRUD UI
+- Public marketing pages driven by CMS
+- Confirm Vercel env vars match `.env.local` (if not already)
+- Supabase Auth redirect URLs for production domain
+
+### Next recommended step
+1. Double-check Vercel Environment Variables + Auth URL config for production.
+2. Begin CMS seed + editors (site_settings / pages) OR public site shell — pick based on priority.
+
+### Checks this entry
+- No code changes; documentation/status only.
+
+---
+
 ## 2026-08-05 — Fix migration order: create admin_profiles before is_admin()
 
 **Status:** Migration SQL failed in Dashboard because `is_admin()` referenced `admin_profiles` before the table existed. Order fixed in the same migration file.
