@@ -62,11 +62,15 @@ Requires env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 
 ## Homepage / About image slots
 
-Hero and about slots on `/` and `/za-cveti` still read optional
-`page_sections` keys `hero_image` / `about_image` (JSON with `image_path` /
-`path` / `src`). There is **no** Site Settings field for these yet — set the
-section JSON in Supabase (or a future pages editor) to a library path such as
-`media/…/w1200.webp`. Documented deliberately instead of a awkward settings hack.
+Hero and about slots on `/` read:
+
+1. Dedicated published sections `hero_image` / `about_image` (JSON `image_path` + `image_alt`)
+2. Fallback: `image_path` embedded in `hero_supporting` / `intro` content
+
+Edit via `/admin/pages` → page slug **`home`** (same section editor as other pages).
+Seed helpers: `supabase/seed/005_home_image_sections.sql`.
+
+Service cards on the homepage also show `services.image_path` when set.
 
 ## Public fallbacks
 

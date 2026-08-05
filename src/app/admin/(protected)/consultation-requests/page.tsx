@@ -1,22 +1,50 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import {
+  ADMIN_CONSULTATION_STATUSES,
   CONSULTATION_STATUS_LABELS,
   CONTACT_METHOD_ADMIN_LABELS,
   formatConsultationDate,
+  isConsultationStatus,
   previewMessage,
   type ConsultationRequestListItem,
 } from "@/lib/consultations/admin";
+import type { ConsultationStatus } from "@/types/database";
 
-export default async function AdminConsultationRequestsPage() {
+type PageProps = {
+  searchParams: Promise<{ status?: string; q?: string }>;
+};
+
+export default async function AdminConsultationRequestsPage({
+  searchParams,
+}: PageProps) {
+  const params = await searchParams;
+  const statusFilter = params.status?.trim() || "";
+  const q = params.q?.trim() || "";
+
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("consultation_requests")
     .select(
       "id, created_at, name, phone, email, service_interest, preferred_contact_method, status, message",
     )
     .order("created_at", { ascending: false });
 
+  if (statusFilter && isConsultationStatus(statusFilter)) {
+    query = query.eq("status", statusFilter);
+  }
+
+  if (q) {
+    // PostgREST or() filter — ilike on contact fields only (no message search).
+    const escaped = q.replace(/[%_,]/g, "");
+    if (escaped) {
+      query = query.or(
+        `name.ilike.%${escaped}%,phone.ilike.%${escaped}%,email.ilike.%${escaped}%`,
+      );
+    }
+  }
+
+  const { data, error } = await query;
   const requests = (data ?? []) as ConsultationRequestListItem[];
 
   return (
@@ -33,8 +61,65 @@ export default async function AdminConsultationRequestsPage() {
       <h1 className="font-heading text-3xl text-primary">Заявки за консултация</h1>
       <p className="mt-2 max-w-2xl text-text-muted">
         Частни заявки от публичната форма. Не споделяйте съдържанието извън
-        админ панела. Изтриване и имейл известия не са включени в тази стъпка.
+        админ панела. Сортирани по най-нови.
       </p>
+
+      <form
+        method="get"
+        className="mt-6 flex flex-col gap-3 border border-border bg-bg px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end"
+      >
+        <div className="min-w-[12rem] flex-1">
+          <label
+            htmlFor="q"
+            className="mb-1 block text-sm text-text-muted"
+          >
+            Търсене (име / телефон / имейл)
+          </label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            defaultValue={q}
+            className="w-full border border-border bg-bg px-3 py-2 text-sm text-text outline-none focus:border-primary"
+            placeholder="напр. Иванова"
+          />
+        </div>
+        <div className="min-w-[10rem]">
+          <label
+            htmlFor="status"
+            className="mb-1 block text-sm text-text-muted"
+          >
+            Статус
+          </label>
+          <select
+            id="status"
+            name="status"
+            defaultValue={statusFilter}
+            className="w-full border border-border bg-bg px-3 py-2 text-sm text-text outline-none focus:border-primary"
+          >
+            <option value="">Всички</option>
+            {ADMIN_CONSULTATION_STATUSES.map((value) => (
+              <option key={value} value={value}>
+                {CONSULTATION_STATUS_LABELS[value as ConsultationStatus]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          type="submit"
+          className="bg-primary px-4 py-2 text-sm font-medium text-sage hover:opacity-90"
+        >
+          Филтрирай
+        </button>
+        {statusFilter || q ? (
+          <Link
+            href="/admin/consultation-requests"
+            className="px-3 py-2 text-sm text-text-muted underline-offset-4 hover:underline"
+          >
+            Изчисти
+          </Link>
+        ) : null}
+      </form>
 
       {error ? (
         <p className="mt-6 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
@@ -44,11 +129,17 @@ export default async function AdminConsultationRequestsPage() {
 
       {!error && requests.length === 0 ? (
         <div className="mt-8 space-y-3 rounded border border-border bg-bg px-4 py-5 text-sm text-text-muted">
-          <p>Няма постъпили заявки.</p>
           <p>
-            Изпратете тестова заявка от{" "}
-            <code>/bezplatna-konsultatsia</code>, за да се появи тук.
+            {statusFilter || q
+              ? "Няма заявки за този филтър."
+              : "Няма постъпили заявки."}
           </p>
+          {!statusFilter && !q ? (
+            <p>
+              Изпратете тестова заявка от{" "}
+              <code>/bezplatna-konsultatsia</code>, за да се появи тук.
+            </p>
+          ) : null}
         </div>
       ) : null}
 

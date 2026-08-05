@@ -5,6 +5,68 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Production-readiness pack (home images, email, QA)
+
+**Status:** Homepage image sections wired through existing Pages CMS; optional Resend notify on consultation submit; admin request filters; launch checklist; safety scan clean for public copy.
+
+### Homepage images
+- `/` already used `CmsImageSlot` for hero/about
+- Loader now resolves `hero_image` / `about_image` sections, with fallbacks from `hero_supporting` / `intro` `image_path`
+- Seed `005_home_image_sections.sql` creates empty image sections on `home`
+- Service cards show optional `services.image_path` thumbnails (placeholders if empty)
+- Edit images via `/admin/pages` → slug `home` (no duplicate editor)
+
+### Email notifications
+- `src/lib/consultations/notify.ts` + hook in `submitConsultationRequest`
+- Env: `RESEND_API_KEY`, `CONSULTATION_NOTIFY_TO`, `CONSULTATION_NOTIFY_FROM`
+- If unset/misconfigured → form still succeeds; email skipped
+- Email body: name, phone, email, service, contact preference + admin link (no form message / health details)
+- Dependency: `resend`
+
+### Admin consultation
+- Filters: status + search (name/phone/email); newest-first sort kept
+
+### Docs
+- `docs/launch-checklist.md`
+- `.env.example` updated
+- `docs/media-pipeline.md` homepage image notes
+- `supabase/seed/README.md` includes `005`
+
+### Safety scan
+- `Райнова` only in corrective seed/docs (intentional)
+- No `Райново` / medical claim phrases in public app copy
+- Historical DEVELOPMENT_LOG entries left unchanged
+
+### Files
+- `src/lib/cms/public-content.ts`, `src/components/public/service-card.tsx`
+- `src/lib/consultations/notify.ts`, `submit.ts`
+- `src/app/admin/(protected)/consultation-requests/page.tsx`
+- `src/app/admin/(protected)/pages/page.tsx`
+- `supabase/seed/005_home_image_sections.sql`
+- `docs/launch-checklist.md`, `docs/media-pipeline.md`, `.env.example`
+- `package.json` / lockfile (`resend`)
+- `DEVELOPMENT_LOG.md`
+
+### Env vars needed
+- Existing Supabase + site URL
+- Optional: `RESEND_API_KEY`, `CONSULTATION_NOTIFY_TO`, `CONSULTATION_NOTIFY_FROM`
+
+### Commands
+- `npm run lint` — pass
+- `npm run build` — pass
+
+### Manual checks
+1. Run `005_home_image_sections.sql`; set paths on home `hero_image` / `about_image` via admin Pages
+2. Submit consultation without Resend → still saves
+3. With Resend env → email arrives (no message body)
+4. Filter requests by status / search
+5. Walk `docs/launch-checklist.md`
+
+### Next step
+- Legal review of privacy draft; configure production Resend domain; fill real About qualifications via CMS.
+
+---
+
 ## 2026-08-05 — Page Content CMS (`/admin/pages`)
 
 **Status:** Admin can edit `pages` + `page_sections`. Public `/za-cveti`, `/kontakti`, `/politika-za-poveritelnost` read published CMS content with safe fallbacks. Homepage still uses existing home sections.

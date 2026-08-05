@@ -301,6 +301,13 @@ function sectionImagePath(content: unknown): string | null {
   return typeof path === "string" && path.trim() ? path.trim() : null;
 }
 
+function sectionImageAlt(content: unknown): string {
+  if (!content || typeof content !== "object") return "";
+  const obj = content as Record<string, unknown>;
+  const alt = obj.image_alt ?? obj.alt;
+  return typeof alt === "string" ? alt.trim() : "";
+}
+
 /**
  * Loads published homepage content from Supabase.
  * Falls back to brand defaults when env/DB content is missing.
@@ -387,8 +394,14 @@ export async function getPublicHomeContent(): Promise<PublicHomeContent> {
 
     if (sections && sections.length > 0) {
       const map = new Map(sections.map((s) => [s.key, s.content]));
-      const heroPath = sectionImagePath(map.get("hero_image"));
-      const aboutPath = sectionImagePath(map.get("about_image"));
+      // Dedicated image sections, with fallbacks from intro / hero_supporting JSON.
+      const heroPath =
+        sectionImagePath(map.get("hero_image")) ||
+        sectionImagePath(map.get("hero_supporting")) ||
+        sectionImagePath(map.get("hero_headline"));
+      const aboutPath =
+        sectionImagePath(map.get("about_image")) ||
+        sectionImagePath(map.get("intro"));
       const [heroMeta, aboutMeta] = await Promise.all([
         resolveMediaMeta(heroPath),
         resolveMediaMeta(aboutPath),
@@ -408,6 +421,8 @@ export async function getPublicHomeContent(): Promise<PublicHomeContent> {
           path: heroPath,
           alt:
             heroMeta.alt ||
+            sectionImageAlt(map.get("hero_image")) ||
+            sectionImageAlt(map.get("hero_supporting")) ||
             `Начална визуализация — ${settings.official_name || brand.officialName}`,
           width: heroMeta.width,
           height: heroMeta.height,
@@ -416,6 +431,8 @@ export async function getPublicHomeContent(): Promise<PublicHomeContent> {
           path: aboutPath,
           alt:
             aboutMeta.alt ||
+            sectionImageAlt(map.get("about_image")) ||
+            sectionImageAlt(map.get("intro")) ||
             `За ${settings.display_name || brand.displayName} — визуал`,
           width: aboutMeta.width,
           height: aboutMeta.height,

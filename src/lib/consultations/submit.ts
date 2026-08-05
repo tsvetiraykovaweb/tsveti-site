@@ -117,5 +117,21 @@ export async function submitConsultationRequest(
     };
   }
 
+  // Best-effort notify — never fail the public form if email is misconfigured.
+  try {
+    const { notifyConsultationRequest } = await import(
+      "@/lib/consultations/notify"
+    );
+    await notifyConsultationRequest({
+      name,
+      phone,
+      email: email || null,
+      service_interest,
+      preferred_contact_method: mapContactMethod(preferred),
+    });
+  } catch {
+    // Intentionally empty — form success must not depend on email.
+  }
+
   return { ok: true };
 }

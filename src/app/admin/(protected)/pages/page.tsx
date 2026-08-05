@@ -29,6 +29,9 @@ export default async function AdminPagesListPage() {
       <p className="mt-2 max-w-2xl text-text-muted">
         Редакция на заглавия, SEO и секции (`page_sections`). Публичните
         маршрути четат публикувани страници/секции с безопасни fallback-и.
+        За началната страница (slug <code>home</code>) ползвайте секции{" "}
+        <code>hero_image</code> и <code>about_image</code> с път от медия
+        библиотеката.
       </p>
 
       {error ? (

@@ -8,7 +8,8 @@ If older seed data used **Райнова**, apply `002_fix_raykova.sql` after `0
 
 CTA URLs: `003_consultation_cta_urls.sql`  
 Page Content CMS (About/Contact/Privacy): `004_page_content_cms.sql`  
-Media caption column: `supabase/migrations/20260805180000_media_assets_caption.sql`
+Media caption column: `supabase/migrations/20260805180000_media_assets_caption.sql`  
+Home image slots: `005_home_image_sections.sql`
 
 ## Files
 
@@ -16,6 +17,7 @@ Media caption column: `supabase/migrations/20260805180000_media_assets_caption.s
 - `002_fix_raykova.sql` — name correction
 - `003_consultation_cta_urls.sql` — CTA path patch
 - `004_page_content_cms.sql` — `za-cveti` / `kontakti` / `politika-za-poveritelnost` pages + sections
+- `005_home_image_sections.sql` — `home` sections `hero_image` / `about_image`
 
 ## Prerequisites
 
