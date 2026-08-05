@@ -1,6 +1,10 @@
 # Seed content
 
-Initial editable CMS data for **Цветелина Райнова** / display name **Цвети**.
+Initial editable CMS data for **Цветелина Райкова** / display name **Цвети**.
+
+## Corrections
+
+If older seed data used **Райнова**, apply `002_fix_raykova.sql` after `001_initial_content.sql`.
 
 ## File
 

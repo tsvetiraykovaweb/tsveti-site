@@ -40,8 +40,8 @@ Flexible key-value or typed columns. Suggested keys / columns:
 
 | Key / column           | Example |
 | ---------------------- | ------- |
-| `display_name`         | Цвети / Цветелина Райнова |
-| `official_name`        | Цветелина Райнова |
+| `display_name`         | Цвети / Цветелина Райкова |
+| `official_name`        | Цветелина Райкова |
 | `tagline`              | short brand line |
 | `phone`                | |
 | `email`                | |

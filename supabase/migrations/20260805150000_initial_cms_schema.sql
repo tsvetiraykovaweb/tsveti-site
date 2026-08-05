@@ -1,5 +1,5 @@
 -- Initial CMS schema: tables, updated_at triggers, RLS, storage bucket
--- Project: Цветелина Райнова / tsveti-site
+-- Project: Цветелина Райкова / tsveti-site
 -- Apply via: npx supabase db push  OR  Supabase Dashboard → SQL Editor
 
 -- Extensions

@@ -8,7 +8,7 @@ import {
 import { SiteSettingsForm } from "./site-settings-form";
 
 const emptyValues: SiteSettingsFormValues = {
-  official_name: "Цветелина Райнова",
+  official_name: "Цветелина Райкова",
   display_name: "Цвети",
   phone: "",
   email: "",
@@ -16,7 +16,7 @@ const emptyValues: SiteSettingsFormValues = {
   primary_cta_url: "/#consultation",
   social_instagram: "",
   social_facebook: "",
-  seo_title: "Цветелина Райнова",
+  seo_title: "Цветелина Райкова",
   seo_description: "",
 };
 

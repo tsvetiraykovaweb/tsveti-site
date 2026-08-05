@@ -1,4 +1,4 @@
-# Supabase schema — Цветелина Райнова CMS
+# Supabase schema — Цветелина Райкова CMS
 
 Canonical schema documentation for database, auth, RLS, and storage.  
 SQL source of truth: `supabase/migrations/20260805150000_initial_cms_schema.sql`
@@ -18,7 +18,7 @@ SQL source of truth: `supabase/migrations/20260805150000_initial_cms_schema.sql`
 | Leads | `consultation_requests` |
 | Files | Storage bucket `site-assets` |
 
-Official name: **Цветелина Райнова**. Display name is editable via `site_settings` (and `src/lib/brand.ts` until CMS is wired).
+Official name: **Цветелина Райкова**. Display name is editable via `site_settings` (and `src/lib/brand.ts` until CMS is wired).
 
 ---
 
@@ -237,7 +237,7 @@ INSERT INTO public.admin_profiles (id, email, full_name, is_active)
 VALUES (
   'PASTE-USER-UUID-HERE',
   'admin@example.com',
-  'Цветелина Райнова',
+  'Цветелина Райкова',
   true
 );
 ```

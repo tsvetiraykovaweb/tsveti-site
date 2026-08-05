@@ -1,6 +1,6 @@
-# Цветелина Райнова — Website
+# Цветелина Райкова — Website
 
-Production-ready foundation for the personal/professional site of **Цветелина Райнова**.
+Production-ready foundation for the personal/professional site of **Цветелина Райкова**.
 
 Stack: Next.js (App Router) · TypeScript · Tailwind CSS · Supabase · Vercel · GitHub
 
@@ -56,7 +56,7 @@ Brand direction: *Спокойна естествена експертност*
 
 ## Brand display name
 
-Official name is always **Цветелина Райнова**. Short display name (e.g. „Цвети“) is configured in `src/lib/brand.ts` via `displayName`.
+Official name is always **Цветелина Райкова**. Short display name (e.g. „Цвети“) is configured in `src/lib/brand.ts` via `displayName`.
 
 ## Admin routes
 
@@ -85,7 +85,7 @@ Official name is always **Цветелина Райнова**. Short display nam
    VALUES (
      'PASTE-USER-UUID-HERE',
      'admin@example.com',
-     'Цветелина Райнова',
+     'Цветелина Райкова',
      true
    );
    ```
@@ -108,6 +108,16 @@ In the Vercel project (**Settings → Environment Variables**), set for Producti
 Also set Supabase **Authentication → URL Configuration** Site URL + Redirect URLs for localhost and the Vercel domain.
 
 Framework Preset: **Next.js**. Root Directory: **`./`**.
+
+## Seed content
+
+See `supabase/seed/README.md`.
+
+If the first seed was applied with the old spelling **Райнова**, run:
+
+`supabase/seed/002_fix_raykova.sql`
+
+in the Supabase SQL Editor to update existing rows to **Райкова**.
 
 ## Documentation
 

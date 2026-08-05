@@ -1,7 +1,48 @@
-# Development Log — Цветелина Райнова
+# Development Log — Цветелина Райкова
 
 Shared project memory for Cursor / Codex / developers.  
 **Convention:** newest entries at the **top**. Append a new dated entry after every meaningful change; do not rewrite history.
+
+---
+
+## 2026-08-05 — Name correction to Цветелина Райкова + CMS polish
+
+**Status:** Official name corrected everywhere in source/docs/seed. Testimonials editor already existed — polished admin dashboard CMS status instead.
+
+### Name correction
+| From | To |
+| ---- | -- |
+| Цветелина Райнова | **Цветелина Райкова** |
+| Informal display | **Цвети** (`brand.displayName`) |
+| package.json name | `cvetelina-raykova` (npm package only; GitHub/Vercel/Supabase project names unchanged) |
+
+Historical log mentions of deleted `vemidi-dev/cvetelina-raynova` repo/URLs left as factual history.
+
+### Supabase data patch
+- Added `supabase/seed/002_fix_raykova.sql` — run in SQL Editor to update already-seeded rows.
+- Seed `001` source also updated for future re-runs.
+
+### CMS polish (testimonials already shipped)
+- Dashboard: CMS status list for settings / services / FAQ / testimonials
+- Pre-deploy checklist note including name patch
+- Nav already includes all sections
+
+### Files changed (high level)
+- `src/lib/brand.ts`, admin UI defaults, seed, docs, README, migration comment
+- `supabase/seed/002_fix_raykova.sql` (new)
+- `src/app/admin/(protected)/page.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` / `npm run build` — this pass
+
+### Manual checks
+1. Run `002_fix_raykova.sql` in Supabase.
+2. `/admin/site-settings` → official name shows Райкова (or save after patch).
+3. Spot-check services SEO titles / homepage section HTML.
+
+### Next step
+- Public site shell reading CMS content, or media upload.
 
 ---
 
@@ -196,7 +237,7 @@ Slug is editable; routing by UUID avoids broken edit URLs after rename. Schema h
 
 ### Part 2 — Seed
 - `supabase/seed/001_initial_content.sql` + `supabase/seed/README.md`
-- Seeds: site_settings (official Цветелина Райнова / display Цвети), pages, homepage sections, 4 services, FAQ/testimonial placeholders
+- Seeds: site_settings (official Цветелина Райкова / display Цвети), pages, homepage sections, 4 services, FAQ/testimonial placeholders
 - **Not auto-applied** — user runs in SQL Editor
 
 ### Part 3 — Site Settings editor
@@ -807,7 +848,7 @@ Evidence:
 ### Summary of completed work
 - Confirmed target folder was empty, then scaffolded Next.js App Router + TypeScript + Tailwind CSS v4.
 - Installed `@supabase/supabase-js` and `@supabase/ssr`.
-- Added brand config with official name **Цветелина Райнова** and configurable `displayName`.
+- Added brand config with official name **Цветелина Райкова** and configurable `displayName`.
 - Applied brand design tokens and fonts (Cormorant Garamond headings, Manrope body).
 - Prepared SSR-compatible Supabase clients (browser / server / middleware refresh / server-only service role).
 - Added placeholder routes: `/`, `/admin`, `/admin/login`.

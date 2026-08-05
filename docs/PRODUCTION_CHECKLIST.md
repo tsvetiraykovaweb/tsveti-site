@@ -1,4 +1,4 @@
-# Production checklist — Цветелина Райнова
+# Production checklist — Цветелина Райкова
 
 Quick readiness check before relying on production admin login / CMS.
 

@@ -1,4 +1,4 @@
-# Implementation plan — Цветелина Райнова
+# Implementation plan — Цветелина Райкова
 
 Short roadmap after this initial setup. Do not treat as a full product spec.
 
@@ -47,7 +47,7 @@ Short roadmap after this initial setup. Do not treat as a full product spec.
 
 ## Conventions
 
-- Official name: **Цветелина Райнова**; short label via `brand.displayName`
+- Official name: **Цветелина Райкова**; short label via `brand.displayName`
 - Locale default: `bg`
 - Design direction: спокойна естествена експертност — use existing CSS tokens
 - Prefer Server Components; Client Components only for interactive admin forms

@@ -4,13 +4,13 @@
  */
 export const brand = {
   /** Official full name — use in legal, SEO title defaults, formal contexts */
-  officialName: "Цветелина Райнова",
+  officialName: "Цветелина Райкова",
 
   /**
    * Short display name used in nav, hero, informal copy.
    * Change this when the site should prefer “Цвети” or another short form.
    */
-  displayName: "Цветелина Райнова",
+  displayName: "Цвети",
 
   /** Brand direction tagline (internal / design reference) */
   direction: "Спокойна естествена експертност",
