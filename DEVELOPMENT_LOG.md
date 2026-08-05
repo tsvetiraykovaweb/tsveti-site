@@ -5,6 +5,46 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Admin FAQ CMS editor
+
+**Status:** FAQ list / create / edit implemented. Schema has no page/service FK — uses `category` + `is_published`.
+
+### Pre-change summary
+- Seed executed; site-settings + services editors exist.
+- `faqs`: question, answer, category, sort_order, is_published.
+
+### Implemented
+- `/admin/faqs` — list ordered by category, then sort_order
+- `/admin/faqs/new` — create
+- `/admin/faqs/[id]` — edit
+- Validation: question, answer required; sort_order numeric
+- Soft unpublish (no hard delete)
+- Empty state + nav links
+- Session + RLS only
+
+### Manual checks
+1. `/admin/faqs` — expect 3 seeded items (category „Общи“, unpublished)
+2. Edit one → save → success
+3. Create new → redirects to edit
+4. „Отпубликувай“ when published
+
+### Files
+- `src/lib/cms/faqs.ts`
+- `src/app/admin/(protected)/faqs/**`
+- `layout.tsx`, `page.tsx`, `README.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed
+
+### Blockers
+- None for admin FAQ CRUD against current schema.
+
+### Next step
+- Testimonials editor, or public site reading published FAQs/services/settings.
+
+---
+
 ## 2026-08-05 — Seed confirmed executed; Services editor verified/docs polish
 
 **Status:** User confirmed seed SQL executed in Supabase. Services CMS editor already shipped (`/admin/services`, `/admin/services/[id]`); polish + log update this pass.

@@ -21,13 +21,20 @@ export default function AdminDashboardPage() {
         >
           Услуги
         </Link>
+        <Link
+          href="/admin/faqs"
+          className="text-primary underline-offset-4 hover:underline"
+        >
+          Въпроси (FAQ)
+        </Link>
       </nav>
 
       <ul className="mt-8 list-inside list-disc text-sm text-text-muted">
         <li>Вход / изход / admin_profiles — активни</li>
         <li>Site settings — активен</li>
-        <li>Услуги — активен редактор</li>
-        <li>FAQ, отзиви, публични страници — предстоят</li>
+        <li>Услуги — активен</li>
+        <li>FAQ — активен</li>
+        <li>Отзиви, публични страници — предстоят</li>
       </ul>
     </section>
   );
