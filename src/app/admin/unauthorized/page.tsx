@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminLogoutButton } from "@/components/admin/logout-button";
 
 /**
  * Shown when a user is authenticated but not listed in admin_profiles.
@@ -13,12 +14,15 @@ export default function AdminUnauthorizedPage() {
         <code className="text-sm">admin_profiles</code> могат да управляват
         сайта.
       </p>
-      <Link
-        href="/admin/login"
-        className="mt-8 text-accent underline-offset-4 hover:underline"
-      >
-        Към вход
-      </Link>
+      <div className="mt-8 flex flex-col items-center gap-3">
+        <AdminLogoutButton />
+        <Link
+          href="/admin/login"
+          className="text-sm text-accent underline-offset-4 hover:underline"
+        >
+          Към вход
+        </Link>
+      </div>
     </main>
   );
 }

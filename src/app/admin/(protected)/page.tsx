@@ -3,12 +3,13 @@ export default function AdminDashboardPage() {
     <section>
       <h1 className="font-heading text-3xl text-primary">Табло</h1>
       <p className="mt-2 text-text-muted">
-        Тук ще се управляват текстове, услуги, FAQ, отзиви, SEO и медия.
+        Успешен вход. CMS редакторите ще бъдат добавени в следващите етапи.
       </p>
       <ul className="mt-6 list-inside list-disc text-sm text-text-muted">
-        <li>Auth + admin_profiles проверка — активни</li>
-        <li>CMS редактори — предстоят</li>
-        <li>Заявки за консултация — таблица + server action готови</li>
+        <li>Email/password вход — активен</li>
+        <li>admin_profiles проверка — активна</li>
+        <li>Изход — в горния десен ъгъл</li>
+        <li>CMS CRUD — предстои</li>
       </ul>
     </section>
   );

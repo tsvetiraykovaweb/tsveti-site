@@ -249,7 +249,7 @@ SELECT * FROM public.admin_profiles;
 SELECT public.is_admin(); -- run while that user is authenticated in a session, or test via app
 ```
 
-6. Log in at `/admin/login` (once login UI is wired to `supabase.auth.signInWithPassword`).
+6. Log in at `/admin/login` with that email and password.
 
 ---
 

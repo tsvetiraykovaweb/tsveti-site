@@ -5,6 +5,55 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Admin login/logout UI + manual migration guide
+
+**Status:** Real `/admin/login` (email/password) and logout implemented. Cloud migration still **manual / pending** (not applied by agent).
+
+**Latest update:** 2026-08-05 ~16:05 UTC+3
+
+### Already in place before this step
+- Migration file `supabase/migrations/20260805150000_initial_cms_schema.sql`
+- `src/lib/auth/admin.ts` + protected admin layout gate
+- SSR/browser Supabase clients; login page was placeholder
+
+### Implemented
+- Client login form: `signInWithPassword` → success message → redirect `/admin` + refresh
+- Loading / error / success UI states
+- Login page redirects existing admins to `/admin`
+- Server action `logoutAdmin` + logout button in protected header
+- Logout also on `/admin/unauthorized`
+
+### Files created or modified
+- `src/app/admin/login/login-form.tsx` (new)
+- `src/app/admin/login/page.tsx`
+- `src/lib/auth/actions.ts` (new)
+- `src/components/admin/logout-button.tsx` (new)
+- `src/app/admin/(protected)/layout.tsx`
+- `src/app/admin/(protected)/page.tsx`
+- `src/app/admin/unauthorized/page.tsx`
+- `docs/supabase-schema.md` (login step wording)
+
+### Migration applied?
+- **No** — still pending user action in Supabase SQL Editor (see guide in chat / docs).
+
+### First admin (manual)
+1. Apply migration SQL in Dashboard.
+2. Auth → Add user (email/password).
+3. `INSERT INTO admin_profiles …` with that UUID.
+4. Sign in at `/admin/login`.
+
+### Checks
+- `npm run lint` — passed
+- `npm run build` — passed (`/admin`, `/admin/login` dynamic)
+
+### Next recommended step
+1. User applies migration + creates first admin.
+2. Verify login → `/admin` and logout locally.
+3. Ensure Vercel env vars match `.env.local`.
+4. Then CMS CRUD screens.
+
+---
+
 ## 2026-08-05 — Supabase CMS foundation (schema, RLS, admin gate)
 
 **Status:** Database/auth/storage foundation added in repo. Migrations **not applied** to cloud Supabase yet. Full public site / CMS UI still not built.
