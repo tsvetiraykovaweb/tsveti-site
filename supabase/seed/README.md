@@ -6,9 +6,16 @@ Initial editable CMS data for **Цветелина Райкова** / display na
 
 If older seed data used **Райнова**, apply `002_fix_raykova.sql` after `001_initial_content.sql`.
 
-## File
+CTA URLs: `003_consultation_cta_urls.sql`  
+Page Content CMS (About/Contact/Privacy): `004_page_content_cms.sql`  
+Media caption column: `supabase/migrations/20260805180000_media_assets_caption.sql`
 
-`supabase/seed/001_initial_content.sql`
+## Files
+
+- `001_initial_content.sql` — base CMS seed
+- `002_fix_raykova.sql` — name correction
+- `003_consultation_cta_urls.sql` — CTA path patch
+- `004_page_content_cms.sql` — `za-cveti` / `kontakti` / `politika-za-poveritelnost` pages + sections
 
 ## Prerequisites
 
@@ -18,16 +25,16 @@ If older seed data used **Райнова**, apply `002_fix_raykova.sql` after `0
 ## Apply (manual)
 
 1. Open [Supabase SQL Editor](https://supabase.com/dashboard).
-2. Paste the full contents of `001_initial_content.sql`.
-3. **Run**.
-4. Confirm:
+2. Paste and **Run** each needed file in order.
+3. Confirm pages:
 
 ```sql
-SELECT key, value FROM public.site_settings ORDER BY key;
 SELECT slug, title, status FROM public.pages ORDER BY sort_order;
-SELECT slug, title, status FROM public.services ORDER BY sort_order;
-SELECT question, is_published FROM public.faqs ORDER BY sort_order;
-SELECT author_name, is_published FROM public.testimonials ORDER BY sort_order;
+SELECT p.slug, s.key, s.is_published
+FROM public.page_sections s
+JOIN public.pages p ON p.id = s.page_id
+WHERE p.slug IN ('za-cveti', 'kontakti', 'politika-za-poveritelnost', 'home')
+ORDER BY p.slug, s.sort_order;
 ```
 
 ## What is seeded
@@ -35,8 +42,8 @@ SELECT author_name, is_published FROM public.testimonials ORDER BY sort_order;
 | Area | Notes |
 | ---- | ----- |
 | `site_settings` | official/display name, phone, email, CTA, social_links, SEO defaults |
-| `pages` | home (published), services (published), about/faq/contact (draft) |
-| `page_sections` | homepage hero / intro / CTA placeholders |
+| `pages` | home, services; plus `za-cveti`, `kontakti`, `politika-za-poveritelnost` (via 004) |
+| `page_sections` | homepage hero/intro/CTA; About/Contact/Privacy starters (004) |
 | `services` | Биорезонанс, От тревога към спокойствие, Хранителна програма, Избери себе си |
 | `faqs` | 3 unpublished placeholders |
 | `testimonials` | 2 unpublished placeholders (not real quotes) |

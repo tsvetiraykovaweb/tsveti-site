@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { brand } from "@/lib/brand";
 import { getPublicSiteChrome } from "@/lib/cms/public-content";
+import { getPublishedCmsPage } from "@/lib/cms/public-pages";
 import {
   PUBLIC_CONSULTATION_PATH,
   PUBLIC_PRIVACY_PATH,
@@ -11,18 +12,30 @@ import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { CtaLink } from "@/components/public/cta-link";
 
-export const metadata: Metadata = {
-  title: "Контакти",
-  description: `Свържете се с ${brand.officialName} за кратък опознавателен разговор и насоки.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPublishedCmsPage("kontakti");
+  return {
+    title: page?.seo_title || page?.title || "Контакти",
+    description:
+      page?.seo_description ||
+      `Свържете се с ${brand.officialName} за кратък опознавателен разговор и насоки.`,
+  };
+}
 
 export default async function ContactPage() {
-  const chrome = await getPublicSiteChrome();
+  const [chrome, page] = await Promise.all([
+    getPublicSiteChrome(),
+    getPublishedCmsPage("kontakti"),
+  ]);
   const { settings, social, ctaHref, ctaLabel, navItems } = chrome;
   const displayName = settings.display_name || brand.displayName;
   const officialName = settings.official_name || brand.officialName;
   const hasContact = Boolean(settings.phone?.trim() || settings.email?.trim());
   const hasSocial = Boolean(social.instagram?.trim() || social.facebook?.trim());
+  const by = page?.byKey ?? {};
+  const intro = by.intro;
+  const cta = by.cta;
+  const disclaimer = by.disclaimer;
 
   return (
     <>
@@ -44,11 +57,11 @@ export default async function ContactPage() {
               <span className="text-primary">Контакти</span>
             </p>
             <h1 className="mt-6 font-heading text-4xl font-medium text-primary md:text-5xl">
-              Контакти
+              {intro?.fields.heading || page?.title || "Контакти"}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-muted md:text-lg">
-              Свържете се с {displayName} за уточняване на следваща стъпка.
-              За предпочитане е да запазите безплатна консултация през формата.
+              {intro?.plainBody ||
+                `Свържете се с ${displayName} за уточняване на следваща стъпка. За предпочитане е да запазите безплатна консултация през формата.`}
             </p>
           </PublicContainer>
         </section>
@@ -127,16 +140,23 @@ export default async function ContactPage() {
 
             <div className="border border-border bg-bg-secondary px-5 py-6">
               <h2 className="font-heading text-2xl text-primary">
-                Безплатна консултация
+                {cta?.fields.heading || "Безплатна консултация"}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-text-muted">
-                Оставете кратки данни през формата. Това е опознавателен
-                разговор — ще обсъдим коя посока е подходяща, с индивидуален
-                подход и спокойни насоки.
+                {cta?.plainBody ||
+                  "Оставете кратки данни през формата. Това е опознавателен разговор — ще обсъдим коя посока е подходяща, с индивидуален подход и спокойни насоки."}
               </p>
               <div className="mt-6">
-                <CtaLink href={PUBLIC_CONSULTATION_PATH}>
-                  {ctaLabel || "Запази безплатна консултация"}
+                <CtaLink
+                  href={
+                    cta?.fields.cta_href ||
+                    PUBLIC_CONSULTATION_PATH ||
+                    ctaHref
+                  }
+                >
+                  {cta?.fields.cta_label ||
+                    ctaLabel ||
+                    "Запази безплатна консултация"}
                 </CtaLink>
               </div>
               <p className="mt-6 text-sm text-text-muted">
@@ -153,11 +173,12 @@ export default async function ContactPage() {
 
         <section className="border-t border-border bg-bg-secondary py-12">
           <PublicContainer className="max-w-3xl">
-            <h2 className="font-heading text-xl text-primary">Важна бележка</h2>
+            <h2 className="font-heading text-xl text-primary">
+              {disclaimer?.fields.heading || "Важна бележка"}
+            </h2>
             <p className="mt-3 text-sm leading-relaxed text-text-muted">
-              Формата и контактните канали не са предназначени за спешни или
-              животозастрашаващи ситуации. При спешна медицинска нужда се
-              обърнете към спешна помощ или квалифициран здравен специалист.
+              {disclaimer?.plainBody ||
+                "Формата и контактните канали не са предназначени за спешни или животозастрашаващи ситуации. При спешна медицинска нужда се обърнете към спешна помощ или квалифициран здравен специалист."}
             </p>
           </PublicContainer>
         </section>

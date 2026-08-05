@@ -4,6 +4,10 @@ import { brand } from "@/lib/brand";
 import { buildImageRef } from "@/lib/cms/media";
 import { getPublicSiteChrome } from "@/lib/cms/public-content";
 import {
+  getPublishedCmsPage,
+  sectionLines,
+} from "@/lib/cms/public-pages";
+import {
   PUBLIC_CONSULTATION_PATH,
 } from "@/lib/cms/public-paths";
 import { PublicContainer } from "@/components/public/public-container";
@@ -12,24 +16,54 @@ import { PublicFooter } from "@/components/public/public-footer";
 import { CtaLink } from "@/components/public/cta-link";
 import { CmsImageSlot } from "@/components/public/cms-image-slot";
 
-export const metadata: Metadata = {
-  title: "За Цвети",
-  description: `Запознайте се с ${brand.officialName} (${brand.displayName}) — спокоен, индивидуален подход и насоки за подкрепа.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPublishedCmsPage("za-cveti");
+  return {
+    title: page?.seo_title || page?.title || "За Цвети",
+    description:
+      page?.seo_description ||
+      `Запознайте се с ${brand.officialName} (${brand.displayName}) — спокоен, индивидуален подход и насоки за подкрепа.`,
+  };
+}
 
 export default async function AboutPage() {
-  const chrome = await getPublicSiteChrome();
-  const displayName =
-    chrome.settings.display_name || brand.displayName;
-  const officialName =
-    chrome.settings.official_name || brand.officialName;
+  const [chrome, page] = await Promise.all([
+    getPublicSiteChrome(),
+    getPublishedCmsPage("za-cveti"),
+  ]);
+  const displayName = chrome.settings.display_name || brand.displayName;
+  const officialName = chrome.settings.official_name || brand.officialName;
+  const by = page?.byKey ?? {};
 
-  const portrait = buildImageRef({
-    alt: `Портрет на ${officialName}`,
-  });
-  const storyImage = buildImageRef({
-    alt: `Визуал към историята на ${displayName}`,
-  });
+  const intro = by.intro;
+  const story = by.story;
+  const approach = by.approach;
+  const values = by.values;
+  const qualifications = by.qualifications;
+  const cta = by.cta;
+
+  const portrait =
+    intro?.image.src
+      ? intro.image
+      : buildImageRef({
+          path: intro?.fields.image_path || null,
+          alt:
+            intro?.fields.image_alt ||
+            `Портрет на ${officialName}`,
+        });
+  const storyImage =
+    story?.image.src
+      ? story.image
+      : buildImageRef({
+          path: story?.fields.image_path || null,
+          alt:
+            story?.fields.image_alt ||
+            `Визуал към историята на ${displayName}`,
+        });
+
+  const approachLines = sectionLines(approach);
+  const valuesLines = sectionLines(values);
+  const qualLines = sectionLines(qualifications);
 
   return (
     <>
@@ -51,16 +85,20 @@ export default async function AboutPage() {
                 <span className="mx-2">/</span>
                 <span className="text-primary">За Цвети</span>
               </p>
-              <h1 className="mt-6 font-heading text-4xl font-medium text-primary md:text-5xl">
-                За {displayName}
+              {intro?.fields.eyebrow ? (
+                <p className="mt-6 text-sm tracking-[0.18em] text-text-muted uppercase">
+                  {intro.fields.eyebrow}
+                </p>
+              ) : null}
+              <h1 className="mt-4 font-heading text-4xl font-medium text-primary md:text-5xl">
+                {intro?.fields.heading || `За ${displayName}`}
               </h1>
               <p className="mt-2 font-heading text-2xl text-primary/80">
                 {officialName}
               </p>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-text-muted md:text-lg">
-                Спокойна естествена експертност — индивидуален подход и ясни
-                насоки за подкрепа в ежедневието. Тук ще намерите кратък
-                преглед на начина на работа на {displayName}.
+                {intro?.plainBody ||
+                  `Спокойна естествена експертност — индивидуален подход и ясни насоки за подкрепа в ежедневието. Тук ще намерите кратък преглед на начина на работа на ${displayName}.`}
               </p>
             </div>
             <CmsImageSlot image={portrait} priority />
@@ -71,12 +109,11 @@ export default async function AboutPage() {
           <PublicContainer className="grid max-w-5xl gap-10 lg:grid-cols-2 lg:items-start">
             <div>
               <h2 className="font-heading text-2xl text-primary md:text-3xl">
-                Лична история
+                {story?.fields.heading || "Лична история"}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-text-muted">
-                [Добавете лична история] — кратък, човешки текст за пътя на{" "}
-                {displayName}, без медицински твърдения и без измислени
-                биографични детайли.
+                {story?.plainBody ||
+                  `[Добавете лична история] — кратък, човешки текст за пътя на ${displayName}, без медицински твърдения и без измислени биографични детайли.`}
               </p>
             </div>
             <CmsImageSlot image={storyImage} />
@@ -86,21 +123,19 @@ export default async function AboutPage() {
         <section className="border-y border-border bg-bg-secondary py-16">
           <PublicContainer className="max-w-3xl">
             <h2 className="font-heading text-2xl text-primary md:text-3xl">
-              Подходът на работа
+              {approach?.fields.heading || "Подходът на работа"}
             </h2>
             <ul className="mt-6 space-y-3 text-base leading-relaxed text-text-muted">
-              <li>
-                Спокоен опознавателен разговор — заедно се уточнява коя посока
-                може да е подходяща.
-              </li>
-              <li>
-                Индивидуален подход с насоки, които могат да подпомогнат по-добро
-                усещане за баланс.
-              </li>
-              <li>
-                Подкрепа според вашето темпо — без натиск и без обещания за
-                конкретни резултати.
-              </li>
+              {(approachLines.length > 0
+                ? approachLines
+                : [
+                    "Спокоен опознавателен разговор — заедно се уточнява коя посока може да е подходяща.",
+                    "Индивидуален подход с насоки, които могат да подпомогнат по-добро усещане за баланс.",
+                    "Подкрепа според вашето темпо — без натиск и без обещания за конкретни резултати.",
+                  ]
+              ).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
             </ul>
           </PublicContainer>
         </section>
@@ -108,13 +143,20 @@ export default async function AboutPage() {
         <section className="py-16">
           <PublicContainer className="max-w-3xl">
             <h2 className="font-heading text-2xl text-primary md:text-3xl">
-              Ценности
+              {values?.fields.heading || "Ценности"}
             </h2>
             <ul className="mt-6 space-y-3 text-base leading-relaxed text-text-muted">
-              <li>Уважение към личните граници и темпото на всеки човек.</li>
-              <li>Ясна и спокойна комуникация.</li>
-              <li>Честност — без преувеличени обещания.</li>
-              <li>Подкрепа чрез практически насоки, когато това е уместно.</li>
+              {(valuesLines.length > 0
+                ? valuesLines
+                : [
+                    "Уважение към личните граници и темпото на всеки човек.",
+                    "Ясна и спокойна комуникация.",
+                    "Честност — без преувеличени обещания.",
+                    "Подкрепа чрез практически насоки, когато това е уместно.",
+                  ]
+              ).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
             </ul>
           </PublicContainer>
         </section>
@@ -122,18 +164,31 @@ export default async function AboutPage() {
         <section className="border-t border-border bg-bg-secondary py-16">
           <PublicContainer className="max-w-3xl">
             <h2 className="font-heading text-2xl text-primary md:text-3xl">
-              Образование и квалификации
+              {qualifications?.fields.heading ||
+                "Образование и квалификации"}
             </h2>
-            <p className="mt-4 text-sm text-text-muted">
-              Полетата по-долу са шаблони. Попълнете ги от админ панела /
-              съдържанието, когато имате потвърдени данни. Не измисляйте
-              титли или сертификати.
-            </p>
+            {qualifications?.fields.eyebrow ? (
+              <p className="mt-4 text-sm text-text-muted">
+                {qualifications.fields.eyebrow}
+              </p>
+            ) : (
+              <p className="mt-4 text-sm text-text-muted">
+                Полетата по-долу са шаблони. Попълнете ги само с потвърдени
+                данни. Не измисляйте титли или сертификати.
+              </p>
+            )}
             <ul className="mt-6 space-y-2 text-base text-text-muted">
-              <li>[Добавете образование]</li>
-              <li>[Добавете квалификация]</li>
-              <li>[Добавете сертификат]</li>
-              <li>[Добавете професионално наименование]</li>
+              {(qualLines.length > 0
+                ? qualLines
+                : [
+                    "[Добавете образование]",
+                    "[Добавете квалификация]",
+                    "[Добавете сертификат]",
+                    "[Добавете професионално наименование]",
+                  ]
+              ).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
             </ul>
           </PublicContainer>
         </section>
@@ -142,15 +197,19 @@ export default async function AboutPage() {
           <PublicContainer className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="font-heading text-2xl text-primary md:text-3xl">
-                Готови ли сте за разговор?
+                {cta?.fields.heading || "Готови ли сте за разговор?"}
               </h2>
               <p className="mt-3 max-w-xl text-text-muted">
-                Запазете безплатна консултация — кратък опознавателен разговор,
-                в който ще обсъдим коя посока е подходяща.
+                {cta?.plainBody ||
+                  "Запазете безплатна консултация — кратък опознавателен разговор, в който ще обсъдим коя посока е подходяща."}
               </p>
             </div>
-            <CtaLink href={PUBLIC_CONSULTATION_PATH}>
-              Запази безплатна консултация
+            <CtaLink
+              href={
+                cta?.fields.cta_href || PUBLIC_CONSULTATION_PATH
+              }
+            >
+              {cta?.fields.cta_label || "Запази безплатна консултация"}
             </CtaLink>
           </PublicContainer>
         </section>

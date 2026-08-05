@@ -3,6 +3,10 @@ import Link from "next/link";
 import { brand } from "@/lib/brand";
 import { getPublicSiteChrome } from "@/lib/cms/public-content";
 import {
+  getPublishedCmsPage,
+  sectionLines,
+} from "@/lib/cms/public-pages";
+import {
   PUBLIC_CONSULTATION_PATH,
   PUBLIC_CONTACT_PATH,
 } from "@/lib/cms/public-paths";
@@ -10,16 +14,35 @@ import { PublicContainer } from "@/components/public/public-container";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 
-export const metadata: Metadata = {
-  title: "Политика за поверителност",
-  description: `Чернова на политика за поверителност за сайта на ${brand.officialName}. Изисква правна проверка преди публично стартиране.`,
-  robots: { index: false, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPublishedCmsPage("politika-za-poveritelnost");
+  return {
+    title:
+      page?.seo_title || page?.title || "Политика за поверителност",
+    description:
+      page?.seo_description ||
+      `Чернова на политика за поверителност за сайта на ${brand.officialName}. Изисква правна проверка преди публично стартиране.`,
+    robots: { index: false, follow: true },
+  };
+}
 
 export default async function PrivacyPolicyPage() {
-  const chrome = await getPublicSiteChrome();
+  const [chrome, page] = await Promise.all([
+    getPublicSiteChrome(),
+    getPublishedCmsPage("politika-za-poveritelnost"),
+  ]);
   const officialName =
     chrome.settings.official_name || brand.officialName;
+  const by = page?.byKey ?? {};
+  const intro = by.intro;
+  const dataCollected = by.data_collected;
+  const purpose = by.purpose;
+  const sensitive = by.sensitive;
+  const storage = by.storage;
+  const rights = by.rights;
+  const legalNote = by.legal_note;
+
+  const dataLines = sectionLines(dataCollected);
 
   return (
     <>
@@ -43,24 +66,25 @@ export default async function PrivacyPolicyPage() {
               <span className="text-primary">Политика за поверителност</span>
             </p>
             <p className="mt-6 inline-block border border-border bg-bg px-3 py-1 text-xs tracking-wide text-accent uppercase">
-              Чернова · правна проверка е нужна
+              {intro?.fields.eyebrow || "Чернова · правна проверка е нужна"}
             </p>
             <h1 className="mt-4 font-heading text-4xl font-medium text-primary md:text-5xl">
-              Политика за поверителност
+              {intro?.fields.heading ||
+                page?.title ||
+                "Политика за поверителност"}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-muted">
-              Този текст е предварителен шаблон за сайта на {officialName}. Не
-              представлява окончателен правен съвет и трябва да бъде прегледан
-              от специалист преди официално стартиране.
+              {intro?.plainBody ||
+                `Този текст е предварителен шаблон за сайта на ${officialName}. Не представлява окончателен правен съвет и трябва да бъде прегледан от специалист преди официално стартиране.`}
             </p>
           </PublicContainer>
         </section>
 
         <section className="py-14 md:py-16">
-          <PublicContainer className="prose-none max-w-3xl space-y-10 text-base leading-relaxed text-text-muted">
+          <PublicContainer className="max-w-3xl space-y-10 text-base leading-relaxed text-text-muted">
             <div>
               <h2 className="font-heading text-2xl text-primary">
-                Какви данни събираме
+                {dataCollected?.fields.heading || "Какви данни събираме"}
               </h2>
               <p className="mt-3">
                 Чрез формата за безплатна консултация (
@@ -73,76 +97,79 @@ export default async function PrivacyPolicyPage() {
                 ) може да се съберат:
               </p>
               <ul className="mt-3 list-disc space-y-1 pl-5">
-                <li>име</li>
-                <li>телефон</li>
-                <li>имейл (по желание)</li>
-                <li>интерес към услуга</li>
-                <li>предпочитан начин за връзка</li>
-                <li>кратко съобщение (по желание)</li>
-                <li>съгласие за обработка с цел връзка</li>
+                {(dataLines.length > 0
+                  ? dataLines
+                  : [
+                      "име",
+                      "телефон",
+                      "имейл (по желание)",
+                      "интерес към услуга",
+                      "предпочитан начин за връзка",
+                      "кратко съобщение (по желание)",
+                      "съгласие за обработка с цел връзка",
+                    ]
+                ).map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
               </ul>
             </div>
 
             <div>
               <h2 className="font-heading text-2xl text-primary">
-                Защо се събират
+                {purpose?.fields.heading || "Защо се събират"}
               </h2>
               <p className="mt-3">
-                Данните се използват единствено, за да се осъществи връзка по
-                заявката и да се уточни кратък опознавателен разговор. Не се
-                използват за медицинска диагноза или лечение.
+                {purpose?.plainBody ||
+                  "Данните се използват единствено, за да се осъществи връзка по заявката и да се уточни кратък опознавателен разговор. Не се използват за медицинска диагноза или лечение."}
               </p>
             </div>
 
             <div>
               <h2 className="font-heading text-2xl text-primary">
-                Чувствителни здравни данни
+                {sensitive?.fields.heading || "Чувствителни здравни данни"}
               </h2>
               <p className="mt-3">
-                Моля, не изпращайте през формата диагнози, лекарства,
-                резултати от изследвания, подробна здравна история или други
-                чувствителни медицински данни. Формата е за кратък контакт и
-                интерес към насоки/подкрепа — не за спешни или клинични случаи.
+                {sensitive?.plainBody ||
+                  "Моля, не изпращайте през формата диагнози, лекарства, резултати от изследвания, подробна здравна история или други чувствителни медицински данни. Формата е за кратък контакт и интерес към насоки/подкрепа — не за спешни или клинични случаи."}
               </p>
             </div>
 
             <div>
               <h2 className="font-heading text-2xl text-primary">
-                Съхранение и достъп
+                {storage?.fields.heading || "Съхранение и достъп"}
               </h2>
               <p className="mt-3">
-                Заявките се съхраняват в защитен бекенд и са видими само за
-                упълномощени администратори. Публичните страници не показват
-                съдържанието на заявките.
+                {storage?.plainBody ||
+                  "Заявките се съхраняват в защитен бекенд и са видими само за упълномощени администратори. Публичните страници не показват съдържанието на заявките."}
               </p>
             </div>
 
             <div>
               <h2 className="font-heading text-2xl text-primary">
-                Вашите права и връзка
+                {rights?.fields.heading || "Вашите права и връзка"}
               </h2>
               <p className="mt-3">
-                За въпроси относно личните данни може да се свържете през
-                страница{" "}
-                <Link
-                  href={PUBLIC_CONTACT_PATH}
-                  className="text-accent underline-offset-4 hover:underline"
-                >
-                  Контакти
-                </Link>
-                . Точните срокове, правни основания и процедури ще бъдат
-                уточнени след правна редакция.
+                {rights?.plainBody ||
+                  "За въпроси относно личните данни може да се свържете през страница Контакти. Точните срокове, правни основания и процедури ще бъдат уточнени след правна редакция."}{" "}
+                {!rights?.plainBody ? (
+                  <Link
+                    href={PUBLIC_CONTACT_PATH}
+                    className="text-accent underline-offset-4 hover:underline"
+                  >
+                    Отвори Контакти
+                  </Link>
+                ) : null}
               </p>
             </div>
 
             <div className="border border-border bg-bg-secondary px-5 py-5 text-sm">
               <p className="font-medium text-primary">
-                Важно преди публично стартиране
+                {legalNote?.fields.heading ||
+                  "Важно преди публично стартиране"}
               </p>
               <p className="mt-2">
-                Тази страница е чернова. Нужна е правна проверка и финален
-                текст, съобразен с приложимото законодателство. Дотогава не
-                третирайте съдържанието като окончателна политика.
+                {legalNote?.plainBody ||
+                  "Тази страница е чернова. Нужна е правна проверка и финален текст, съобразен с приложимото законодателство. Дотогава не третирайте съдържанието като окончателна политика."}
               </p>
             </div>
           </PublicContainer>

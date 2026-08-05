@@ -37,6 +37,12 @@ const cmsSections = [
     status: "Готов",
     note: "Качване + WebP варианти в site-assets",
   },
+  {
+    href: "/admin/pages",
+    title: "Страници",
+    status: "Готов",
+    note: "pages + page_sections (About/Contact/Privacy/Home)",
+  },
 ] as const;
 
 export default function AdminDashboardPage() {

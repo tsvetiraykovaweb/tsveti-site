@@ -5,6 +5,61 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Page Content CMS (`/admin/pages`)
+
+**Status:** Admin can edit `pages` + `page_sections`. Public `/za-cveti`, `/kontakti`, `/politika-za-poveritelnost` read published CMS content with safe fallbacks. Homepage still uses existing home sections.
+
+### Pre-change summary
+- Public pages mostly hardcoded; home already used `page_sections`.
+- Media library + services `image_path` existed.
+
+### Hardcoded text before → after
+| Page | Before | After |
+| ---- | ------ | ----- |
+| `/` | CMS sections + some chrome | unchanged (still home sections) |
+| `/za-cveti` | Fully hardcoded | CMS keys `intro/story/approach/values/qualifications/cta` + fallbacks |
+| `/kontakti` | Hardcoded + site_settings contacts | CMS `intro/cta/disclaimer` + site_settings phone/email/social |
+| `/politika-za-poveritelnost` | Hardcoded draft | CMS sections + draft fallbacks; still noindex |
+| `/uslugi`, `/bezplatna-konsultatsia` | Service/form copy | unchanged (out of scope) |
+
+### Admin
+- `/admin/pages` list; `/admin/pages/[id]` page SEO + sections list
+- `/admin/pages/[id]/sections/new` and `/sections/[sectionId]`
+- Section fields: key, type, heading, eyebrow, body, image_path (+ media pick), image_alt, CTA, sort_order, is_published
+- Nav + dashboard «Страници»
+
+### Seed / manual SQL
+- Apply `supabase/seed/004_page_content_cms.sql` in SQL Editor (not auto-applied)
+- Reminder: `20260805180000_media_assets_caption.sql` if caption not yet applied
+
+### Remaining hardcoded (intentional)
+- Layout chrome, nav labels, consultation form UI copy
+- Qualification placeholders until filled in CMS
+- Emergency disclaimer fallback if CMS missing
+- Brand direction strings as last-resort SEO fallbacks
+
+### Files
+- `src/lib/cms/pages.ts`, `public-pages.ts`
+- `src/app/admin/(protected)/pages/**`
+- `src/app/za-cveti/page.tsx`, `kontakti/page.tsx`, `politika-za-poveritelnost/page.tsx`
+- `supabase/seed/004_page_content_cms.sql`, `seed/README.md`
+- Admin layout/dashboard, `README.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; routes include `/admin/pages` and section editors
+
+### Manual checks
+1. Run `004_page_content_cms.sql`
+2. `/admin/pages` → edit `za-cveti` section + SEO
+3. Set section image path from media library
+4. Confirm `/za-cveti` updates; missing sections still fall back safely
+
+### Next step
+- Email notifications, or homepage hero/about image editing via Pages CMS (`home` sections `hero_image` / `about_image`).
+
+---
+
 ## 2026-08-05 — Admin media upload + sharp optimization
 
 **Status:** Admins can upload images at `/admin/media`; server-side sharp generates WebP variants in `site-assets`; services can set `image_path` from the library.

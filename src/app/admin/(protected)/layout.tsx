@@ -100,6 +100,12 @@ export default async function ProtectedAdminLayout({
             >
               Медия
             </Link>
+            <Link
+              href="/admin/pages"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Страници
+            </Link>
           </nav>
         </div>
         <AdminLogoutButton />
