@@ -81,9 +81,9 @@ Official name is always **Цветелина Райнова**. Short display nam
 
 Пълни стъпки: **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**
 
-Бързо:
+Бързо (с **нови** клиентски акаунти — виж `docs/DEPLOYMENT.md`):
 
 1. Попълни `.env.local` от `.env.example` (Supabase keys).
-2. Push към GitHub: `vemidi-dev/cvetelina-raynova`.
-3. Import в Vercel от GitHub; добави същите env vars.
+2. Създай GitHub repo в новия профил; `git remote add origin …` и push.
+3. Import в **нов** Vercel акаунт; добави env vars.
 4. Настрой Supabase Auth redirect URLs (localhost + Vercel domain).

@@ -1,6 +1,8 @@
 # Deployment — GitHub · Supabase · Vercel
 
-Стъпки за свързване на трите услуги за сайта на **Цветелина Райнова**.
+Стъпки за свързване на услугите за сайта на **Цветелина Райнова**.
+
+> **Важно:** Този проект е за клиент. Използвай **отделни** GitHub, Vercel и Supabase акаунти/организации — без връзка с лични vemidi профили.
 
 ## Архитектура
 
@@ -10,9 +12,17 @@ GitHub (source)  →  Vercel (build + hosting)  →  Production URL
                     Supabase (DB, Auth, Storage)
 ```
 
-- **GitHub** държи кода; push към `main` стартира deploy на Vercel.
-- **Vercel** билдва Next.js и сервира сайта.
-- **Supabase** — backend (по-късно: съдържание, auth, снимки).
+---
+
+## 0. Нови акаунти (препоръчително)
+
+| Услуга | Действие |
+| ------ | -------- |
+| **GitHub** | Нов org или user за клиента → нов repo (напр. `cvetelina-raynova`) |
+| **Vercel** | Нов team/account → import от новия GitHub repo |
+| **Supabase** | Нов проект в Supabase org за клиента |
+
+Локално: `git remote` и `.vercel` **не** трябва да сочат към vemidi акаунти.
 
 ---
 
@@ -20,13 +30,13 @@ GitHub (source)  →  Vercel (build + hosting)  →  Production URL
 
 ### 1.1 Ключове от Dashboard
 
-1. Отвори [Supabase Dashboard](https://supabase.com/dashboard) → твоят проект.
+1. [Supabase Dashboard](https://supabase.com/dashboard) → проект за Цветелина.
 2. **Settings → API**:
    - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
    - **anon public** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - **service_role** → `SUPABASE_SERVICE_ROLE_KEY` (само сървър / Vercel, никога в браузър)
+   - **service_role** → `SUPABASE_SERVICE_ROLE_KEY` (само сървър / Vercel)
 
-3. **Settings → General** → **Reference ID** (напр. `abcdefghijklmnop`) — нужен за `supabase link`.
+3. **Settings → General** → **Reference ID** — за `supabase link`.
 
 ### 1.2 Локален `.env.local`
 
@@ -34,20 +44,18 @@ GitHub (source)  →  Vercel (build + hosting)  →  Production URL
 Copy-Item .env.example .env.local
 ```
 
-Попълни реалните стойности в `.env.local` (файлът **не** се качва в Git).
+### 1.3 Auth redirect URLs
 
-### 1.3 Auth redirect URLs (важно за `/admin/login`)
-
-В Supabase: **Authentication → URL Configuration**
+**Authentication → URL Configuration** (след първи Vercel deploy — замени с реалния production URL):
 
 | Поле | Стойности |
 | ---- | --------- |
-| **Site URL** | `https://cvetelina-raynova.vercel.app` |
+| **Site URL** | `https://YOUR-PRODUCTION-DOMAIN.vercel.app` |
 | **Redirect URLs** | `http://localhost:3000/**` |
-| | `https://cvetelina-raynova.vercel.app/**` |
-| | `https://*.vercel.app/**` (preview deploys) |
+| | `https://YOUR-PRODUCTION-DOMAIN.vercel.app/**` |
+| | `https://*.vercel.app/**` |
 
-### 1.4 Supabase CLI (опционално, за migrations)
+### 1.4 Supabase CLI (опционално)
 
 ```powershell
 npx supabase login
@@ -56,53 +64,61 @@ npx supabase link --project-ref YOUR_PROJECT_REF
 
 ---
 
-## 2. GitHub
+## 2. GitHub (нов профил / org)
 
-Репото: **https://github.com/vemidi-dev/cvetelina-raynova**
+### 2.1 Създай repo
 
-Production URL: **https://cvetelina-raynova.vercel.app**
+В **новия** GitHub акаунт:
 
-### Първи push (ако още не е направен)
+1. New repository → напр. `cvetelina-raynova` (private препоръчително).
+2. Без template — празен repo.
+
+### 2.2 Свържи локалния проект
 
 ```powershell
-git add .
-git commit -m "Initial project setup for Цветелина Райнова"
+git remote add origin https://github.com/YOUR-ORG-OR-USER/cvetelina-raynova.git
 git push -u origin main
 ```
 
-### Клон
+Ако `origin` вече съществува:
 
-По подразбиране: `main`.
+```powershell
+git remote remove origin
+git remote add origin https://github.com/YOUR-ORG-OR-USER/cvetelina-raynova.git
+git push -u origin main
+```
+
+Клон: `main`.
 
 ---
 
-## 3. Vercel
+## 3. Vercel (нов профил / team)
 
 ### 3.1 Свързване с GitHub
 
-1. [Vercel Dashboard](https://vercel.com) → **Add New → Project**.
-2. Import `vemidi-dev/cvetelina-raynova`.
+1. Влез в **новия** Vercel акаунт.
+2. **Add New → Project** → Import от новия GitHub repo.
 3. Framework: **Next.js** (auto-detect).
-4. Root directory: `.` (project root).
 
-Или от CLI (след `vercel link`):
+Или от CLI (логнат в новия Vercel акаунт):
 
 ```powershell
+vercel link
 vercel git connect
 ```
 
-### 3.2 Environment variables в Vercel
+### 3.2 Environment variables
 
-**Settings → Environment Variables** — добави за **Production**, **Preview**, и **Development**:
+**Settings → Environment Variables** — Production, Preview, Development:
 
 | Variable | Notes |
 | -------- | ----- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | service role — **Sensitive** |
-| `NEXT_PUBLIC_SITE_URL` | Production: `https://cvetelina-raynova.vercel.app` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Sensitive |
+| `NEXT_PUBLIC_SITE_URL` | Production URL от Vercel |
 
-Скрипт (след попълване на `.env.local`):
+След `.env.local`:
 
 ```powershell
 .\scripts\sync-vercel-env.ps1
@@ -112,27 +128,37 @@ vercel --prod
 ### 3.3 Deploy
 
 - Автоматично при push към `main`.
-- Ръчно: `vercel --prod` от проектната папка.
+- Ръчно: `vercel --prod`.
 
 ---
 
-## 4. Проверка след setup
+## 4. Почистване на vemidi връзки (ако бяха създадени по грешка)
+
+| Място | Действие |
+| ----- | -------- |
+| Локално | `git remote remove origin` (ако сочи към vemidi) |
+| Локално | Изтрий папка `.vercel` |
+| Vercel (vemidi) | Изтрий проект `cvetelina-raynova` от vemidi dashboard |
+| GitHub (vemidi-dev) | **Settings → Delete repository** за `cvetelina-raynova` |
+
+---
+
+## 5. Проверка
 
 ```powershell
+git remote -v          # трябва да е новия GitHub или празно
+Test-Path .vercel      # False, докато не vercel link в нов акаунт
 npm run build
 npm run dev
 ```
 
-- Локално: http://localhost:3000
-- Production: URL от Vercel dashboard
-
 ---
 
-## 5. Често срещани проблеми
+## 6. Често срещани проблеми
 
 | Проблем | Решение |
 | ------- | ------- |
-| Admin redirect loop | Провери Supabase Auth redirect URLs |
-| Build fail на Vercel | Провери env vars в Vercel dashboard |
-| Supabase „Invalid API key“ | Сравни `.env.local` с Dashboard → API |
+| Admin redirect loop | Supabase Auth redirect URLs |
+| Build fail на Vercel | Env vars в новия Vercel проект |
+| Wrong account deploy | `vercel logout` → login с клиентски акаунт |
 | Service role в браузър | Никога `NEXT_PUBLIC_` за service role |

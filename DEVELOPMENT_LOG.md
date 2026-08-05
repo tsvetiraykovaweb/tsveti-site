@@ -5,6 +5,69 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Disconnect from vemidi accounts (client-only setup)
+
+**Status:** Local project detached from vemidi GitHub/Vercel; ready for new client accounts.
+
+**Latest update:** 2026-08-05 (UTC+3)
+
+### Summary of completed work
+- Removed `git remote origin` (was `vemidi-dev/cvetelina-raynova`).
+- Deleted local `.vercel` link folder.
+- Removed Vercel project `cvetelina-raynova` from `ve-mi-di` team via CLI.
+- Updated `docs/DEPLOYMENT.md`, `README.md`, `.env.example` — generic client-account instructions, no vemidi URLs.
+- Added cleanup checklist for leftover vemidi resources.
+
+### Files created or modified
+- `docs/DEPLOYMENT.md` — rewritten for new GitHub/Vercel/Supabase accounts
+- `README.md` — deploy steps updated
+- `.env.example` — removed hardcoded old Vercel URL
+- `DEVELOPMENT_LOG.md` — this entry
+
+### Important decisions
+| Decision | Reason |
+| -------- | ------ |
+| Separate client accounts for GitHub, Vercel, Supabase | Client project; no tie to vemidi personal/business profiles |
+| Local repo kept; only remotes/links removed | Code stays; re-push under new GitHub when ready |
+| Vercel production site on vemidi removed | Old URL no longer valid |
+
+### Environment / setup notes
+- **No `git remote`** configured — add when new GitHub repo exists.
+- **No `.vercel`** — run `vercel link` after logging into new Vercel account.
+- **GitHub repo on vemidi-dev** may still exist — delete manually (see below).
+
+### Known issues / blockers
+- **Manual:** Delete GitHub repo `vemidi-dev/cvetelina-raynova` if it still exists:
+  https://github.com/vemidi-dev/cvetelina-raynova/settings → Delete repository
+  (CLI delete failed — needs `delete_repo` scope / manual action)
+- New GitHub, Vercel, Supabase accounts not created yet (user action).
+
+### Checks run
+- `git remote -v` — empty (no remotes)
+- `Test-Path .vercel` — False
+- `vercel remove cvetelina-raynova` — success on ve-mi-di
+- `gh repo delete` — failed (403 / scope); manual delete required
+
+### Next recommended steps
+1. User deletes vemidi-dev GitHub repo (if present).
+2. Create new GitHub org/user + repo for client.
+3. Create new Vercel team + import; `vercel link` locally.
+4. Create new Supabase project; fill `.env.local`.
+5. Push and deploy under new accounts.
+
+### Pending tasks
+- [ ] Delete `vemidi-dev/cvetelina-raynova` on GitHub (manual)
+- [ ] New GitHub repo + remote + push
+- [ ] New Vercel project + env vars
+- [ ] New Supabase project + Auth URLs
+- [ ] Phase 1 migrations (unchanged)
+
+### Assumptions
+- Local git history on `main` is retained for convenience.
+- Client will use entirely new credentials; no shared vemidi infra.
+
+---
+
 ## 2026-08-05 — GitHub, Vercel, Supabase deployment wiring
 
 **Status:** Phase 0 complete; repo on GitHub, live on Vercel; Supabase env vars still need user keys.
