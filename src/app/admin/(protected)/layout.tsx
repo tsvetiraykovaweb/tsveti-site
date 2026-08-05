@@ -1,31 +1,44 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser, isAdmin } from "@/lib/auth/admin";
+import { getPublicEnv } from "@/lib/env";
 
 /**
- * Protected admin layout placeholder.
- * Full CMS auth/roles will be implemented later.
+ * Protected admin layout.
+ * - No session → /admin/login
+ * - Session but not in admin_profiles → /admin/unauthorized
+ * - Active admin → render children
  *
- * Route group `(protected)` keeps `/admin/login` outside this layout
- * so unauthenticated users can reach the login page.
+ * Route group `(protected)` keeps `/admin/login` outside this layout.
  */
 export default async function ProtectedAdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const hasSupabase =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  const { isSupabaseConfigured } = getPublicEnv();
 
-  if (hasSupabase) {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  if (!isSupabaseConfigured) {
+    return (
+      <div className="min-h-full bg-bg-secondary">
+        <header className="border-b border-border bg-bg px-6 py-4">
+          <p className="font-heading text-xl text-primary">Админ панел</p>
+          <p className="text-sm text-text-muted">
+            Supabase env vars липсват — конфигурирай `.env.local` / Vercel.
+          </p>
+        </header>
+        <div className="px-6 py-8">{children}</div>
+      </div>
+    );
+  }
 
-    if (!user) {
-      redirect("/admin/login");
-    }
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect("/admin/login");
+  }
+
+  const admin = await isAdmin();
+  if (!admin) {
+    redirect("/admin/unauthorized");
   }
 
   return (
@@ -33,7 +46,7 @@ export default async function ProtectedAdminLayout({
       <header className="border-b border-border bg-bg px-6 py-4">
         <p className="font-heading text-xl text-primary">Админ панел</p>
         <p className="text-sm text-text-muted">
-          Защитен layout (placeholder) — CMS предстои
+          Защитен достъп — CMS UI предстои
         </p>
       </header>
       <div className="px-6 py-8">{children}</div>

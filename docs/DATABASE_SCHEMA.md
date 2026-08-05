@@ -1,5 +1,11 @@
 # Draft database schema (documentation only)
 
+> **Superseded for implementation.** Use **[docs/supabase-schema.md](./supabase-schema.md)** and  
+> `supabase/migrations/20260805150000_initial_cms_schema.sql` as the source of truth.  
+> This file is kept as historical draft notes.
+
+---
+
 > **Not final SQL.** This is a first-pass content model for the future CMS.
 > Migrations will live under `supabase/migrations/` once approved.
 

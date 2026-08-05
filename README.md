@@ -68,8 +68,10 @@ Official name is always **Цветелина Райнова**. Short display nam
 
 ## Documentation
 
+- [Supabase schema (canonical)](docs/supabase-schema.md)
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
-- [Draft database schema](docs/DATABASE_SCHEMA.md)
+- [Deployment](docs/DEPLOYMENT.md)
+- [Draft schema notes (historical)](docs/DATABASE_SCHEMA.md)
 
 ## Security notes
 

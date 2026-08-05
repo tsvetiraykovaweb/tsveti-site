@@ -5,6 +5,82 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Supabase CMS foundation (schema, RLS, admin gate)
+
+**Status:** Database/auth/storage foundation added in repo. Migrations **not applied** to cloud Supabase yet. Full public site / CMS UI still not built.
+
+**Latest update:** 2026-08-05 ~15:10 UTC+3
+
+### Summary of current project state (pre-change)
+- Next.js App Router with `src/app` confirmed.
+- Vercel Framework Preset fixed to **Next.js**; Root Directory `./`.
+- Phase 0 placeholders + Supabase SSR clients existed; admin only checked login, not `admin_profiles`.
+
+### Completed this step
+- SQL migration with all required tables, `is_admin()`, RLS, and `site-assets` storage bucket + policies.
+- Admin helpers (`getCurrentUser`, `getAdminProfile`, `isAdmin`).
+- Protected `/admin` layout: login redirect + unauthorized for non-admins.
+- Public `/admin/unauthorized` page.
+- Server action stub for consultation requests (RLS-safe insert, no service role).
+- Canonical docs: `docs/supabase-schema.md`.
+- Hand-written `src/types/database.ts` aligned to migration.
+
+### Files created or modified
+**Created**
+- `supabase/migrations/20260805150000_initial_cms_schema.sql`
+- `docs/supabase-schema.md`
+- `src/lib/auth/admin.ts`
+- `src/lib/consultations/submit.ts`
+- `src/app/admin/unauthorized/page.tsx`
+
+**Modified**
+- `src/app/admin/(protected)/layout.tsx` — admin_profiles gate
+- `src/app/admin/(protected)/page.tsx` — dashboard notes
+- `src/types/database.ts` — typed tables
+- `docs/DATABASE_SCHEMA.md` — points to canonical doc
+- `README.md` — docs links
+- Removed `supabase/migrations/.gitkeep`
+
+### Important decisions
+| Decision | Reason |
+| -------- | ------ |
+| `admin_profiles` not client-writable | First admin via Dashboard SQL / service role only |
+| `page_sections` public read requires parent page published + section published | Prevent draft leaks |
+| Consultation insert via anon SSR + RLS | No service role in browser; consent required in DB |
+| Bucket `site-assets` public read / admin write | Public website images; no uploads yet |
+| Authenticated ≠ admin | Explicit `admin_profiles` check |
+
+### Environment / setup notes
+- Local `.env.local` has Supabase URL/keys (not committed).
+- Project ref: `jnvbsiydahnkfpkdhkps`
+- Migrations **not applied** in this session (no `supabase link` / db push run).
+- Vercel: keep Framework **Next.js**, Root Directory **`./`**.
+
+### Commands run
+- `npm run lint` — **passed** (exit 0)
+- `npm run build` — **passed** (exit 0); routes: `/`, `/admin`, `/admin/login`, `/admin/unauthorized`
+
+### Known blockers
+- Cloud DB still empty until migration is applied in Supabase SQL Editor or CLI.
+- Admin login UI still placeholder (no `signInWithPassword` form yet).
+- First admin user must be created manually after migration.
+- Nested accidental folder `cveti-raykova/` still untracked locally (ignore).
+
+### Next recommended steps
+1. Apply `20260805150000_initial_cms_schema.sql` in Supabase SQL Editor.
+2. Create Auth user + `INSERT` into `admin_profiles` (see docs).
+3. Wire `/admin/login` to Supabase Auth.
+4. Then CMS editors and public content pages.
+
+### Pending
+- [ ] Apply migration to Supabase cloud
+- [ ] First admin user
+- [ ] Real admin login form
+- [ ] Public marketing pages
+- [ ] CMS CRUD UI
+
+---
+
 ## 2026-08-05 — Diagnosis: Vercel 404 (NOT_FOUND) — not a Next.js routing bug
 
 **Status:** App structure is valid. Preview/production hostnames return Vercel platform `404 NOT_FOUND` (`X-Vercel-Error: NOT_FOUND`), not Next.js `_not-found`.
