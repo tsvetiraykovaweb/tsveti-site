@@ -66,6 +66,7 @@ Official name is always **Цветелина Райнова**. Short display nam
 | `/admin` | Protected admin dashboard (requires `admin_profiles`) |
 | `/admin/login` | Email/password login (Supabase Auth) |
 | `/admin/site-settings` | Edit site settings (names, contact, CTA, SEO) |
+| `/admin/services` | List/edit services |
 | `/admin/unauthorized` | Logged in but not an admin |
 
 ## Supabase setup (admin)

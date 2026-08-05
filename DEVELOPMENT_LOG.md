@@ -5,6 +5,52 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Admin Services CMS editor
+
+**Status:** Services list + edit by UUID implemented under `/admin/services`. Mapped to existing schema columns (no subtitle/disclaimer columns).
+
+### Pre-change summary
+- Auth + site-settings editor working; seed SQL exists (manual apply).
+- `services` table: title, slug, summary, body, cta_label, cta_href, sort_order, status, seo_*.
+
+### Implemented
+- `/admin/services` — list by `sort_order` (title, slug, summary, status, cta_href, edit link)
+- `/admin/services/[id]` — edit form (id safer than slug when renaming)
+- Validation: title, URL-safe slug, numeric sort_order; status draft/published/archived
+- Save via server action + SSR client + RLS; loading/success/error
+- Empty state + seed reminder if no rows
+- Nav links in header + dashboard
+
+### Schema mapping (requested → actual)
+| UI | Column |
+| -- | ------ |
+| short description | `summary` |
+| full description | `body` |
+| external / CTA URL | `cta_href` (+ `cta_label`) |
+| publish state | `status` (not `is_published`) |
+| subtitle / disclaimer | **not in schema** — omitted |
+
+### Files
+- `src/lib/cms/services.ts`
+- `src/app/admin/(protected)/services/page.tsx`
+- `src/app/admin/(protected)/services/[id]/page.tsx`
+- `src/app/admin/(protected)/services/[id]/service-form.tsx`
+- `src/app/admin/(protected)/services/[id]/actions.ts`
+- `src/app/admin/(protected)/layout.tsx`, `page.tsx`
+- `README.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed
+
+### Blockers
+- If list empty: apply `supabase/seed/001_initial_content.sql` manually.
+
+### Next step
+- FAQ editor, testimonials editor, or public pages reading services/settings.
+
+---
+
 ## 2026-08-05 — Production checklist, CMS seed, Site Settings editor
 
 **Status:** Production env checklist documented; seed SQL added (manual apply); first CMS editor `/admin/site-settings` live. Login/logout + first admin already user-verified.

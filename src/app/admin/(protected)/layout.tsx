@@ -70,6 +70,12 @@ export default async function ProtectedAdminLayout({
             >
               Настройки
             </Link>
+            <Link
+              href="/admin/services"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Услуги
+            </Link>
           </nav>
         </div>
         <AdminLogoutButton />
