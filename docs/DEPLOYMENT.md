@@ -18,7 +18,7 @@ GitHub (source)  →  Vercel (build + hosting)  →  Production URL
 
 | Услуга | Действие |
 | ------ | -------- |
-| **GitHub** | Нов org или user за клиента → нов repo (напр. `cvetelina-raynova`) |
+| **GitHub** | [tsvetiraykovaweb](https://github.com/tsvetiraykovaweb) → repo `tsveti-site` |
 | **Vercel** | Нов team/account → import от новия GitHub repo |
 | **Supabase** | Нов проект в Supabase org за клиента |
 
@@ -64,31 +64,39 @@ npx supabase link --project-ref YOUR_PROJECT_REF
 
 ---
 
-## 2. GitHub (нов профил / org)
+## 2. GitHub — `tsvetiraykovaweb/tsveti-site`
 
-### 2.1 Създай repo
+Repo: **https://github.com/tsvetiraykovaweb/tsveti-site**
 
-В **новия** GitHub акаунт:
+Локалният `origin` вече сочи към този repo. Push изисква GitHub login като **tsvetiraykovaweb** (не vemidi-dev).
 
-1. New repository → напр. `cvetelina-raynova` (private препоръчително).
-2. Без template — празен repo.
-
-### 2.2 Свържи локалния проект
+### 2.1 Влез с клиентския GitHub акаунт
 
 ```powershell
-git remote add origin https://github.com/YOUR-ORG-OR-USER/cvetelina-raynova.git
+gh auth login
+# Избери: GitHub.com → HTTPS → Login with browser
+# Влез като tsvetiraykovaweb
+```
+
+Ако `gh` още е на vemidi:
+
+```powershell
+gh auth logout -h github.com -u vemidi-dev
+gh auth login
+```
+
+### 2.2 Push
+
+```powershell
 git push -u origin main
 ```
 
-Ако `origin` вече съществува:
+Ако `origin` липсва:
 
 ```powershell
-git remote remove origin
-git remote add origin https://github.com/YOUR-ORG-OR-USER/cvetelina-raynova.git
+git remote add origin https://github.com/tsvetiraykovaweb/tsveti-site.git
 git push -u origin main
 ```
-
-Клон: `main`.
 
 ---
 

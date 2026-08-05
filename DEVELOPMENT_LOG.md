@@ -5,6 +5,30 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Link to tsvetiraykovaweb/tsveti-site (push pending)
+
+**Status:** `origin` → `tsvetiraykovaweb/tsveti-site`; push blocked — local `gh` still authenticated as `vemidi-dev`.
+
+### Completed
+- Confirmed empty repo https://github.com/tsvetiraykovaweb/tsveti-site
+- Added `git remote origin` → `tsvetiraykovaweb/tsveti-site`
+- Updated `docs/DEPLOYMENT.md` and `README.md` with client GitHub account
+
+### Blocker
+- `git push` → 403: Permission denied to `vemidi-dev`
+- User must `gh auth login` as **tsvetiraykovaweb**, then `git push -u origin main`
+
+### Checks
+- `gh repo view tsvetiraykovaweb/tsveti-site` — OK (empty repo)
+- `git push` — failed (wrong GitHub account)
+
+### Next
+1. `gh auth login` as tsvetiraykovaweb
+2. `git push -u origin main`
+3. Vercel import from `tsvetiraykovaweb/tsveti-site`
+
+---
+
 ## 2026-08-05 — Disconnect from vemidi accounts (client-only setup)
 
 **Status:** Local project detached from vemidi GitHub/Vercel; ready for new client accounts.
