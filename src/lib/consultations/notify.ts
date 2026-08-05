@@ -8,12 +8,23 @@ export type ConsultationNotifyPayload = {
   email: string | null;
   service_interest: string | null;
   preferred_contact_method: ContactMethod;
+  /** Optional form note — truncated; full text stays in admin only. */
+  message?: string | null;
 };
+
+const MESSAGE_EMAIL_MAX = 280;
+
+function briefMessageForEmail(message: string | null | undefined): string | null {
+  const trimmed = message?.trim();
+  if (!trimmed) return null;
+  if (trimmed.length <= MESSAGE_EMAIL_MAX) return trimmed;
+  return `${trimmed.slice(0, MESSAGE_EMAIL_MAX).trimEnd()}…`;
+}
 
 /**
  * Best-effort email notify via Resend.
  * Never throws to the caller — missing config or send failure is swallowed
- * after logging a short message (no request body / health details).
+ * after logging a short message. Does not include clinical/health framing.
  */
 export async function notifyConsultationRequest(
   payload: ConsultationNotifyPayload,
@@ -38,8 +49,9 @@ export async function notifyConsultationRequest(
     const contactLabel =
       CONTACT_METHOD_ADMIN_LABELS[payload.preferred_contact_method] ||
       payload.preferred_contact_method;
+    const briefMessage = briefMessageForEmail(payload.message);
 
-    const text = [
+    const lines = [
       "Нова заявка за безплатна консултация.",
       "",
       `Име: ${payload.name}`,
@@ -47,16 +59,22 @@ export async function notifyConsultationRequest(
       `Имейл: ${payload.email || "—"}`,
       `Услуга: ${payload.service_interest || "—"}`,
       `Предпочитан контакт: ${contactLabel}`,
+    ];
+
+    if (briefMessage) {
+      lines.push("", `Кратко съобщение: ${briefMessage}`);
+    }
+
+    lines.push(
       "",
-      "Съобщението от формата не се включва в този имейл.",
-      `Провери детайлите в админ панела: ${origin}/admin/consultation-requests`,
-    ].join("\n");
+      `Провери пълната заявка в админ панела: ${origin}/admin/consultation-requests`,
+    );
 
     const { error } = await resend.emails.send({
       from,
       to: [to],
       subject: `Нова заявка: ${payload.name}`,
-      text,
+      text: lines.join("\n"),
     });
 
     if (error) {

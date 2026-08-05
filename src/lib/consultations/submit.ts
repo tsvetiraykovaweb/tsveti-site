@@ -128,6 +128,7 @@ export async function submitConsultationRequest(
       email: email || null,
       service_interest,
       preferred_contact_method: mapContactMethod(preferred),
+      message: finalMessage || null,
     });
   } catch {
     // Intentionally empty — form success must not depend on email.

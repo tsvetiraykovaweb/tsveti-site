@@ -5,6 +5,49 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Production-readiness follow-up (email message + seed fix)
+
+**Status:** Confirmed prior pack (`cc6f08b`) covers homepage CMS images, Resend notify, admin filters, launch checklist. This follow-up: include brief form message in notify email (truncated); harden `005` seed; re-verify lint/build + safety scan.
+
+### Done (verified / updated)
+- Homepage `/` reads `hero_image` / `about_image` via existing `/admin/pages` editor; `CmsImageSlot` fallbacks; service cards use `services.image_path`
+- Email after successful insert: name, phone, email, service, contact preference, optional brief message (≤280 chars), admin link — no clinical framing; form succeeds without Resend env
+- Admin `/admin/consultation-requests`: status filter, name/phone/email search, newest first
+- `docs/launch-checklist.md` present
+- Safety scan: no `Райново` / medical claim phrases in `src`; `Райнова` only in corrective seed `002`
+
+### Files
+- `src/lib/consultations/notify.ts`, `submit.ts`
+- `supabase/seed/005_home_image_sections.sql`
+- `docs/launch-checklist.md`
+- `DEVELOPMENT_LOG.md`
+
+### Env vars
+- Optional: `RESEND_API_KEY`, `CONSULTATION_NOTIFY_TO`, `CONSULTATION_NOTIFY_FROM`
+- Existing: Supabase public + service role (server-only), `NEXT_PUBLIC_SITE_URL`
+
+### Commands
+- `npm run lint` — pass
+- `npm run build` — pass
+
+### Manual checks
+1. Paste full `005_home_image_sections.sql` in SQL Editor (empty tab → Studio Zod “query too small”)
+2. Set home images via `/admin/pages` → `home`
+3. Submit consultation with/without Resend; confirm brief message appears in email when filled
+4. Walk `docs/launch-checklist.md`
+
+---
+
+## 2026-08-05 — Fix `005_home_image_sections.sql` empty-query / empty path
+
+**Status:** Seed rewritten so slots omit empty `image_path` (matches admin save) and fail clearly if `home` page is missing. The Studio error `query: Too small: expected string to have >=1 characters` means the SQL Editor sent an empty query string — paste the full file and Run (do not run an empty tab).
+
+### Files
+- `supabase/seed/005_home_image_sections.sql`
+- `DEVELOPMENT_LOG.md`
+
+---
+
 ## 2026-08-05 — Production-readiness pack (home images, email, QA)
 
 **Status:** Homepage image sections wired through existing Pages CMS; optional Resend notify on consultation submit; admin request filters; launch checklist; safety scan clean for public copy.

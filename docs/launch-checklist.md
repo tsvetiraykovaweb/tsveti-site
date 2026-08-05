@@ -35,7 +35,7 @@
 - [ ] Flat nav: separate service items, no dropdown
 - [ ] Consultation form validates + inserts into `consultation_requests`
 - [ ] Form still succeeds if Resend env is missing
-- [ ] With Resend configured: notification email arrives (basic fields only, no message body)
+- [ ] With Resend configured: notification email arrives (name/phone/email/service/contact + brief message if any; full details in admin)
 
 ## SEO / robots
 
