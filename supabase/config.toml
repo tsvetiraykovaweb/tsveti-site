@@ -2,7 +2,7 @@
 #   npx supabase login
 #   npx supabase link --project-ref YOUR_PROJECT_REF
 
-project_id = "cvetelina-raynova"
+project_id = "jnvbsiydahnkfpkdhkps"
 
 [api]
 enabled = true

@@ -5,6 +5,31 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Supabase project linked; push deploy via GitHub
+
+**Status:** Supabase project `jnvbsiydahnkfpkdhkps` configured locally; `.env.local` present (not committed); push to trigger Vercel.
+
+### Completed
+- Set `supabase/config.toml` `project_id` to `jnvbsiydahnkfpkdhkps`
+- User filled `.env.local` with URL + anon + service_role keys
+- Push to `tsvetiraykovaweb/tsveti-site` to trigger Vercel auto-deploy
+
+### Not committed (by design)
+- `.env.local` — secrets stay local only
+- Accidental nested folder `cveti-raykova/` (has own `.git`) — left untracked
+
+### Pending (user / Vercel dashboard)
+- Confirm env vars on Vercel project `tsveti.raykova` match `.env.local`
+- Set `NEXT_PUBLIC_SITE_URL` to production domain from Vercel Domains
+- Supabase Auth redirect URLs
+- Local Vercel CLI still on vemidi — deploy via GitHub, not `vercel --prod` from this machine
+
+### Checks
+- `gh auth` → tsvetiraykovaweb
+- `.env.local` keys present (values not logged)
+
+---
+
 ## 2026-08-05 — GitHub complete; Supabase/Vercel accounts only (not configured)
 
 **Status:** `tsvetiraykovaweb/tsveti-site` live on GitHub. Supabase + Vercel: registered but no project/env/deploy yet.
