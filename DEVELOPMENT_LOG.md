@@ -64,7 +64,7 @@ Shared project memory for Cursor / Codex / developers.
 - Cloud DB still empty until migration is applied in Supabase SQL Editor or CLI.
 - Admin login UI still placeholder (no `signInWithPassword` form yet).
 - First admin user must be created manually after migration.
-- Nested accidental folder `cveti-raykova/` still untracked locally (ignore).
+- Nested local folder `cveti-raykova/` is gitignored (accidental gitlink briefly pushed then removed in follow-up commit `5c081d9`).
 
 ### Next recommended steps
 1. Apply `20260805150000_initial_cms_schema.sql` in Supabase SQL Editor.
