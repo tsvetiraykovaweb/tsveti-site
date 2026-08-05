@@ -5,6 +5,58 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Public service detail pages (`/services/[slug]`)
+
+**Status:** Published services have public detail pages; homepage cards link to `/services/[slug]`. Optional `/services` index included.
+
+### Implemented
+- Dynamic route `src/app/services/[slug]/page.tsx` — published-only by slug; otherwise `notFound()`
+- Optional index `src/app/services/page.tsx` reusing `ServiceCard`
+- CMS helpers: `getPublishedServiceBySlug`, `getPublishedServices`, `getPublicSiteChrome`, `resolveServiceCta`, `isExternalHref`
+- `CtaLink` supports external `http(s)` URLs (`target=_blank`, `rel=noopener`)
+- Homepage `ServiceCard` → internal detail link («Научи повече»)
+- Header nav anchors use `/#…` so they work from service pages
+- Layout: breadcrumb, hero, body, gentle process section, CTA, generic health disclaimer (no schema disclaimer field)
+- Safe wording only (подкрепа / насоки / подпомага / индивидуален подход); no medical claims
+
+### CMS fields used
+`title`, `slug`, `summary`, `body`, `cta_label`, `cta_href`, `seo_title`, `seo_description`, `status`
+
+### Fallback behavior
+- Missing/unpublished slug → `notFound()`
+- SEO: `seo_title` → `{title} · {officialName}`; `seo_description` → `summary` → `brand.direction`
+- Empty `cta_href` → `/#consultation`
+- Empty `cta_label` → «Запази безплатна консултация»
+- Empty `body` → calm placeholder (no invented claims)
+- External `cta_href` → external link
+
+### Files created/modified
+- `src/app/services/[slug]/page.tsx` (new)
+- `src/app/services/page.tsx` (new)
+- `src/lib/cms/public-content.ts`
+- `src/components/public/cta-link.tsx`
+- `src/components/public/service-card.tsx`
+- `src/components/public/public-header.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; routes include `/services` and `/services/[slug]`
+
+### Manual checks
+1. `/services/biorezonans`
+2. `/services/ot-trevoga-kam-spokoystvie`
+3. `/services/hranitelna-programa`
+4. `/services/izberi-sebe-si`
+5. Unpublished or unknown slug → 404
+6. Homepage service cards navigate to detail pages
+7. If a service `cta_href` is set to `https://…`, CTA opens externally
+
+### Next step
+- Consultation form wired to `consultation_requests`, or publish FAQ/testimonials for homepage previews.
+
+---
+
 ## 2026-08-05 — Public homepage shell from CMS
 
 **Status:** Public `/` reads published CMS content (settings, services, FAQs, testimonials, homepage sections) with brand fallbacks.

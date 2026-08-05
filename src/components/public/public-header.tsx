@@ -25,18 +25,18 @@ export function PublicHeader({
           <p className="text-xs text-text-muted">{officialName}</p>
         </div>
         <nav className="hidden items-center gap-6 text-sm text-text-muted sm:flex">
-          <a href="#services" className="hover:text-primary">
+          <Link href="/#services" className="hover:text-primary">
             Услуги
-          </a>
-          <a href="#about" className="hover:text-primary">
+          </Link>
+          <Link href="/#about" className="hover:text-primary">
             За мен
-          </a>
-          <a href="#faq" className="hover:text-primary">
+          </Link>
+          <Link href="/#faq" className="hover:text-primary">
             Въпроси
-          </a>
-          <a href="#testimonials" className="hover:text-primary">
+          </Link>
+          <Link href="/#testimonials" className="hover:text-primary">
             Отзиви
-          </a>
+          </Link>
         </nav>
         <CtaLink href={ctaHref} className="hidden md:inline-flex">
           {ctaLabel}
