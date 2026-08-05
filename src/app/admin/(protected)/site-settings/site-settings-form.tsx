@@ -129,7 +129,7 @@ export function SiteSettingsForm({ initialValues }: Props) {
           value={values.primary_cta_url}
           onChange={(e) => update("primary_cta_url", e.target.value)}
           className={fieldClass}
-          placeholder="/#consultation"
+          placeholder="/bezplatna-konsultatsia"
         />
       </div>
 

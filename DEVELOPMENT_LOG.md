@@ -5,6 +5,66 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Public consultation form (`/bezplatna-konsultatsia`)
+
+**Status:** Public consultation request page inserts into `consultation_requests` via anon SSR client + RLS. Primary CTAs normalize to `/bezplatna-konsultatsia`.
+
+### Pre-change summary
+- Homepage + `/uslugi/[slug]` live; flat service nav; image slots reserved.
+- `submitConsultationRequest` helper existed but no public form UI.
+- CTAs still defaulted to `/#consultation`.
+
+### Implemented
+- Route `/bezplatna-konsultatsia` with calm intro + form
+- Client form → server action `submitConsultationRequest` (no service role)
+- Fields: name, phone, email (optional), service_interest, preferred_contact_method, message, consent
+- Loading / success / error states
+- Privacy note: do not submit diagnoses, medication, tests, or detailed health history
+- CTA normalization: empty/`#consultation`/`/#consultation` → `/bezplatna-konsultatsia` (external https kept)
+- Header, homepage, service fallback CTAs, footer link wired
+- Optional `?usluga=` prefills service interest from slug
+- Seed + admin placeholders updated; optional patch `003_consultation_cta_urls.sql` for live DB
+
+### Contact method note
+- UI: Телефон / Имейл / Viber
+- DB CHECK remains `phone | email | either`; Viber maps to `either` + message note «Предпочитан канал: Viber»
+
+### Validation
+- Required: name, phone, service_interest, preferred_contact_method, consent
+- Email format only when provided
+- Server-side validation with field errors (BG copy)
+
+### Privacy / sensitive data
+- No health-history fields
+- Visible copy asks for a short intro conversation only
+- Success: «Благодаря ти! Заявката беше изпратена успешно. Ще се свържа с теб възможно най-скоро.»
+
+### Files
+- `src/app/bezplatna-konsultatsia/page.tsx`
+- `src/components/public/consultation-form.tsx`, `public-footer.tsx`
+- `src/lib/consultations/submit.ts`, `options.ts`
+- `src/lib/cms/public-paths.ts`, `public-content.ts`
+- `src/app/uslugi/[slug]/page.tsx`
+- Admin CTA placeholders; `supabase/seed/001_*.sql`, `003_consultation_cta_urls.sql`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; route includes `/bezplatna-konsultatsia`
+
+### Manual checks
+1. `/bezplatna-konsultatsia` renders
+2. Empty required fields → validation
+3. Invalid email → validation
+4. Successful submit → row in `consultation_requests`
+5. CTAs from `/` and `/uslugi/[slug]` → form (legacy `#consultation` normalized)
+6. Optionally run `003_consultation_cta_urls.sql` if DB still has old CTA URLs
+
+### Next step
+- Admin list for consultation requests, or email notifications, or media upload pipeline.
+
+---
+
 ## 2026-08-05 — Public `/uslugi/[slug]` + flat service nav + image slots
 
 **Status:** Service detail pages at `/uslugi/[slug]`; each published service is a top-level nav item (no dropdown); image slots reserved for future Storage uploads.

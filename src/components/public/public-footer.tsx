@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { PublicContainer } from "./public-container";
+import { PUBLIC_CONSULTATION_PATH } from "@/lib/cms/public-paths";
 
 type Props = {
   officialName: string;
@@ -22,6 +24,14 @@ export function PublicFooter({
           <p className="font-heading text-xl text-primary">{officialName}</p>
           <p className="mt-1 text-sm text-text-muted">
             Спокойна естествена експертност
+          </p>
+          <p className="mt-3 text-sm">
+            <Link
+              href={PUBLIC_CONSULTATION_PATH}
+              className="text-accent underline-offset-4 hover:underline"
+            >
+              Запази безплатна консултация
+            </Link>
           </p>
         </div>
         <div className="space-y-1 text-sm text-text-muted">

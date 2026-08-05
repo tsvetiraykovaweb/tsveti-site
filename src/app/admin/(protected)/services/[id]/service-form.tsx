@@ -136,7 +136,7 @@ export function ServiceEditForm({ id, initialValues }: Props) {
           value={values.cta_href}
           onChange={(e) => update("cta_href", e.target.value)}
           className={fieldClass}
-          placeholder="/#consultation или https://…"
+          placeholder="/bezplatna-konsultatsia или https://…"
         />
       </div>
 

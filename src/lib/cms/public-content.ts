@@ -7,6 +7,10 @@ import {
   type PublicNavItem,
 } from "@/lib/cms/public-nav";
 import {
+  PUBLIC_CONSULTATION_PATH,
+  normalizePublicCtaHref,
+} from "@/lib/cms/public-paths";
+import {
   SITE_SETTING_KEYS,
   jsonValueToString,
   rowsToFormValues,
@@ -16,8 +20,10 @@ import {
 
 export {
   PUBLIC_USLUGI_BASE,
+  PUBLIC_CONSULTATION_PATH,
   publicServicePath,
   isExternalHref,
+  normalizePublicCtaHref,
 } from "@/lib/cms/public-paths";
 
 export type PublicService = {
@@ -77,24 +83,29 @@ export type PublicHomeContent = {
 };
 
 const DEFAULT_CTA_LABEL = "Запази безплатна консултация";
-const DEFAULT_CTA_HREF = "/#consultation";
+const DEFAULT_CTA_HREF = PUBLIC_CONSULTATION_PATH;
 
 export function resolveSiteCta(label: string, href: string) {
   const ctaLabel =
     label.trim() && label.trim() !== "Запиши консултация"
       ? label.trim()
       : DEFAULT_CTA_LABEL;
-  const ctaHref = href.trim() || DEFAULT_CTA_HREF;
+  const ctaHref = normalizePublicCtaHref(href);
   return { ctaLabel, ctaHref };
 }
 
 export function resolveServiceCta(
   cta_label: string | null,
   cta_href: string | null,
+  slug?: string,
 ) {
+  let href = normalizePublicCtaHref(cta_href);
+  if (slug && href === PUBLIC_CONSULTATION_PATH) {
+    href = `${PUBLIC_CONSULTATION_PATH}?usluga=${encodeURIComponent(slug)}`;
+  }
   return {
     label: cta_label?.trim() || DEFAULT_CTA_LABEL,
-    href: cta_href?.trim() || DEFAULT_CTA_HREF,
+    href,
   };
 }
 

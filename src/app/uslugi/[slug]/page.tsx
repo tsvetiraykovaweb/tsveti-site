@@ -48,7 +48,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const serviceCta = resolveServiceCta(service.cta_label, service.cta_href);
+  const serviceCta = resolveServiceCta(
+    service.cta_label,
+    service.cta_href,
+    service.slug,
+  );
   const bodyParagraphs = (service.body || "")
     .split(/\n+/)
     .map((p) => p.trim())
