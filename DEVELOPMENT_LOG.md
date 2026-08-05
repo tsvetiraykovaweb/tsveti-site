@@ -5,6 +5,55 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Production checklist, CMS seed, Site Settings editor
+
+**Status:** Production env checklist documented; seed SQL added (manual apply); first CMS editor `/admin/site-settings` live. Login/logout + first admin already user-verified.
+
+### Pre-change summary
+- Admin auth complete and verified.
+- Migration applied in cloud (user-confirmed earlier).
+- No CMS editors / seed content yet.
+
+### Part 1 — Production env
+- Reviewed `.env.example`: URL, anon, service role (server-only), site URL.
+- Added `docs/PRODUCTION_CHECKLIST.md` (Vercel vars, Auth URLs, Framework Next.js, Root `./`, security).
+- Documented: `SUPABASE_SERVICE_ROLE_KEY` never client-side; CMS edits use session + RLS.
+
+### Part 2 — Seed
+- `supabase/seed/001_initial_content.sql` + `supabase/seed/README.md`
+- Seeds: site_settings (official Цветелина Райнова / display Цвети), pages, homepage sections, 4 services, FAQ/testimonial placeholders
+- **Not auto-applied** — user runs in SQL Editor
+
+### Part 3 — Site Settings editor
+- Route `/admin/site-settings` (inside protected layout)
+- Fields: official/display name, phone, email, CTA label/URL, Instagram/Facebook, SEO title/description
+- Server action upsert via SSR client (admin session); loading/success/error; required-field validation
+- Nav links from dashboard + admin header
+
+### Files created/modified
+- `docs/PRODUCTION_CHECKLIST.md`
+- `supabase/seed/001_initial_content.sql`, `supabase/seed/README.md`
+- `src/lib/cms/site-settings.ts`
+- `src/app/admin/(protected)/site-settings/*`
+- `src/app/admin/(protected)/layout.tsx`, `page.tsx`
+- `README.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed (`/admin/site-settings` listed)
+
+### Blockers
+- Seed must be applied manually before editor has rows (form still works with defaults/upsert).
+- Production Vercel env still user-confirmed separately.
+
+### Next step
+1. Apply seed SQL in Supabase.
+2. Test `/admin/site-settings` save.
+3. Confirm Vercel env checklist.
+4. Next CMS: services editor or public home reading settings.
+
+---
+
 ## 2026-08-05 — Harden admin login gate + docs (login already implemented)
 
 **Status:** Email/password admin login/logout were already implemented and user-verified. This pass adds non-admin redirect consistency, empty-field validation message, and README/schema setup docs.

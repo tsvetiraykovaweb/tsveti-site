@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getAdminProfile, getCurrentUser, isAdmin } from "@/lib/auth/admin";
 import { getPublicEnv } from "@/lib/env";
 import { AdminLogoutButton } from "@/components/admin/logout-button";
@@ -48,10 +49,28 @@ export default async function ProtectedAdminLayout({
     <div className="min-h-full bg-bg-secondary">
       <header className="flex items-start justify-between gap-4 border-b border-border bg-bg px-6 py-4">
         <div>
-          <p className="font-heading text-xl text-primary">Админ панел</p>
+          <p className="font-heading text-xl text-primary">
+            <Link href="/admin" className="hover:opacity-80">
+              Админ панел
+            </Link>
+          </p>
           <p className="text-sm text-text-muted">
             {profile?.full_name ?? profile?.email ?? user.email}
           </p>
+          <nav className="mt-2 flex flex-wrap gap-4 text-sm">
+            <Link
+              href="/admin"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Табло
+            </Link>
+            <Link
+              href="/admin/site-settings"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Настройки
+            </Link>
+          </nav>
         </div>
         <AdminLogoutButton />
       </header>

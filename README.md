@@ -65,6 +65,7 @@ Official name is always **Цветелина Райнова**. Short display nam
 | `/` | Public home (placeholder) |
 | `/admin` | Protected admin dashboard (requires `admin_profiles`) |
 | `/admin/login` | Email/password login (Supabase Auth) |
+| `/admin/site-settings` | Edit site settings (names, contact, CTA, SEO) |
 | `/admin/unauthorized` | Logged in but not an admin |
 
 ## Supabase setup (admin)
@@ -108,6 +109,8 @@ Framework Preset: **Next.js**. Root Directory: **`./`**.
 ## Documentation
 
 - [Supabase schema (canonical)](docs/supabase-schema.md)
+- [Production checklist](docs/PRODUCTION_CHECKLIST.md)
+- [Seed content](supabase/seed/README.md)
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
 - [Deployment](docs/DEPLOYMENT.md)
 - [Draft schema notes (historical)](docs/DATABASE_SCHEMA.md)
