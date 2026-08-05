@@ -103,5 +103,10 @@ export async function saveService(
 
   revalidatePath("/admin/services");
   revalidatePath(`/admin/services/${id}`);
+  revalidatePath("/");
+  revalidatePath("/uslugi");
+  if (values.slug.trim()) {
+    revalidatePath(`/uslugi/${values.slug.trim()}`);
+  }
   return { ok: true };
 }

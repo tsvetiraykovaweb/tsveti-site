@@ -11,6 +11,21 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Public URLs use Bulgarian transliteration `/uslugi` (DB table stays `services`).
+  async redirects() {
+    return [
+      {
+        source: "/services",
+        destination: "/uslugi",
+        permanent: true,
+      },
+      {
+        source: "/services/:slug",
+        destination: "/uslugi/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

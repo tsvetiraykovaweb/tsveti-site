@@ -11,6 +11,8 @@ import { PublicContainer } from "@/components/public/public-container";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { CtaLink } from "@/components/public/cta-link";
+import { CmsImageSlot } from "@/components/public/cms-image-slot";
+import { buildImageRef } from "@/lib/cms/media";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -59,8 +61,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           chrome.settings.display_name || chrome.settings.official_name
         }
         officialName={chrome.settings.official_name}
-        ctaLabel={chrome.ctaLabel}
         ctaHref={chrome.ctaHref}
+        navItems={chrome.navItems}
       />
 
       <main className="flex-1">
@@ -71,22 +73,32 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 Начало
               </Link>
               <span className="mx-2">/</span>
-              <Link href="/#services" className="hover:text-primary">
+              <Link href="/uslugi" className="hover:text-primary">
                 Услуги
               </Link>
               <span className="mx-2">/</span>
               <span className="text-primary">{service.title}</span>
             </p>
-            <h1 className="mt-6 max-w-3xl font-heading text-4xl font-medium text-primary md:text-5xl">
-              {service.title}
-            </h1>
-            {service.summary ? (
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-muted md:text-lg">
-                {service.summary}
-              </p>
-            ) : null}
-            <div className="mt-8">
-              <CtaLink href={serviceCta.href}>{serviceCta.label}</CtaLink>
+
+            <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-center">
+              <div>
+                <h1 className="max-w-3xl font-heading text-4xl font-medium text-primary md:text-5xl">
+                  {service.title}
+                </h1>
+                {service.summary ? (
+                  <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-muted md:text-lg">
+                    {service.summary}
+                  </p>
+                ) : null}
+                <div className="mt-8">
+                  <CtaLink href={serviceCta.href}>{serviceCta.label}</CtaLink>
+                </div>
+              </div>
+              <CmsImageSlot
+                image={service.heroImage}
+                priority
+                aspectClassName="aspect-[4/3] md:aspect-[16/11]"
+              />
             </div>
           </PublicContainer>
         </section>
@@ -112,24 +124,33 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </section>
 
         <section className="border-y border-border bg-bg-secondary py-16">
-          <PublicContainer className="max-w-3xl">
-            <h2 className="font-heading text-2xl text-primary md:text-3xl">
-              Как протича работата
-            </h2>
-            <ul className="mt-6 space-y-3 text-sm leading-relaxed text-text-muted md:text-base">
-              <li>
-                Спокоен разговор за вашите цели и нужди — без натиск и без
-                обещания за конкретни резултати.
-              </li>
-              <li>
-                Индивидуален подход с насоки, които могат да подпомогнат по-добро
-                усещане за баланс в ежедневието.
-              </li>
-              <li>
-                Подкрепа според вашето темпо — съдържанието и следващите стъпки
-                се уточняват заедно.
-              </li>
-            </ul>
+          <PublicContainer className="grid max-w-5xl gap-10 lg:grid-cols-2 lg:items-start">
+            <div>
+              <h2 className="font-heading text-2xl text-primary md:text-3xl">
+                Как протича работата
+              </h2>
+              <ul className="mt-6 space-y-3 text-sm leading-relaxed text-text-muted md:text-base">
+                <li>
+                  Спокоен разговор за вашите цели и нужди — без натиск и без
+                  обещания за конкретни резултати.
+                </li>
+                <li>
+                  Индивидуален подход с насоки, които могат да подпомогнат
+                  по-добро усещане за баланс в ежедневието.
+                </li>
+                <li>
+                  Подкрепа според вашето темпо — съдържанието и следващите
+                  стъпки се уточняват заедно.
+                </li>
+              </ul>
+            </div>
+            {/* Reserved slot for a future section image (separate from hero). */}
+            <CmsImageSlot
+              image={buildImageRef({
+                alt: `Допълнителен визуал към ${service.title}`,
+              })}
+              aspectClassName="aspect-[5/4]"
+            />
           </PublicContainer>
         </section>
 

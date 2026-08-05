@@ -5,9 +5,121 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Public `/uslugi/[slug]` + flat service nav + image slots
+
+**Status:** Service detail pages at `/uslugi/[slug]`; each published service is a top-level nav item (no dropdown); image slots reserved for future Storage uploads.
+
+### Pre-change summary
+- Homepage CMS shell existed; `/uslugi` routes were partially migrated; header still used generic «Услуги» link.
+- Official name: Цветелина Райкова. DB table remains `services`.
+
+### `/uslugi` URL decision
+- Public URLs use Bulgarian transliteration `/uslugi` / `/uslugi/[slug]`.
+- Admin stays `/admin/services`; Supabase table `services` unchanged.
+- Redirects: `/services` → `/uslugi`, `/services/:slug` → `/uslugi/:slug`.
+
+### Navigation
+- Flat top-level items (no services dropdown):
+  - Начало `/`
+  - Биорезонанс `/uslugi/biorezonans`
+  - Тревожност `/uslugi/ot-trevoga-kam-spokoystvie`
+  - Хранене `/uslugi/hranitelna-programa`
+  - Избери себе си `/uslugi/izberi-sebe-si`
+  - За Цвети `/#about`
+  - Въпроси `/#faq`
+  - Контакти `/#contact`
+  - CTA «Запази консултация»
+- Labels via `NAV_SERVICE_LABELS`; items built from **published** services + fixed anchors.
+- Desktop: full row from `xl`; below that: mobile «Меню» panel.
+
+### Service detail pages
+- Route `src/app/uslugi/[slug]/page.tsx` — slug + `status=published` or `notFound()`
+- Fields: title, slug, summary, body, cta_*, seo_*, `image_path`
+- Layout: breadcrumb, hero + image slot, body, process, CTA, health disclaimer
+- Safe wording only; external `cta_href` supported; missing CTA → `/#consultation`
+
+### Image slot planning
+- `CmsImageSlot` + `resolvePublicStorageUrl` / `buildImageRef`
+- Service hero from `services.image_path` (+ `media_assets` alt/dims when present)
+- Homepage hero/about slots from `page_sections` keys `hero_image` / `about_image` (JSON path)
+- Calm placeholder when no path — no stock URLs hardcoded
+- Future pipeline documented in `docs/media-pipeline.md` (admin upload, server optimize, WebP/AVIF, widths 480/768/1200/1600, metadata)
+
+### CMS fields used
+`services`: title, slug, summary, body, image_path, cta_label, cta_href, seo_title, seo_description, status  
+`media_assets` (optional): alt_text, width, height  
+`page_sections`: hero_headline, hero_supporting, intro, hero_image, about_image
+
+### Fallback behavior
+- Unpublished/missing slug → 404
+- SEO / CTA / body fallbacks as before
+- Empty image path → placeholder block with descriptive alt
+
+### Files
+- `src/app/uslugi/[slug]/page.tsx`, `src/app/uslugi/page.tsx`
+- `src/app/page.tsx`, `src/components/public/public-header.tsx`, `cms-image-slot.tsx`, `service-card.tsx`
+- `src/lib/cms/public-content.ts`, `public-nav.ts`, `public-paths.ts`, `media.ts`
+- `docs/media-pipeline.md`, `next.config.ts`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed (no errors)
+- `npm run build` — passed; routes include `/uslugi` and `/uslugi/[slug]`
+
+### Manual checks
+1. `/uslugi/biorezonans`
+2. `/uslugi/ot-trevoga-kam-spokoystvie`
+3. `/uslugi/hranitelna-programa`
+4. `/uslugi/izberi-sebe-si`
+5. Header shows four service links + mobile menu
+6. `/#contact`, `/#about`, `/#faq`
+7. Unpublished slug → 404
+
+### Next step
+- Consultation form → `consultation_requests`, or admin media upload + optimization pipeline.
+
+---
+
+## 2026-08-05 — Public service URLs → `/uslugi/[slug]`
+
+**Status:** Public service routes use Bulgarian-transliterated `/uslugi`. DB table remains `services`. Admin stays at `/admin/services`.
+
+### Change
+- Moved `src/app/services/*` → `src/app/uslugi/*`
+- Cards / nav / breadcrumbs use `/uslugi` and `/uslugi/[slug]`
+- Homepage section anchor `id="uslugi"` (was `#services`)
+- Helper: `PUBLIC_USLUGI_BASE`, `publicServicePath(slug)` in `public-content.ts`
+- Permanent redirects: `/services` → `/uslugi`, `/services/:slug` → `/uslugi/:slug`
+- Admin service save revalidates `/`, `/uslugi`, `/uslugi/[slug]`
+
+### Expected public URLs
+- `/uslugi/biorezonans`
+- `/uslugi/ot-trevoga-kam-spokoystvie`
+- `/uslugi/hranitelna-programa`
+- `/uslugi/izberi-sebe-si`
+
+### Files
+- `src/app/uslugi/page.tsx`, `src/app/uslugi/[slug]/page.tsx` (moved)
+- `src/app/services/*` removed
+- `src/components/public/service-card.tsx`, `public-header.tsx`
+- `src/app/page.tsx`, `src/lib/cms/public-content.ts`
+- `src/app/admin/(protected)/services/[id]/actions.ts`
+- `next.config.ts`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; routes include `/uslugi` and `/uslugi/[slug]` (no public `/services`)
+
+### Next step
+- Consultation form → `consultation_requests`, or publish FAQ/testimonials.
+
+---
+
 ## 2026-08-05 — Public service detail pages (`/services/[slug]`)
 
-**Status:** Published services have public detail pages; homepage cards link to `/services/[slug]`. Optional `/services` index included.
+**Status:** _(Superseded for public paths)_ Originally shipped as `/services/[slug]`; migrated to `/uslugi/[slug]` in the entry above. Admin CMS paths unchanged.
+
+**Status (historical):** Published services had public detail pages; homepage cards linked to `/services/[slug]`. Optional `/services` index included.
 
 ### Implemented
 - Dynamic route `src/app/services/[slug]/page.tsx` — published-only by slug; otherwise `notFound()`

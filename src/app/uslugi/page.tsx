@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: `Преглед на услугите на ${brand.officialName}.`,
 };
 
-export default async function ServicesIndexPage() {
+export default async function UslugiIndexPage() {
   const [services, chrome] = await Promise.all([
     getPublishedServices(),
     getPublicSiteChrome(),
@@ -29,8 +29,8 @@ export default async function ServicesIndexPage() {
           chrome.settings.display_name || chrome.settings.official_name
         }
         officialName={chrome.settings.official_name}
-        ctaLabel={chrome.ctaLabel}
         ctaHref={chrome.ctaHref}
+        navItems={chrome.navItems}
       />
 
       <main className="flex-1">

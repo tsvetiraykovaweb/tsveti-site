@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { isExternalHref } from "@/lib/cms/public-content";
+import { isExternalHref } from "@/lib/cms/public-paths";
 
 type Props = {
   href: string;
