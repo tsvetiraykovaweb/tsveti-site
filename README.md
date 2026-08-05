@@ -58,13 +58,52 @@ Brand direction: *Спокойна естествена експертност*
 
 Official name is always **Цветелина Райнова**. Short display name (e.g. „Цвети“) is configured in `src/lib/brand.ts` via `displayName`.
 
-## Placeholder routes
+## Admin routes
 
-| Path            | Purpose                          |
-| --------------- | -------------------------------- |
-| `/`             | Public home (placeholder)        |
-| `/admin`        | Protected admin dashboard shell  |
-| `/admin/login`  | Admin login (placeholder)        |
+| Path | Purpose |
+| ---- | ------- |
+| `/` | Public home (placeholder) |
+| `/admin` | Protected admin dashboard (requires `admin_profiles`) |
+| `/admin/login` | Email/password login (Supabase Auth) |
+| `/admin/unauthorized` | Logged in but not an admin |
+
+## Supabase setup (admin)
+
+1. **Apply migration** — Supabase Dashboard → **SQL Editor** → paste  
+   `supabase/migrations/20260805150000_initial_cms_schema.sql` → **Run**.
+
+2. **Create Auth user** — **Authentication → Users → Add user** (email + password; Auto Confirm on).
+
+3. **Grant admin** — SQL Editor:
+
+   ```sql
+   INSERT INTO public.admin_profiles (id, email, full_name, is_active)
+   VALUES (
+     'PASTE-USER-UUID-HERE',
+     'admin@example.com',
+     'Цветелина Райнова',
+     true
+   );
+   ```
+
+4. Open `/admin/login` and sign in. Logout is in the admin header.
+
+Full schema/RLS notes: [docs/supabase-schema.md](docs/supabase-schema.md).
+
+## Vercel environment variables
+
+In the Vercel project (**Settings → Environment Variables**), set for Production / Preview / Development:
+
+| Variable | Notes |
+| -------- | ----- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | service_role — server only, never `NEXT_PUBLIC_` |
+| `NEXT_PUBLIC_SITE_URL` | Production site URL (e.g. `https://your-app.vercel.app`) |
+
+Also set Supabase **Authentication → URL Configuration** Site URL + Redirect URLs for localhost and the Vercel domain.
+
+Framework Preset: **Next.js**. Root Directory: **`./`**.
 
 ## Documentation
 

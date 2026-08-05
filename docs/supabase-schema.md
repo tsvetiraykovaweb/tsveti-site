@@ -216,7 +216,7 @@ Paths convention (future): `pages/{slug}/…`, `services/{slug}/…`, `avatars/�
 
 ## Future CMS editing flow
 
-1. Admin logs in at `/admin/login` (Auth UI next).
+1. Admin logs in at `/admin/login` (email/password via Supabase Auth).
 2. Dashboard lists pages, services, FAQs, testimonials, settings, media, consultation requests.
 3. Edits go through Server Actions using SSR anon client (RLS enforces admin).
 4. Publish toggles `status` / `is_published` / `published_at`.
@@ -246,10 +246,26 @@ VALUES (
 
 ```sql
 SELECT * FROM public.admin_profiles;
-SELECT public.is_admin(); -- run while that user is authenticated in a session, or test via app
 ```
 
 6. Log in at `/admin/login` with that email and password.
+
+---
+
+## Vercel environment variables
+
+Add the same keys as `.env.local` in Vercel → **Settings → Environment Variables** (Production, Preview, Development):
+
+| Variable | Scope |
+| -------- | ----- |
+| `NEXT_PUBLIC_SUPABASE_URL` | public |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | public |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only — never expose to browser |
+| `NEXT_PUBLIC_SITE_URL` | production URL |
+
+Auth URLs: **Authentication → URL Configuration** — Site URL = production domain; Redirect URLs include `http://localhost:3000/**` and `https://YOUR-DOMAIN/**`.
+
+Vercel project settings: Framework **Next.js**, Root Directory **`./`**.
 
 ---
 

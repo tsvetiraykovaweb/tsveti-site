@@ -5,6 +5,52 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Harden admin login gate + docs (login already implemented)
+
+**Status:** Email/password admin login/logout were already implemented and user-verified. This pass adds non-admin redirect consistency, empty-field validation message, and README/schema setup docs.
+
+### Current state summary (confirmed in code)
+| Item | Status |
+| ---- | ------ |
+| App Router `src/app` | yes |
+| Migration file | `supabase/migrations/20260805150000_initial_cms_schema.sql` |
+| Cloud migration | applied + first admin — user confirmed earlier (“готово”); agent cannot re-verify cloud |
+| `/admin/login` | real form (`signInWithPassword`), not placeholder |
+| `/admin` gate | server-side `getCurrentUser` + `isAdmin()` / `admin_profiles` |
+| Logout | server action in protected header |
+| Service role in browser | not used (login uses anon browser client) |
+
+### Completed this step
+- Empty email/password → clear BG error before Supabase call
+- Logged-in non-admin visiting `/admin/login` → redirect `/admin/unauthorized`
+- README: admin setup steps + Vercel env vars; routes table updated
+- `docs/supabase-schema.md`: Vercel env + Auth URL notes
+
+### Files changed
+- `src/app/admin/login/login-form.tsx`
+- `src/app/admin/login/page.tsx`
+- `README.md`
+- `docs/supabase-schema.md`
+- `DEVELOPMENT_LOG.md`
+
+### Commands run
+- `npm run lint` — passed
+- `npm run build` — passed
+
+### Assumptions
+- User’s earlier confirmation still valid: migration applied, admin row exists, local login works.
+- Cloud state not re-queried in this session.
+
+### Blockers
+- None for local admin auth.
+- Production login still depends on Vercel env vars + Supabase Auth redirect URLs (user may still need to confirm).
+
+### Next recommended steps
+1. Confirm Vercel env vars + Auth redirect URLs for production `/admin/login`.
+2. CMS seed (`site_settings` / pages) and editors, or public site shell.
+
+---
+
 ## 2026-08-05 — Migration applied + first admin confirmed
 
 **Status:** Cloud Supabase schema applied; first admin user created and login verified by user (“готово”).

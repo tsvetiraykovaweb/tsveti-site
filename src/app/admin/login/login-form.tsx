@@ -21,9 +21,16 @@ export function AdminLoginForm() {
     setStatus("loading");
     setMessage(null);
 
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !password) {
+      setStatus("error");
+      setMessage("Моля, попълни имейл и парола.");
+      return;
+    }
+
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
+      email: trimmedEmail,
       password,
     });
 

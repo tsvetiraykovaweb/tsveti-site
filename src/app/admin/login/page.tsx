@@ -9,8 +9,11 @@ export default async function AdminLoginPage() {
 
   if (isSupabaseConfigured) {
     const user = await getCurrentUser();
-    if (user && (await isAdmin())) {
-      redirect("/admin");
+    if (user) {
+      if (await isAdmin()) {
+        redirect("/admin");
+      }
+      redirect("/admin/unauthorized");
     }
   }
 
