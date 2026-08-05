@@ -68,6 +68,7 @@ Official name is always **Цветелина Райнова**. Short display nam
 | `/admin/site-settings` | Edit site settings (names, contact, CTA, SEO) |
 | `/admin/services` | List/edit services |
 | `/admin/faqs` | List/create/edit FAQ |
+| `/admin/testimonials` | List/create/edit testimonials |
 | `/admin/unauthorized` | Logged in but not an admin |
 
 ## Supabase setup (admin)

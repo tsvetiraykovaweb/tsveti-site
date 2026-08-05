@@ -5,6 +5,45 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Admin Testimonials CMS editor
+
+**Status:** Testimonials list / create / edit implemented. Soft unpublish only; no service FK in schema.
+
+### Pre-change summary
+- FAQ editor done; seed executed; public site still placeholder.
+- `testimonials`: author_name, author_role, quote, avatar_path, sort_order, is_published.
+
+### Implemented
+- `/admin/testimonials` — ordered by sort_order, then created_at
+- `/admin/testimonials/new` — create (default author „Клиент (шаблон)“)
+- `/admin/testimonials/[id]` — edit
+- Validation: quote + author_name required; sort_order numeric
+- Soft unpublish; avatar_path as text path only (no upload UI)
+- Nav links + empty state
+
+### Manual checks
+1. `/admin/testimonials` — 2 seeded placeholders, unpublished
+2. Edit → save → success
+3. Create new → redirect to edit
+4. Do not publish invented quotes
+
+### Files
+- `src/lib/cms/testimonials.ts`
+- `src/app/admin/(protected)/testimonials/**`
+- `layout.tsx`, `page.tsx`, `README.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed
+
+### Blockers
+- None for admin CRUD. Media upload still pending.
+
+### Next step
+- Public site shell reading site_settings + published services/FAQs/testimonials, or media upload.
+
+---
+
 ## 2026-08-05 — Admin FAQ CMS editor
 
 **Status:** FAQ list / create / edit implemented. Schema has no page/service FK — uses `category` + `is_published`.

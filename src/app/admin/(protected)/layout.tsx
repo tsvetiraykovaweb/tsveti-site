@@ -82,6 +82,12 @@ export default async function ProtectedAdminLayout({
             >
               FAQ
             </Link>
+            <Link
+              href="/admin/testimonials"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Отзиви
+            </Link>
           </nav>
         </div>
         <AdminLogoutButton />

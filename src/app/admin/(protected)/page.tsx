@@ -27,6 +27,12 @@ export default function AdminDashboardPage() {
         >
           Въпроси (FAQ)
         </Link>
+        <Link
+          href="/admin/testimonials"
+          className="text-primary underline-offset-4 hover:underline"
+        >
+          Отзиви
+        </Link>
       </nav>
 
       <ul className="mt-8 list-inside list-disc text-sm text-text-muted">
@@ -34,7 +40,8 @@ export default function AdminDashboardPage() {
         <li>Site settings — активен</li>
         <li>Услуги — активен</li>
         <li>FAQ — активен</li>
-        <li>Отзиви, публични страници — предстоят</li>
+        <li>Отзиви — активен</li>
+        <li>Публични страници — предстоят</li>
       </ul>
     </section>
   );
