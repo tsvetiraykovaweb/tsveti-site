@@ -1,12 +1,14 @@
 "use client";
 
 import { FormEvent, useState, useTransition } from "react";
+import Link from "next/link";
 import { submitConsultationRequest } from "@/lib/consultations/submit";
 import {
   CONTACT_METHOD_OPTIONS,
   SERVICE_INTEREST_OPTIONS,
   type ContactMethodFormValue,
 } from "@/lib/consultations/options";
+import { PUBLIC_PRIVACY_PATH } from "@/lib/cms/public-paths";
 
 type Props = {
   initialServiceInterest?: string;
@@ -253,7 +255,14 @@ export function ConsultationForm({ initialServiceInterest = "" }: Props) {
           />
           <span>
             Съгласявам се данните ми да бъдат използвани само за връзка по
-            тази заявка. *
+            тази заявка. Вижте{" "}
+            <Link
+              href={PUBLIC_PRIVACY_PATH}
+              className="text-accent underline-offset-4 hover:underline"
+            >
+              политиката за поверителност
+            </Link>
+            . *
           </span>
         </label>
         {fieldErrors.consent ? (

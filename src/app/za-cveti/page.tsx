@@ -8,6 +8,10 @@ import {
   sectionLines,
 } from "@/lib/cms/public-pages";
 import {
+  filterRealCmsLines,
+  isCmsPlaceholderText,
+} from "@/lib/cms/placeholder-copy";
+import {
   PUBLIC_CONSULTATION_PATH,
 } from "@/lib/cms/public-paths";
 import { PublicContainer } from "@/components/public/public-container";
@@ -63,7 +67,11 @@ export default async function AboutPage() {
 
   const approachLines = sectionLines(approach);
   const valuesLines = sectionLines(values);
-  const qualLines = sectionLines(qualifications);
+  const qualLines = filterRealCmsLines(sectionLines(qualifications));
+  const storyBody =
+    story?.plainBody && !isCmsPlaceholderText(story.plainBody)
+      ? story.plainBody
+      : null;
 
   return (
     <>
@@ -112,8 +120,8 @@ export default async function AboutPage() {
                 {story?.fields.heading || "Лична история"}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-text-muted">
-                {story?.plainBody ||
-                  `[Добавете лична история] — кратък, човешки текст за пътя на ${displayName}, без медицински твърдения и без измислени биографични детайли.`}
+                {storyBody ||
+                  `Кратък текст за пътя на ${displayName} ще бъде допълнен тук — без медицински твърдения и без измислени биографични детайли.`}
               </p>
             </div>
             <CmsImageSlot image={storyImage} />
@@ -161,37 +169,27 @@ export default async function AboutPage() {
           </PublicContainer>
         </section>
 
+        {qualLines.length > 0 ? (
         <section className="border-t border-border bg-bg-secondary py-16">
           <PublicContainer className="max-w-3xl">
             <h2 className="font-heading text-2xl text-primary md:text-3xl">
               {qualifications?.fields.heading ||
                 "Образование и квалификации"}
             </h2>
-            {qualifications?.fields.eyebrow ? (
+            {qualifications?.fields.eyebrow &&
+            !isCmsPlaceholderText(qualifications.fields.eyebrow) ? (
               <p className="mt-4 text-sm text-text-muted">
                 {qualifications.fields.eyebrow}
               </p>
-            ) : (
-              <p className="mt-4 text-sm text-text-muted">
-                Полетата по-долу са шаблони. Попълнете ги само с потвърдени
-                данни. Не измисляйте титли или сертификати.
-              </p>
-            )}
+            ) : null}
             <ul className="mt-6 space-y-2 text-base text-text-muted">
-              {(qualLines.length > 0
-                ? qualLines
-                : [
-                    "[Добавете образование]",
-                    "[Добавете квалификация]",
-                    "[Добавете сертификат]",
-                    "[Добавете професионално наименование]",
-                  ]
-              ).map((line) => (
+              {qualLines.map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>
           </PublicContainer>
         </section>
+        ) : null}
 
         <section className="py-16">
           <PublicContainer className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">

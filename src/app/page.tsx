@@ -120,6 +120,7 @@ export default async function HomePage() {
           </PublicContainer>
         </section>
 
+        {faqs.length > 0 ? (
         <section id="faq" className="py-20">
           <PublicContainer>
             <h2 className="font-heading text-3xl text-primary md:text-4xl">
@@ -130,7 +131,9 @@ export default async function HomePage() {
             </div>
           </PublicContainer>
         </section>
+        ) : null}
 
+        {testimonials.length > 0 ? (
         <section
           id="testimonials"
           className="border-y border-border bg-bg-secondary py-20"
@@ -144,6 +147,7 @@ export default async function HomePage() {
             </div>
           </PublicContainer>
         </section>
+        ) : null}
 
         <section id="consultation" className="py-20">
           <PublicContainer className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
@@ -169,7 +173,17 @@ export default async function HomePage() {
               Свържете се за насоки и уточняване на следваща стъпка.
             </p>
             <div className="mt-6 space-y-2 text-sm text-text-muted md:text-base">
-              {settings.phone ? <p>Телефон: {settings.phone}</p> : null}
+              {settings.phone ? (
+                <p>
+                  Телефон:{" "}
+                  <a
+                    href={`tel:${settings.phone.trim()}`}
+                    className="text-accent underline-offset-4 hover:underline"
+                  >
+                    {settings.phone}
+                  </a>
+                </p>
+              ) : null}
               {settings.email ? (
                 <p>
                   Имейл:{" "}

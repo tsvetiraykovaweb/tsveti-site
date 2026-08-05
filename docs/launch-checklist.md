@@ -2,6 +2,8 @@
 
 Кратък production-readiness списък. Отметнете преди публичен launch.
 
+Жива admin проверка: **`/admin/readiness`** (статус + бързи връзки; без secret стойности).
+
 ## Infrastructure
 
 - [ ] Supabase migrations applied (`20260805150000_initial_cms_schema.sql`, `20260805180000_media_assets_caption.sql`)
@@ -22,6 +24,7 @@
 
 - [ ] `/admin/login` works
 - [ ] Logout works
+- [ ] Open `/admin/readiness` and clear missing/warn items (or accept intentional warnings)
 - [ ] CMS: settings, services, FAQs, testimonials, pages, media, consultation requests
 - [ ] Media upload creates WebP variants in `site-assets` + `media_assets` row
 - [ ] Service `image_path` selectable from media library
@@ -29,11 +32,12 @@
 
 ## Public flows
 
-- [ ] `/` homepage (hero/about image slots + fallbacks)
+- [ ] `/` homepage (hero/about image slots + fallbacks; FAQ/отзиви секции само ако има съдържание)
 - [ ] `/uslugi` and `/uslugi/[slug]` (BG URLs, not `/services`)
 - [ ] `/za-cveti`, `/kontakti`, `/bezplatna-konsultatsia`, `/politika-za-poveritelnost`
 - [ ] Flat nav: separate service items, no dropdown
 - [ ] Consultation form validates + inserts into `consultation_requests`
+- [ ] Consultation consent links to privacy policy
 - [ ] Form still succeeds if Resend env is missing
 - [ ] With Resend configured: notification email arrives (name/phone/email/service/contact + brief message if any; full details in admin)
 
@@ -48,7 +52,7 @@
 
 - [ ] Official name is **Цветелина Райкова** (not Райнова / Райново)
 - [ ] No invented testimonials published
-- [ ] No invented qualifications/certificates on About
+- [ ] No invented qualifications/certificates on About (empty qualifications stay hidden)
 - [ ] No medical claims (`лекува`, `диагностицира`, `гарантира`, `премахва тревожността`)
 - [ ] Privacy / legal copy reviewed by a professional before treating it as final
 - [ ] Emergency disclaimer present on contact / consultation surfaces
@@ -60,3 +64,4 @@
 - [ ] Update status
 - [ ] Upload one test image and attach to a service / home section
 - [ ] Check mobile header «Меню» and primary CTA
+- [ ] Re-check `/admin/readiness` on production

@@ -65,6 +65,12 @@ export default async function ProtectedAdminLayout({
               Табло
             </Link>
             <Link
+              href="/admin/readiness"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Готовност
+            </Link>
+            <Link
               href="/admin/site-settings"
               className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
             >

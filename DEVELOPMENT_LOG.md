@@ -5,6 +5,55 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Launch polish + admin readiness
+
+**Status:** New `/admin/readiness` status page; public UX polish; privacy draft labeling strengthened; safety scan clean in public copy.
+
+### Admin readiness (`/admin/readiness`)
+- Checks: site_settings, published services, page SEO, home hero/about image paths, service images, FAQ, testimonials (optional), `NEXT_PUBLIC_SITE_URL`, Resend env configured/missing (no secret values)
+- Privacy legal-review warning
+- Quick links to home/za-cveti/kontakti/privacy editors, services, media, FAQ, testimonials
+- Nav + dashboard entry «Готовност»
+
+### Public polish
+- `tel:` links on homepage + footer
+- Consultation consent links to privacy
+- Hide empty FAQ/testimonials sections on homepage
+- Hide empty/placeholder qualifications on `/za-cveti`; soft story fallback (no `[Добавете…]` brackets)
+- Remove empty second image slot on `/uslugi/[slug]`
+- Privacy: always-visible draft badge + amber legal-review notice; contact link always shown
+- Admin services copy no longer says public pages are “coming soon”
+
+### Docs / seeds
+- `docs/launch-checklist.md` references `/admin/readiness`
+- `004` story/qualifications placeholders softened for future re-runs
+
+### Safety scan
+- `Райнова` only in corrective seed/docs/checklist mentions
+- No medical-claim phrases in `src` public copy
+
+### Files
+- `src/lib/admin/readiness.ts`, `src/app/admin/(protected)/readiness/page.tsx`
+- `src/app/admin/(protected)/layout.tsx`, `page.tsx`, `pages/page.tsx`, `services/page.tsx`
+- `src/lib/cms/placeholder-copy.ts`
+- `src/app/page.tsx`, `za-cveti/page.tsx`, `politika-za-poveritelnost/page.tsx`, `uslugi/[slug]/page.tsx`
+- `src/components/public/consultation-form.tsx`, `public-footer.tsx`
+- `supabase/seed/004_page_content_cms.sql`
+- `docs/launch-checklist.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — pass
+- `npm run build` — pass (`/admin/readiness` listed)
+
+### Manual actions remaining
+1. Open `/admin/readiness` and clear warn/missing items
+2. Configure production `NEXT_PUBLIC_SITE_URL` + optional Resend
+3. Upload home/service images via media + pages CMS
+4. Legal review of privacy before treating as final
+5. Re-run `004` only if you want seed placeholder text refreshed (overwrites section content)
+
+---
+
 ## 2026-08-05 — Production-readiness follow-up (email message + seed fix)
 
 **Status:** Confirmed prior pack (`cc6f08b`) covers homepage CMS images, Resend notify, admin filters, launch checklist. This follow-up: include brief form message in notify email (truncated); harden `005` seed; re-verify lint/build + safety scan.

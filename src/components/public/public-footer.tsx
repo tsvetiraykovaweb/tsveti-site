@@ -56,7 +56,13 @@ export function PublicFooter({
         </nav>
 
         <div className="space-y-1 text-sm text-text-muted">
-          {phone ? <p>{phone}</p> : null}
+          {phone ? (
+            <p>
+              <a href={`tel:${phone.trim()}`} className="hover:text-primary">
+                {phone}
+              </a>
+            </p>
+          ) : null}
           {email ? (
             <p>
               <a href={`mailto:${email}`} className="hover:text-primary">

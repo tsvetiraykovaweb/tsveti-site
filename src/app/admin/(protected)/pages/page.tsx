@@ -34,6 +34,27 @@ export default async function AdminPagesListPage() {
         библиотеката.
       </p>
 
+      <div className="mt-4 flex flex-wrap gap-3 text-sm">
+        <Link
+          href="/admin/readiness"
+          className="text-accent underline-offset-4 hover:underline"
+        >
+          Готовност за launch
+        </Link>
+        <Link
+          href="/admin/media"
+          className="text-accent underline-offset-4 hover:underline"
+        >
+          Медия библиотека
+        </Link>
+        <Link
+          href="/admin/services"
+          className="text-accent underline-offset-4 hover:underline"
+        >
+          Услуги
+        </Link>
+      </div>
+
       {error ? (
         <p className="mt-6 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
           Грешка: {error.message}

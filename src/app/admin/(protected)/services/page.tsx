@@ -28,7 +28,8 @@ export default async function AdminServicesPage() {
       <h1 className="font-heading text-3xl text-primary">Услуги</h1>
       <p className="mt-2 text-text-muted">
         Очаквани seed услуги: Биорезонанс, От тревога към спокойствие,
-        Хранителна програма, Избери себе си. Публичните страници предстоят.
+        Хранителна програма, Избери себе си. Публични URL:{" "}
+        <code>/uslugi/[slug]</code>.
       </p>
 
       {error ? (

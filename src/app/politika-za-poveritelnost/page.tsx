@@ -66,7 +66,7 @@ export default async function PrivacyPolicyPage() {
               <span className="text-primary">Политика за поверителност</span>
             </p>
             <p className="mt-6 inline-block border border-border bg-bg px-3 py-1 text-xs tracking-wide text-accent uppercase">
-              {intro?.fields.eyebrow || "Чернова · правна проверка е нужна"}
+              Чернова · правна проверка е нужна
             </p>
             <h1 className="mt-4 font-heading text-4xl font-medium text-primary md:text-5xl">
               {intro?.fields.heading ||
@@ -76,6 +76,10 @@ export default async function PrivacyPolicyPage() {
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-muted">
               {intro?.plainBody ||
                 `Този текст е предварителен шаблон за сайта на ${officialName}. Не представлява окончателен правен съвет и трябва да бъде прегледан от специалист преди официално стартиране.`}
+            </p>
+            <p className="mt-4 max-w-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+              Това е чернова / fallback текст. Нужна е правна проверка преди
+              production launch. Дотогава страницата остава с noindex.
             </p>
           </PublicContainer>
         </section>
@@ -92,7 +96,7 @@ export default async function PrivacyPolicyPage() {
                   href={PUBLIC_CONSULTATION_PATH}
                   className="text-accent underline-offset-4 hover:underline"
                 >
-                  /bezplatna-konsultatsia
+                  безплатна консултация
                 </Link>
                 ) може да се съберат:
               </p>
@@ -151,14 +155,12 @@ export default async function PrivacyPolicyPage() {
               <p className="mt-3">
                 {rights?.plainBody ||
                   "За въпроси относно личните данни може да се свържете през страница Контакти. Точните срокове, правни основания и процедури ще бъдат уточнени след правна редакция."}{" "}
-                {!rights?.plainBody ? (
-                  <Link
-                    href={PUBLIC_CONTACT_PATH}
-                    className="text-accent underline-offset-4 hover:underline"
-                  >
-                    Отвори Контакти
-                  </Link>
-                ) : null}
+                <Link
+                  href={PUBLIC_CONTACT_PATH}
+                  className="text-accent underline-offset-4 hover:underline"
+                >
+                  Отвори Контакти
+                </Link>
               </p>
             </div>
 

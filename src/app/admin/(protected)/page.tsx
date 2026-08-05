@@ -2,6 +2,12 @@ import Link from "next/link";
 
 const cmsSections = [
   {
+    href: "/admin/readiness",
+    title: "Готовност за launch",
+    status: "Проверка",
+    note: "Status checks + бързи връзки преди публикуване",
+  },
+  {
     href: "/admin/site-settings",
     title: "Настройки на сайта",
     status: "Готов",
@@ -11,7 +17,7 @@ const cmsSections = [
     href: "/admin/services",
     title: "Услуги",
     status: "Готов",
-    note: "4 seed услуги — редакция по id",
+    note: "4 seed услуги — редакция по id · публични /uslugi/...",
   },
   {
     href: "/admin/faqs",
@@ -78,6 +84,16 @@ export default function AdminDashboardPage() {
       <div className="mt-8 rounded border border-border bg-bg-secondary px-4 py-4 text-sm text-text-muted">
         <p className="font-medium text-text">Преди Vercel deploy</p>
         <ul className="mt-2 list-inside list-disc space-y-1">
+          <li>
+            Отвори{" "}
+            <Link
+              href="/admin/readiness"
+              className="text-accent underline-offset-4 hover:underline"
+            >
+              Готовност за launch
+            </Link>{" "}
+            за status checks
+          </li>
           <li>Env vars: URL, anon, site URL (+ service role само сървърно)</li>
           <li>
             SQL patch за името:{" "}
