@@ -5,6 +5,33 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — GitHub push verified; Vercel/Supabase still pending locally
+
+**Status:** Code on `tsvetiraykovaweb/tsveti-site` ✅; local Supabase env and Vercel client link ❌
+
+### Verified
+- `gh auth` → **tsvetiraykovaweb**
+- Remote `origin` → `tsvetiraykovaweb/tsveti-site`
+- GitHub repo not empty; `main` pushed
+- Doc updates committed and pushed
+
+### Not ready yet (local check)
+- No `.env.local` — Supabase keys not configured locally
+- No `.vercel` — project not linked locally
+- `vercel whoami` → still **vemidicrafts-3485** / team **ve-mi-di** (vemidi, not client)
+
+### Next for user
+1. Supabase: `.env.local` from `.env.example`
+2. Vercel: login with **client** account → import `tsvetiraykovaweb/tsveti-site` in dashboard
+3. Or locally: `vercel logout` → `vercel login` (client) → `vercel link`
+
+### Checks
+- `gh repo view tsvetiraykovaweb/tsveti-site` — OK, has files
+- `git push` — OK after tsvetiraykovaweb auth
+- Vercel project for tsveti-site on ve-mi-di — not found
+
+---
+
 ## 2026-08-05 — Link to tsvetiraykovaweb/tsveti-site (push pending)
 
 **Status:** `origin` → `tsvetiraykovaweb/tsveti-site`; push blocked — local `gh` still authenticated as `vemidi-dev`.
