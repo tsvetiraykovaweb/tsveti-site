@@ -5,6 +5,24 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Fix migration order: create admin_profiles before is_admin()
+
+**Status:** Migration SQL failed in Dashboard because `is_admin()` referenced `admin_profiles` before the table existed. Order fixed in the same migration file.
+
+### Cause
+`ERROR: 42P01: relation "public.admin_profiles" does not exist` at `is_admin()` body.
+
+### Fix
+Reorder: `set_updated_at` → `CREATE TABLE admin_profiles` → `is_admin()` → RLS policy → remaining tables.
+
+### User action
+Re-run the full fixed file in SQL Editor (safe to re-run helpers via `CREATE OR REPLACE`; tables use `CREATE TABLE` — if a partial run created nothing after the failure, full re-run is fine).
+
+### Checks
+- Code lint/build not re-run (SQL-only fix)
+
+---
+
 ## 2026-08-05 — Admin login/logout UI + manual migration guide
 
 **Status:** Real `/admin/login` (email/password) and logout implemented. Cloud migration still **manual / pending** (not applied by agent).

@@ -19,8 +19,28 @@ BEGIN
 END;
 $$;
 
+-- ---------------------------------------------------------------------------
+-- admin_profiles (created before is_admin(), which references this table)
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE public.admin_profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE,
+  email text NOT NULL,
+  full_name text,
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TRIGGER admin_profiles_set_updated_at
+  BEFORE UPDATE ON public.admin_profiles
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+ALTER TABLE public.admin_profiles ENABLE ROW LEVEL SECURITY;
+
 -- True when the current auth user is an active admin.
 -- SECURITY DEFINER so RLS policies can call it without recursion issues.
+-- Must be created AFTER admin_profiles exists (SQL functions validate relations).
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS boolean
 LANGUAGE sql
@@ -38,25 +58,6 @@ $$;
 
 REVOKE ALL ON FUNCTION public.is_admin() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO anon, authenticated;
-
--- ---------------------------------------------------------------------------
--- admin_profiles
--- ---------------------------------------------------------------------------
-
-CREATE TABLE public.admin_profiles (
-  id uuid PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE,
-  email text NOT NULL,
-  full_name text,
-  is_active boolean NOT NULL DEFAULT true,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TRIGGER admin_profiles_set_updated_at
-  BEFORE UPDATE ON public.admin_profiles
-  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
-
-ALTER TABLE public.admin_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Admins can list all admin profiles; a user can read their own row.
 CREATE POLICY admin_profiles_select
