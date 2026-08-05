@@ -5,6 +5,83 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Diagnosis: Vercel 404 (NOT_FOUND) — not a Next.js routing bug
+
+**Status:** App structure is valid. Preview/production hostnames return Vercel platform `404 NOT_FOUND` (`X-Vercel-Error: NOT_FOUND`), not Next.js `_not-found`.
+
+**Latest update:** 2026-08-05 ~14:40 UTC+3
+
+### Checks performed (no code refactor)
+
+| Check | Result |
+| ----- | ------ |
+| 1. Homepage route | ✅ `src/app/page.tsx` exists (App Router with `src/`) |
+| 2. `package.json` root | ✅ at repo root (`D:\projects\cveti rajkova\site\package.json`) |
+| 3. App Router | ✅ `src/app/layout.tsx` + `page.tsx`; no `pages/` router |
+| 4. Vercel Root Directory | ✅ should be `.` / empty (project root = GitHub root) |
+| 5. Git sync | ✅ `main` matches `origin/main`; latest commits pushed (`27338c8`, `698cd83`) |
+| 6. Build / framework | ✅ `npm run build` succeeds; Framework Next.js; scripts `build`/`start` correct; no `vercel.json` override |
+| 7. Routes from build | ✅ `/`, `/_not-found`, `/admin`, `/admin/login` |
+
+### Why the preview URL returns 404
+
+HTTP response from deployment hostnames:
+
+```
+HTTP/1.1 404 Not Found
+X-Vercel-Error: NOT_FOUND
+```
+
+Body: `The page could not be found` / `NOT_FOUND` — this is **Vercel edge** saying **no deployment is mapped to that hostname**, not the Next.js app failing to find a page.
+
+Evidence:
+- Local/production build generates `/` successfully.
+- GitHub deployment statuses point at URLs like `https://tsvetiraykova-fu8rb9ms2-tsveti.vercel.app` with state success, but those hosts currently also return platform `NOT_FOUND`.
+- Common production aliases (`tsvetiraykova-tsveti.vercel.app`, `tsveti-raykova.vercel.app`, etc.) also 404.
+- Project was **renamed** (`tsveti-site` → `tsveti.raykova`) and Domains were edited manually earlier — classic cause of broken/orphaned `*.vercel.app` hostnames and stale preview links.
+- Two projects previously existed (`tsveti.raykova` + `tsveti-site`), which can leave old preview URLs pointing at deleted/orphaned deployments.
+
+**Conclusion:** Code/routes are fine. The broken piece is **Vercel Domains / deployment URL assignment** (or opening an **obsolete preview URL** after rename).
+
+### Exactly what to fix (Vercel setting — minimal)
+
+1. Open project **`tsveti.raykova`** (team **Tsveti**).
+2. **Settings → Domains**
+   - Ensure there is a valid production domain assigned to this project (re-add the default `*.vercel.app` domain if missing after rename).
+   - Do **not** leave Domains empty.
+3. **Deployments** → latest **Ready** deploy → click **Visit** (use the URL Vercel shows now — discard old preview bookmarks like `…-1zzilmvz1-…`).
+4. If a yellow warning remains on the project: open it — often Domains / Protection related.
+5. Optional cleanup: delete duplicate project **`tsveti-site`** if it still exists.
+6. **Root Directory:** leave blank / `.` — do **not** set a subdirectory.
+7. **Deployment Protection:** if Visit works only when logged into Vercel, disable protection for Production (and Preview if public).
+
+### Minimal change recommended
+
+- **No Next.js code change.**
+- **No Root Directory change.**
+- Fix **Domains** on `tsveti.raykova` + open **Visit** from the latest Ready deployment.
+- After Domains work: set `NEXT_PUBLIC_SITE_URL` to that production domain; add Supabase env vars if missing; Redeploy once.
+
+### Working local URLs (after fix, same paths on Vercel)
+
+- `/` — homepage
+- `/admin/login` — admin login placeholder
+- `/admin` — admin dashboard (auth gate when Supabase env present)
+
+### Checks run
+
+- `npm run build` — **passed** (routes listed above)
+- `curl -I` on latest deployment URL — **404** with `X-Vercel-Error: NOT_FOUND`
+- GitHub deployments API — reports success, but hostnames no longer resolve to a live deployment mapping
+
+### Not done this step
+
+- No refactor
+- No Root Directory / framework config change in repo
+- Domains fix must be done in Vercel dashboard (no local CLI link to client Vercel account)
+
+---
+
 ## 2026-08-05 — Vercel deploy triggered successfully
 
 **Status:** Empty commit `698cd83` triggered Vercel production deploy for `tsveti.raykova`. Git connection confirmed OK.
