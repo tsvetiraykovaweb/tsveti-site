@@ -31,6 +31,12 @@ const cmsSections = [
     status: "Готов",
     note: "Частни заявки от публичната форма",
   },
+  {
+    href: "/admin/media",
+    title: "Медия библиотека",
+    status: "Готов",
+    note: "Качване + WebP варианти в site-assets",
+  },
 ] as const;
 
 export default function AdminDashboardPage() {

@@ -69,6 +69,8 @@ Official name is always **Цветелина Райкова**. Short display nam
 | `/admin/services` | List/edit services |
 | `/admin/faqs` | List/create/edit FAQ |
 | `/admin/testimonials` | List/create/edit testimonials |
+| `/admin/consultation-requests` | Private consultation inbox |
+| `/admin/media` | Image upload + library (sharp → WebP variants) |
 | `/admin/unauthorized` | Logged in but not an admin |
 
 ## Supabase setup (admin)

@@ -11,11 +11,16 @@ import { saveService } from "./actions";
 type Props = {
   id: string;
   initialValues: ServiceFormValues;
+  mediaOptions?: { path: string; label: string }[];
 };
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export function ServiceEditForm({ id, initialValues }: Props) {
+export function ServiceEditForm({
+  id,
+  initialValues,
+  mediaOptions = [],
+}: Props) {
   const [values, setValues] = useState(initialValues);
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string | null>(null);
@@ -110,6 +115,45 @@ export function ServiceEditForm({ id, initialValues }: Props) {
           value={values.body}
           onChange={(e) => update("body", e.target.value)}
           className={fieldClass}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="image_path" className={labelClass}>
+          Изображение (storage path)
+        </label>
+        {mediaOptions.length > 0 ? (
+          <select
+            id="image_path_pick"
+            disabled={busy}
+            value={
+              mediaOptions.some((m) => m.path === values.image_path)
+                ? values.image_path
+                : ""
+            }
+            onChange={(e) => update("image_path", e.target.value)}
+            className={`${fieldClass} mb-2`}
+          >
+            <option value="">— избор от медия библиотеката —</option>
+            {mediaOptions.map((option) => (
+              <option key={option.path} value={option.path}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <p className="mb-2 text-xs text-text-muted">
+            Няма качени файлове още. Качете от /admin/media или въведете път
+            ръчно.
+          </p>
+        )}
+        <input
+          id="image_path"
+          disabled={busy}
+          value={values.image_path}
+          onChange={(e) => update("image_path", e.target.value)}
+          className={fieldClass}
+          placeholder="media/2026/08/…/w1200.webp"
         />
       </div>
 

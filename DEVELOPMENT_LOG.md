@@ -5,6 +5,56 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Admin media upload + sharp optimization
+
+**Status:** Admins can upload images at `/admin/media`; server-side sharp generates WebP variants in `site-assets`; services can set `image_path` from the library.
+
+### Pre-change summary
+- Public image slots (`CmsImageSlot`) existed; `media_assets` + Storage bucket existed; no upload UI.
+
+### Implemented
+- `/admin/media` upload form (file, required alt, optional caption) + grid list
+- `/admin/media/[id]` edit alt/caption, copy path
+- `sharp` WebP variants: 480 / 768 / 1200 / 1600 (quality 82); max input 8 MB; JPG/PNG/WebP only
+- Canonical DB path = `media/{yyyy}/{mm}/{uuid}/w1200.webp`
+- Service editor: pick/paste `image_path`
+- Nav + dashboard link «Медия»
+- Docs: `docs/media-pipeline.md` updated with real pipeline
+- Homepage hero/about still via `page_sections` (documented; no awkward Site Settings hack)
+
+### Storage / RLS
+- Bucket `site-assets` (existing public-read + admin write policies)
+- Upload uses **server-only** service role after `isAdmin()` (never in browser)
+- Metadata insert/update on `media_assets`; public select remains `is_public` only
+- Migration: `20260805180000_media_assets_caption.sql` adds `caption`
+
+### Dependencies
+- `sharp` (also pulled by Next; declared in app dependencies)
+
+### Files
+- `src/lib/media/optimize.ts`, `store.ts`
+- `src/app/admin/(protected)/media/*`
+- `src/app/admin/(protected)/services/[id]/*` (image_path)
+- `src/types/database.ts`, `next.config.ts` (bodySizeLimit 10mb)
+- `supabase/migrations/20260805180000_media_assets_caption.sql`
+- `docs/media-pipeline.md`, `README.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; routes include `/admin/media` and `/admin/media/[id]`
+
+### Manual checks
+1. Apply caption migration in Supabase SQL Editor if needed
+2. Upload at `/admin/media` — confirm Storage objects + `media_assets` row
+3. Set service `image_path` → check `/uslugi/[slug]`
+4. Confirm pages without images still show placeholders
+5. Confirm `SUPABASE_SERVICE_ROLE_KEY` is server-only env
+
+### Next step
+- Email notifications for consultation requests, or page-sections editor for homepage hero/about images.
+
+---
+
 ## 2026-08-05 — About, Contacts, Privacy + SEO (sitemap/robots)
 
 **Status:** Public About/Contact/Privacy pages live; nav/footer updated; sitemap + robots added. Admin consultation inbox already existed from prior entry.

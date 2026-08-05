@@ -235,6 +235,7 @@ export type Database = {
           bucket: string;
           path: string;
           alt_text: string | null;
+          caption: string | null;
           mime_type: string | null;
           width: number | null;
           height: number | null;
@@ -249,6 +250,7 @@ export type Database = {
           bucket?: string;
           path: string;
           alt_text?: string | null;
+          caption?: string | null;
           mime_type?: string | null;
           width?: number | null;
           height?: number | null;

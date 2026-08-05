@@ -1,39 +1,80 @@
-# Media pipeline (planned)
+# Media pipeline
 
-Images for the public site will be uploaded through the **admin panel** later.
-This document describes the intended pipeline so public layouts can reserve slots now
-(`CmsImageSlot`, `services.image_path`, `page_sections` image content, `media_assets`).
+Admin uploads images at `/admin/media`. Processing runs **server-side** with
+[`sharp`](https://sharp.pixelplumbing.com/); only optimized WebP variants are
+stored in Supabase Storage. Public pages use `CmsImageSlot` + `next/image`.
 
-## Goals
+## Goals (implemented)
 
-- Upload via admin only (no hardcoded stock URLs on public pages).
-- Optimize **server-side** before storing public versions.
-- Store **optimized variants**, not only originals.
-- Prefer **WebP / AVIF** where supported.
-- Generate responsive widths: **480, 768, 1200, 1600**.
-- Track metadata: width, height, alt text, caption, storage path, mime type, file size.
-- Public pages use optimized variants + Next.js `next/image`.
+- Upload via admin only (no stock URLs hardcoded on public pages).
+- Optimize server-side before storing public versions.
+- Store responsive WebP variants (not the original upload).
+- Track metadata in `media_assets` (path, alt, caption, width, height, mime, size).
+- Public pages resolve `services.image_path` / section paths via `resolvePublicStorageUrl`.
 
-## Current schema hooks
+## Limits
 
-| Source | Field / table | Public usage |
-| ------ | ------------- | ------------ |
-| `services.image_path` | Storage path | Service detail hero (+ section slot) |
-| `pages.og_image_path` | Storage path | Future OG / social |
-| `page_sections` keys `hero_image`, `about_image` | JSON `image_path` / `path` / `src` | Homepage slots |
-| `media_assets` | `path`, `alt_text`, `width`, `height`, `mime_type`, `size_bytes` | Alt + dimensions for slots |
-| Storage bucket | `site-assets` | Public object URLs |
+| Rule | Value |
+| ---- | ----- |
+| Input types | `image/jpeg`, `image/png`, `image/webp` |
+| Max upload size | **8 MB** (raw input) |
+| Server Action body limit | **10 MB** (`next.config` experimental.serverActions.bodySizeLimit) |
+| Output | WebP quality **82** |
+| Variants | **480 / 768 / 1200 / 1600** (`withoutEnlargement`) |
+| Canonical path in DB | `…/w1200.webp` (or largest requested slot) |
 
-## Intended upload flow (not built yet)
+AVIF is not generated in this version (WebP only for broad compatibility).
 
-1. Admin selects image in CMS.
-2. Server receives original; validates type/size.
-3. Server generates variants (AVIF/WebP + widths above).
-4. Uploads variants to `site-assets` (e.g. `services/{slug}/hero-1200.webp`).
-5. Upserts `media_assets` row with alt, caption, dimensions, mime, size.
-6. Saves path on `services.image_path` or section JSON.
-7. Public `resolvePublicStorageUrl` + `CmsImageSlot` render via `next/image`.
+## Storage layout
+
+Bucket: **`site-assets`** (public read; admin write via RLS / service role on server).
+
+```
+media/{yyyy}/{mm}/{assetId}/w480.webp
+media/{yyyy}/{mm}/{assetId}/w768.webp
+media/{yyyy}/{mm}/{assetId}/w1200.webp
+media/{yyyy}/{mm}/{assetId}/w1600.webp
+```
+
+`media_assets.path` stores the **primary** object (`w1200.webp`). Other widths
+sit beside it for future `srcset` use.
+
+## Schema
+
+Table `media_assets` (+ migration `20260805180000_media_assets_caption.sql` adds `caption`).
+
+Run in Supabase if not applied:
+
+```sql
+ALTER TABLE public.media_assets ADD COLUMN IF NOT EXISTS caption text;
+```
+
+Requires env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY` (server-only, used after `isAdmin()` for Storage upload).
+
+## Admin usage
+
+1. Open `/admin/media`.
+2. Upload file + required **alt text** (+ optional caption).
+3. Copy path or open detail to edit alt/caption.
+4. On `/admin/services/[id]`, pick the path for `image_path` (or paste manually).
+5. Public `/uslugi/[slug]` shows the image via `CmsImageSlot`; empty path → placeholder.
+
+## Homepage / About image slots
+
+Hero and about slots on `/` and `/za-cveti` still read optional
+`page_sections` keys `hero_image` / `about_image` (JSON with `image_path` /
+`path` / `src`). There is **no** Site Settings field for these yet — set the
+section JSON in Supabase (or a future pages editor) to a library path such as
+`media/…/w1200.webp`. Documented deliberately instead of a awkward settings hack.
 
 ## Public fallbacks
 
-If no path is set, pages show a calm placeholder block (no external stock images).
+If no path is set, pages keep calm placeholder blocks (no external stock images).
+
+## Security
+
+- Browser never sees the service role key.
+- Upload/update only after `isAdmin()`.
+- Public may read `is_public` media metadata and public Storage URLs.
+- Consultation requests and other private tables are unchanged.

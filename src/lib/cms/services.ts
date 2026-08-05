@@ -15,6 +15,7 @@ export type ServiceFormValues = {
   slug: string;
   summary: string;
   body: string;
+  image_path: string;
   cta_label: string;
   cta_href: string;
   sort_order: number;

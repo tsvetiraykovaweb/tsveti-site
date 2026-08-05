@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Allow admin image uploads (raw file before sharp optimization).
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
   // Public URLs use Bulgarian transliteration `/uslugi` (DB table stays `services`).
   async redirects() {
     return [

@@ -83,6 +83,7 @@ export async function saveService(
       slug,
       summary: values.summary.trim() || null,
       body: values.body.trim() || null,
+      image_path: values.image_path.trim() || null,
       cta_label: values.cta_label.trim() || null,
       cta_href: values.cta_href.trim() || null,
       sort_order,
