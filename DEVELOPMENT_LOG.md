@@ -5,6 +5,62 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Admin consultation requests list/detail
+
+**Status:** Admins can list and open consultation requests and update status. Public cannot read requests (RLS + protected layout).
+
+### Pre-change summary
+- Public form at `/bezplatna-konsultatsia` inserts into `consultation_requests`.
+- No admin UI for viewing submissions.
+
+### Implemented
+- `/admin/consultation-requests` — list newest first
+- `/admin/consultation-requests/[id]` — full message + contact fields + status form
+- Status update via server action (session + RLS): `new` | `contacted` | `closed` | `spam`
+- Nav link «Заявки» + dashboard CMS row
+- Empty state when no rows
+- No delete, no email notifications
+
+### Fields displayed
+List: created_at, name, phone, email, service_interest, preferred_contact_method, status, message preview  
+Detail: above + full message, consent, updated_at
+
+### Status update behavior
+- Admin-only `updateConsultationRequestStatus`
+- Sets `status` + `updated_by`
+- Revalidates list and detail paths
+- Does not log request contents
+
+### Privacy notes
+- Requests treated as private admin data
+- Protected by `(protected)` layout + `consultation_requests_admin_select/update` RLS
+- No health-data fields added
+- Message treated as short context only
+
+### Files
+- `src/lib/consultations/admin.ts`
+- `src/app/admin/(protected)/consultation-requests/page.tsx`
+- `src/app/admin/(protected)/consultation-requests/[id]/page.tsx`
+- `src/app/admin/(protected)/consultation-requests/actions.ts`
+- `src/app/admin/(protected)/consultation-requests/status-form.tsx`
+- `src/app/admin/(protected)/layout.tsx`, `page.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed
+- `npm run build` — passed; routes include `/admin/consultation-requests` and `/admin/consultation-requests/[id]`
+
+### Manual checks
+1. Submit test request from `/bezplatna-konsultatsia`
+2. Confirm it appears in `/admin/consultation-requests`
+3. Open detail, update status
+4. Confirm logged-out / non-admin cannot access admin list
+
+### Next step
+- Email notifications on new requests, or media upload pipeline.
+
+---
+
 ## 2026-08-05 — Public consultation form (`/bezplatna-konsultatsia`)
 
 **Status:** Public consultation request page inserts into `consultation_requests` via anon SSR client + RLS. Primary CTAs normalize to `/bezplatna-konsultatsia`.

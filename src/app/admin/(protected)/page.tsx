@@ -25,6 +25,12 @@ const cmsSections = [
     status: "Готов",
     note: "Шаблони — не публикувай измислени",
   },
+  {
+    href: "/admin/consultation-requests",
+    title: "Заявки за консултация",
+    status: "Готов",
+    note: "Частни заявки от публичната форма",
+  },
 ] as const;
 
 export default function AdminDashboardPage() {
@@ -71,7 +77,8 @@ export default function AdminDashboardPage() {
       </div>
 
       <p className="mt-6 text-sm text-text-muted">
-        Публични страници от CMS — предстоят.
+        Публичният сайт чете CMS съдържанието. Заявките за консултация са
+        видими само за админи.
       </p>
     </section>
   );
