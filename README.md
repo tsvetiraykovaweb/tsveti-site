@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Цветелина Райнова — Website
 
-## Getting Started
+Production-ready foundation for the personal/professional site of **Цветелина Райнова**.
 
-First, run the development server:
+Stack: Next.js (App Router) · TypeScript · Tailwind CSS · Supabase · Vercel · GitHub
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Brand direction: *Спокойна естествена експертност*
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prerequisites
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Node.js 20+
+- npm
+- A [Supabase](https://supabase.com) project (for auth, DB, storage — later stages)
+- A [Vercel](https://vercel.com) account (for deployment)
+- A [GitHub](https://github.com) repository as the source of truth
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Local setup
 
-## Learn More
+1. Clone the repository and enter the project folder.
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Copy environment variables:
 
-## Deploy on Vercel
+   ```bash
+   cp .env.example .env.local
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Fill in `.env.local` with your Supabase project URL and keys from the Supabase dashboard → Settings → API.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   - `NEXT_PUBLIC_SUPABASE_URL` — project URL  
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — anon/public key (browser-safe)  
+   - `SUPABASE_SERVICE_ROLE_KEY` — **server only**; never expose to the client  
+   - `NEXT_PUBLIC_SITE_URL` — e.g. `http://localhost:3000`
+
+5. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start local dev server   |
+| `npm run build` | Production build         |
+| `npm run start` | Serve production build   |
+| `npm run lint`  | Run ESLint               |
+
+## Brand display name
+
+Official name is always **Цветелина Райнова**. Short display name (e.g. „Цвети“) is configured in `src/lib/brand.ts` via `displayName`.
+
+## Placeholder routes
+
+| Path            | Purpose                          |
+| --------------- | -------------------------------- |
+| `/`             | Public home (placeholder)        |
+| `/admin`        | Protected admin dashboard shell  |
+| `/admin/login`  | Admin login (placeholder)        |
+
+## Documentation
+
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
+- [Draft database schema](docs/DATABASE_SCHEMA.md)
+
+## Security notes
+
+- Never prefix the service role key with `NEXT_PUBLIC_`.
+- Never import `@/lib/supabase/admin` in Client Components.
+- Keep `.env.local` out of git (already covered by `.gitignore`).
+
+## Deploy (GitHub + Vercel + Supabase)
+
+Пълни стъпки: **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**
+
+Бързо:
+
+1. Попълни `.env.local` от `.env.example` (Supabase keys).
+2. Push към GitHub: `vemidi-dev/cvetelina-raynova`.
+3. Import в Vercel от GitHub; добави същите env vars.
+4. Настрой Supabase Auth redirect URLs (localhost + Vercel domain).
