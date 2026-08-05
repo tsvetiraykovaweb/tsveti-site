@@ -5,6 +5,24 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — GitHub complete; Supabase/Vercel accounts only (not configured)
+
+**Status:** `tsvetiraykovaweb/tsveti-site` live on GitHub. Supabase + Vercel: registered but no project/env/deploy yet.
+
+### Confirmed ready
+- GitHub: https://github.com/tsvetiraykovaweb/tsveti-site (`main`, full codebase)
+
+### Not done yet
+- Supabase: no project, no `.env.local`
+- Vercel: no client project, CLI still on vemidi account locally
+
+### Next (user)
+1. Create Supabase project → `.env.local`
+2. Vercel: client login → import repo → env vars → deploy
+3. Supabase Auth URLs with Vercel production URL
+
+---
+
 ## 2026-08-05 — GitHub push verified; Vercel/Supabase still pending locally
 
 **Status:** Code on `tsvetiraykovaweb/tsveti-site` ✅; local Supabase env and Vercel client link ❌
