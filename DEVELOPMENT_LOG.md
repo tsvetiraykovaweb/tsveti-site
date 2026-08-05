@@ -5,6 +5,79 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — GitHub, Vercel, Supabase deployment wiring
+
+**Status:** Phase 0 complete; repo on GitHub, live on Vercel; Supabase env vars still need user keys.
+
+**Latest update:** 2026-08-05 (morning, UTC+3)
+
+### Summary of completed work
+- Created private GitHub repo and pushed `main` branch.
+- Linked Vercel project `ve-mi-di/cvetelina-raynova` to GitHub (auto-connect on `vercel link`).
+- First production deploy succeeded.
+- Added `docs/DEPLOYMENT.md` (BG) with full wiring steps.
+- Added `supabase/config.toml` for future CLI link/migrations.
+- Added `src/lib/env.ts` for public env helper.
+- Added `scripts/sync-vercel-env.ps1` to push `.env.local` vars to Vercel.
+- Renamed default branch from `master` to `main`.
+
+### Files created or modified
+- `docs/DEPLOYMENT.md` (new)
+- `supabase/config.toml` (new)
+- `src/lib/env.ts` (new)
+- `scripts/sync-vercel-env.ps1` (new)
+- `package.json` — `supabase:link`, `supabase:login` scripts
+- `README.md` — deploy section updated
+- `.env.example` — production URL note
+- `.gitignore` — duplicate `.vercel` entry removed
+
+### Important decisions
+| Decision | Reason |
+| -------- | ------ |
+| GitHub repo `vemidi-dev/cvetelina-raynova` (private) | Personal/pro site with future admin CMS |
+| Vercel team `ve-mi-di` | Existing Vercel account scope |
+| No env vars on Vercel yet | Supabase keys not available in session; user must add via Dashboard or sync script |
+| `vercel link` auto-connected GitHub | Vercel CLI connected repo on link — no manual dashboard import needed |
+
+### Environment / setup notes
+- **GitHub:** https://github.com/vemidi-dev/cvetelina-raynova
+- **Vercel production:** https://cvetelina-raynova.vercel.app
+- **Vercel dashboard:** https://vercel.com/ve-mi-di/cvetelina-raynova
+- **Supabase CLI:** not logged in locally (`supabase login` required)
+- User must:
+  1. Copy `.env.example` → `.env.local` and add Supabase keys from Dashboard → Settings → API
+  2. Set Supabase Auth redirect URLs (see `docs/DEPLOYMENT.md`)
+  3. Run `.\scripts\sync-vercel-env.ps1` then `vercel --prod` OR add vars in Vercel dashboard
+  4. For migrations later: `npx supabase login` + `npx supabase link --project-ref <ref>`
+
+### Known issues / blockers
+- Vercel has **no environment variables** yet — admin auth will not work until Supabase keys are set.
+- Supabase redirect URLs must be configured manually in Supabase dashboard.
+- Next.js middleware deprecation warning unchanged.
+
+### Checks run
+- `vercel --prod` — **passed** (production deploy READY)
+- Local `npm run build` — not re-run this session
+- `vercel env ls` — confirmed empty (expected until user adds keys)
+
+### Next recommended steps
+1. User adds Supabase keys to `.env.local`.
+2. User configures Supabase Auth URLs for localhost + Vercel domain.
+3. Run `.\scripts\sync-vercel-env.ps1` and redeploy.
+4. Phase 1: SQL migrations from `docs/DATABASE_SCHEMA.md`.
+
+### Pending tasks
+- [ ] Supabase `.env.local` + Vercel env vars (user action)
+- [ ] Supabase Auth redirect URL configuration (user action)
+- [ ] `supabase login` + `supabase link` (optional, for migrations)
+- [ ] Phase 1 migrations, public site, CMS (unchanged from Phase 0)
+
+### Assumptions
+- GitHub account `vemidi-dev` and Vercel team `ve-mi-di` are the correct accounts for this project.
+- Private GitHub repo is acceptable (can be made public later).
+
+---
+
 ## 2026-08-04 — Development log introduced
 
 **Status:** Phase 0 foundation complete; log file now required as ongoing handoff memory.

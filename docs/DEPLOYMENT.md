@@ -42,9 +42,9 @@ Copy-Item .env.example .env.local
 
 | Поле | Стойности |
 | ---- | --------- |
-| **Site URL** | `https://YOUR-VERCEL-DOMAIN.vercel.app` (или custom domain) |
+| **Site URL** | `https://cvetelina-raynova.vercel.app` |
 | **Redirect URLs** | `http://localhost:3000/**` |
-| | `https://YOUR-VERCEL-DOMAIN.vercel.app/**` |
+| | `https://cvetelina-raynova.vercel.app/**` |
 | | `https://*.vercel.app/**` (preview deploys) |
 
 ### 1.4 Supabase CLI (опционално, за migrations)
@@ -58,7 +58,9 @@ npx supabase link --project-ref YOUR_PROJECT_REF
 
 ## 2. GitHub
 
-Репото: `https://github.com/vemidi-dev/cvetelina-raynova`
+Репото: **https://github.com/vemidi-dev/cvetelina-raynova**
+
+Production URL: **https://cvetelina-raynova.vercel.app**
 
 ### Първи push (ако още не е направен)
 
@@ -98,9 +100,14 @@ vercel git connect
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | service role — **Sensitive** |
-| `NEXT_PUBLIC_SITE_URL` | Production: `https://your-domain.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | Production: `https://cvetelina-raynova.vercel.app` |
 
-За Preview може да оставиш `NEXT_PUBLIC_SITE_URL` празно или да използваш `VERCEL_URL` (по-късно в кода).
+Скрипт (след попълване на `.env.local`):
+
+```powershell
+.\scripts\sync-vercel-env.ps1
+vercel --prod
+```
 
 ### 3.3 Deploy
 
