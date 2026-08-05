@@ -5,6 +5,56 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Seed confirmed executed; Services editor verified/docs polish
+
+**Status:** User confirmed seed SQL executed in Supabase. Services CMS editor already shipped (`/admin/services`, `/admin/services/[id]`); polish + log update this pass.
+
+### Current state summary
+| Item | Status |
+| ---- | ------ |
+| Migration | applied |
+| First admin + login | user-verified |
+| Seed `001_initial_content.sql` | **executed by user** |
+| `/admin/site-settings` | exists |
+| `/admin/services` list + edit | exists (by **id**, not slug) |
+| Public site | still placeholder |
+
+### Why `[id]` not `[slug]`
+Slug is editable; routing by UUID avoids broken edit URLs after rename. Schema has unique `slug` + `id` PK — **id is safer**.
+
+### Expected seeded services in UI (sort_order 0–3)
+1. Биорезонанс (`biorezonans`)
+2. От тревога към спокойствие (`ot-trevoga-kam-spokoystvie`)
+3. Хранителна програма (`hranitelna-programa`)
+4. Избери себе си (`izberi-sebe-si`)
+
+### Schema ↔ form mapping
+| Concept | Column |
+| ------- | ------ |
+| short description | `summary` |
+| full description | `body` |
+| external landing URL | `cta_href` (+ `cta_label`) |
+| publish | `status` (`draft`/`published`/`archived`) |
+| subtitle / disclaimer | not in schema — omitted |
+
+### This pass changes
+- List copy updated for executed seed + empty-state troubleshooting
+- Edit page note about field mapping
+- DEVELOPMENT_LOG updated
+
+### Manual checks (user)
+1. Open `/admin/services` — should list 4 services.
+2. Open one → edit title/summary → Save → success message.
+3. Confirm status/sort_order/cta_href display on list.
+
+### Commands
+- `npm run lint` / `npm run build` — run this pass
+
+### Next recommended step
+- FAQ admin editor, or public homepage reading `site_settings` + published services.
+
+---
+
 ## 2026-08-05 — Admin Services CMS editor
 
 **Status:** Services list + edit by UUID implemented under `/admin/services`. Mapped to existing schema columns (no subtitle/disclaimer columns).

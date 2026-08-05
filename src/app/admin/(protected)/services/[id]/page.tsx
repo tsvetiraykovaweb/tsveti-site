@@ -48,6 +48,12 @@ export default async function AdminServiceEditPage({ params }: PageProps) {
       </div>
       <h1 className="font-heading text-3xl text-primary">Редакция на услуга</h1>
       <p className="mt-2 text-text-muted">{data.title}</p>
+      <p className="mt-3 max-w-2xl text-xs text-text-muted">
+        Полетата следват текущата схема: кратко описание →{" "}
+        <code>summary</code>, пълно → <code>body</code>, линк →{" "}
+        <code>cta_href</code>, статус → <code>status</code>. Няма отделни
+        колони за subtitle/disclaimer.
+      </p>
       <ServiceEditForm id={data.id} initialValues={initialValues} />
     </section>
   );

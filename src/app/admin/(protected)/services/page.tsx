@@ -27,8 +27,8 @@ export default async function AdminServicesPage() {
       </div>
       <h1 className="font-heading text-3xl text-primary">Услуги</h1>
       <p className="mt-2 text-text-muted">
-        Редактирай заглавия, описания, статус и линкове. Публичните страници
-        предстоят.
+        Очаквани seed услуги: Биорезонанс, От тревога към спокойствие,
+        Хранителна програма, Избери себе си. Публичните страници предстоят.
       </p>
 
       {error ? (
@@ -41,11 +41,10 @@ export default async function AdminServicesPage() {
         <div className="mt-8 space-y-3 rounded border border-border bg-bg px-4 py-5 text-sm text-text-muted">
           <p>Няма услуги в базата.</p>
           <p>
-            Ако още не си приложил seed съдържанието, пусни в Supabase SQL
-            Editor файла{" "}
-            <code className="text-text">supabase/seed/001_initial_content.sql</code>
-            — там са четирите услуги (Биорезонанс, От тревога към спокойствие,
-            Хранителна програма, Избери себе си).
+            Seed SQL е документиран като изпълнен — ако списъкът е празен,
+            провери RLS/сесията или пусни отново{" "}
+            <code className="text-text">supabase/seed/001_initial_content.sql</code>{" "}
+            в SQL Editor.
           </p>
         </div>
       ) : null}
