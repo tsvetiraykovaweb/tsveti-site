@@ -5,6 +5,51 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-05 — Public homepage shell from CMS
+
+**Status:** Public `/` reads published CMS content (settings, services, FAQs, testimonials, homepage sections) with brand fallbacks.
+
+### Pre-change summary
+- CMS editors complete; name = Цветелина Райкова / Цвети.
+- `002_fix_raykova.sql` may still need manual run in Supabase (do not assume applied).
+- Public page was still a placeholder.
+
+### Implemented
+- Public components: Header, Footer, Container, CtaLink, ServiceCard, FaqAccordion, TestimonialPreview
+- `getPublicHomeContent()` loader in `src/lib/cms/public-content.ts`
+- Homepage sections: Hero, Services, About, FAQ, Testimonials, Final CTA
+- Filters: services `status=published`; FAQs/testimonials `is_published=true`
+- Main CTA default: **Запази безплатна консултация**
+- Metadata from `seo_title` / `seo_description` with brand fallbacks
+- No service detail pages yet (cards link to CTA / #consultation)
+
+### CMS tables used
+`site_settings`, `services`, `faqs`, `testimonials`, `pages` + `page_sections` (home)
+
+### Fallback behavior
+If Supabase env missing or rows empty → `brand` defaults + calm empty-state copy (no invented testimonials).
+
+### Manual checks
+1. Optionally run `002_fix_raykova.sql` if not done.
+2. Open `/` — hero + 4 published services.
+3. FAQ/testimonials sections: empty-state until items are published in admin.
+4. Publish one FAQ in `/admin/faqs` → appears on `/`.
+
+### Files
+- `src/lib/cms/public-content.ts`
+- `src/components/public/*`
+- `src/app/page.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — passed (after unused import fix)
+- `npm run build` — passed (`/` dynamic)
+
+### Next step
+- Service detail pages, consultation form wired to `consultation_requests`, or publish FAQ/testimonials for homepage previews.
+
+---
+
 ## 2026-08-05 — Name correction to Цветелина Райкова + CMS polish
 
 **Status:** Official name corrected everywhere in source/docs/seed. Testimonials editor already existed — polished admin dashboard CMS status instead.
