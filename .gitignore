@@ -40,3 +40,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# Accidental nested clone — do not commit
+cveti-raykova/
