@@ -5,6 +5,51 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-10 — Supabase heartbeat cron (3×/week)
+
+**Status:** Vercel cron + protected API route upserts `maintenance_heartbeats` via service role; admin readiness shows cron/heartbeat status.
+
+### Cron
+- Route: `GET /api/cron/supabase-heartbeat`
+- Auth: `Authorization: Bearer ${CRON_SECRET}` → else `401`
+- `export const dynamic = "force-dynamic"`
+- Schedule (`vercel.json`): `0 7 * * 1,3,5` — Mon/Wed/Fri 07:00 UTC
+
+### Database
+- Migration: `20260810120000_maintenance_heartbeats.sql`
+- Table `maintenance_heartbeats` (id, last_seen_at, run_count, last_status, last_error)
+- RPC `record_maintenance_heartbeat()` — atomic upsert for `id = supabase-heartbeat`
+- Admin SELECT via RLS `is_admin()`; writes service-role only
+
+### Env
+- `CRON_SECRET` — Vercel Production (+ local for manual curl)
+- Existing `SUPABASE_SERVICE_ROLE_KEY` (server-only, not exposed in UI)
+
+### Admin / docs
+- `/admin/readiness`: CRON_SECRET configured/missing + last heartbeat row
+- `docs/heartbeat-cron.md` — schedule, env, manual test, Vercel logs
+- `docs/launch-checklist.md` updated
+
+### Files
+- `src/app/api/cron/supabase-heartbeat/route.ts`
+- `src/lib/maintenance/heartbeat.ts`
+- `supabase/migrations/20260810120000_maintenance_heartbeats.sql`
+- `vercel.json`, `.env.example`, `src/lib/admin/readiness.ts`, `src/types/database.ts`
+- `docs/heartbeat-cron.md`, `docs/launch-checklist.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm run lint` — pass
+- `npm run build` — pass (`/api/cron/supabase-heartbeat` listed)
+
+### Manual checks
+1. Apply migration in Supabase SQL Editor
+2. Set `CRON_SECRET` in Vercel Production env
+3. `curl` without header → 401; with `Bearer CRON_SECRET` → 200
+4. Verify row in `maintenance_heartbeats`; check `/admin/readiness`
+5. After deploy: Vercel cron logs on Production (Mon/Wed/Fri)
+
+---
+
 ## 2026-08-05 — Launch polish + admin readiness
 
 **Status:** New `/admin/readiness` status page; public UX polish; privacy draft labeling strengthened; safety scan clean in public copy.

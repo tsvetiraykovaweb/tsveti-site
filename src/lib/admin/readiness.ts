@@ -85,6 +85,16 @@ export async function getLaunchReadiness(): Promise<LaunchReadiness> {
       : `API key: ${resendKey ? "configured" : "missing"} · TO: ${resendTo ? "configured" : "missing"} · FROM: ${resendFrom ? "configured" : "missing"}. Формата пак записва заявки без email.`,
   });
 
+  const cronSecretConfigured = envConfigured("CRON_SECRET");
+  checks.push({
+    id: "cron_secret",
+    label: "CRON_SECRET (Vercel cron)",
+    tone: cronSecretConfigured ? "ok" : "warn",
+    detail: cronSecretConfigured
+      ? "Configured. Vercel изпраща Bearer header към /api/cron/supabase-heartbeat."
+      : "Липсва — cron job-ът ще връща 401. Добавете в Vercel Production env.",
+  });
+
   if (!isSupabaseConfigured) {
     checks.push({
       id: "supabase",
@@ -305,6 +315,42 @@ export async function getLaunchReadiness(): Promise<LaunchReadiness> {
       tone: "missing",
       detail: "Страница home липсва — пуснете 001_initial_content.sql и 005_home_image_sections.sql.",
       href: "/admin/pages",
+    });
+  }
+
+  const { data: heartbeat, error: heartbeatError } = await supabase
+    .from("maintenance_heartbeats")
+    .select("last_seen_at, run_count, last_status, last_error")
+    .eq("id", "supabase-heartbeat")
+    .maybeSingle();
+
+  if (heartbeatError) {
+    checks.push({
+      id: "heartbeat",
+      label: "Supabase heartbeat",
+      tone: "warn",
+      detail:
+        "Таблицата maintenance_heartbeats липсва или не е достъпна — пуснете migration 20260810120000_maintenance_heartbeats.sql.",
+    });
+  } else if (heartbeat) {
+    const seen = heartbeat.last_seen_at
+      ? new Date(heartbeat.last_seen_at).toLocaleString("bg-BG", {
+          timeZone: "Europe/Sofia",
+        })
+      : "—";
+    checks.push({
+      id: "heartbeat",
+      label: "Supabase heartbeat",
+      tone: heartbeat.last_status === "ok" ? "ok" : "warn",
+      detail: `Последен успешен: ${seen} · run_count: ${heartbeat.run_count} · status: ${heartbeat.last_status ?? "—"}`,
+    });
+  } else {
+    checks.push({
+      id: "heartbeat",
+      label: "Supabase heartbeat",
+      tone: "warn",
+      detail:
+        "Няма запис — тествайте GET /api/cron/supabase-heartbeat с Bearer CRON_SECRET след migration.",
     });
   }
 

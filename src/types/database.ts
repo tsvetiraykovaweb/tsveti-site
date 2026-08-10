@@ -295,12 +295,35 @@ export type Database = {
           Database["public"]["Tables"]["consultation_requests"]["Insert"]
         >;
       };
+      maintenance_heartbeats: {
+        Row: {
+          id: string;
+          last_seen_at: string;
+          run_count: number;
+          last_status: string | null;
+          last_error: string | null;
+        };
+        Insert: {
+          id: string;
+          last_seen_at?: string;
+          run_count?: number;
+          last_status?: string | null;
+          last_error?: string | null;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["maintenance_heartbeats"]["Insert"]
+        >;
+      };
     };
     Views: Record<string, never>;
     Functions: {
       is_admin: {
         Args: Record<string, never>;
         Returns: boolean;
+      };
+      record_maintenance_heartbeat: {
+        Args: Record<string, never>;
+        Returns: Database["public"]["Tables"]["maintenance_heartbeats"]["Row"];
       };
     };
     Enums: Record<string, never>;

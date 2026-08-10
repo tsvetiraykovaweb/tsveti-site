@@ -6,7 +6,7 @@
 
 ## Infrastructure
 
-- [ ] Supabase migrations applied (`20260805150000_initial_cms_schema.sql`, `20260805180000_media_assets_caption.sql`)
+- [ ] Supabase migrations applied (`20260805150000_initial_cms_schema.sql`, `20260805180000_media_assets_caption.sql`, `20260810120000_maintenance_heartbeats.sql`)
 - [ ] Seeds / patches run as needed (`001`…`005`, esp. `002_fix_raykova`, `004_page_content_cms`, `005_home_image_sections`)
 - [ ] At least one `admin_profiles` row for the Auth user
 - [ ] Vercel project: Framework = Next.js, Root = `./`
@@ -19,6 +19,7 @@
 - [ ] `SUPABASE_SERVICE_ROLE_KEY` (server-only — never `NEXT_PUBLIC_`)
 - [ ] `NEXT_PUBLIC_SITE_URL` (production URL)
 - [ ] Optional email: `RESEND_API_KEY`, `CONSULTATION_NOTIFY_TO`, `CONSULTATION_NOTIFY_FROM`
+- [ ] `CRON_SECRET` (Production — Vercel cron heartbeat; see `docs/heartbeat-cron.md`)
 
 ## Admin
 
@@ -65,3 +66,4 @@
 - [ ] Upload one test image and attach to a service / home section
 - [ ] Check mobile header «Меню» and primary CTA
 - [ ] Re-check `/admin/readiness` on production
+- [ ] Confirm Supabase heartbeat row updates after cron (Mon/Wed/Fri 07:00 UTC) or manual curl test
