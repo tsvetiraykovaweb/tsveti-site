@@ -6,6 +6,8 @@ import { isAdmin } from "@/lib/auth/admin";
 import {
   isValidSlug,
   normalizeSlug,
+  serviceCtaHrefError,
+  validateServiceCtaHref,
   type ServiceFormValues,
   type ServiceStatus,
 } from "@/lib/cms/services";
@@ -52,6 +54,13 @@ export async function saveService(
     return { ok: false, error: "Невалиден статус." };
   }
 
+  const ctaHrefError = serviceCtaHrefError(values.cta_href);
+  if (ctaHrefError) {
+    return { ok: false, error: ctaHrefError };
+  }
+
+  const normalizedCtaHref = validateServiceCtaHref(values.cta_href);
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -85,7 +94,7 @@ export async function saveService(
       body: values.body.trim() || null,
       image_path: values.image_path.trim() || null,
       cta_label: values.cta_label.trim() || null,
-      cta_href: values.cta_href.trim() || null,
+      cta_href: normalizedCtaHref,
       sort_order,
       status: values.status,
       seo_title: values.seo_title.trim() || null,

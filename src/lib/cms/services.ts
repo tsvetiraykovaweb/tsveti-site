@@ -45,3 +45,28 @@ export function normalizeSlug(input: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+const LEGACY_CONSULTATION_HREFS = new Set([
+  "#consultation",
+  "/#consultation",
+  "/consultation",
+]);
+
+/** Validates service landing CTA href for admin save. Empty is allowed. */
+export function validateServiceCtaHref(href: string): string | null {
+  const trimmed = href.trim();
+  if (!trimmed) return null;
+  if (LEGACY_CONSULTATION_HREFS.has(trimmed)) {
+    return null;
+  }
+  if (trimmed.startsWith("/")) return trimmed;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return null;
+}
+
+export function serviceCtaHrefError(href: string): string | null {
+  const trimmed = href.trim();
+  if (!trimmed) return null;
+  if (validateServiceCtaHref(trimmed) !== null) return null;
+  return "Линкът трябва да започва с / (вътрешен) или с http:// / https:// (външен).";
+}

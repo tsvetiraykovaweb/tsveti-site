@@ -5,6 +5,36 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-11 — Service detail CTA from admin (landing link)
+
+**Status:** `/uslugi/[slug]` hero and bottom buttons use `services.cta_label` / `services.cta_href` from CMS. Admin can set landing page text and URL per service.
+
+### Behavior
+- Fields: existing `cta_label`, `cta_href` (no migration)
+- Empty label → «Виж лендинг страницата»
+- Empty href → `/bezplatna-konsultatsia?usluga=<slug>`
+- Set href → internal (`/path`) or external (`https://…`); `CtaLink` opens externals in new tab
+- Admin save validates href format; trims values
+- Service cards unchanged («Научи повече» → detail page)
+
+### Files
+- `src/lib/cms/public-content.ts` — `resolveServiceCta` updated
+- `src/lib/cms/services.ts` — CTA href validation helpers
+- `src/app/admin/(protected)/services/[id]/service-form.tsx`, `actions.ts`
+- `src/app/uslugi/[slug]/page.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- Build not run (per task). Lint optional.
+
+### Manual checks
+1. Admin → Услуги → edit service: set button text + landing URL → save
+2. Open `/uslugi/<slug>` — button shows admin label, links correctly
+3. Clear href — falls back to consultation form with `?usluga=`
+4. External URL opens in new tab
+
+---
+
 ## 2026-08-11 — Persistent two-tier public navigation
 
 **Status:** Services subnav is now always visible under the main header on all public pages (not only `/uslugi`). Active service pill derives from URL via `usePathname`.

@@ -153,11 +153,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <PublicContainer className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="font-heading text-2xl text-primary md:text-3xl">
-                Запазете консултация
+                Следваща стъпка
               </h2>
               <p className="mt-3 max-w-xl text-text-muted">
-                Ако тази услуга резонира с вас, може да запазите безплатна
-                консултация за повече яснота.
+                Продължете към landing страницата на услугата или се свържете с
+                нас за кратък разговор.
               </p>
             </div>
             <CtaLink href={serviceCta.href}>{serviceCta.label}</CtaLink>

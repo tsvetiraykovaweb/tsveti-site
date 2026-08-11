@@ -157,31 +157,43 @@ export function ServiceEditForm({
         />
       </div>
 
-      <div>
-        <label htmlFor="cta_label" className={labelClass}>
-          CTA етикет
-        </label>
-        <input
-          id="cta_label"
-          disabled={busy}
-          value={values.cta_label}
-          onChange={(e) => update("cta_label", e.target.value)}
-          className={fieldClass}
-        />
-      </div>
+      <div className="rounded border border-border bg-bg-secondary px-4 py-4">
+        <p className="text-sm font-medium text-primary">Бутон на публичната страница</p>
+        <p className="mt-1 text-xs text-text-muted">
+          Този бутон се показва на страницата на услугата (`/uslugi/…`). Може да
+          води към landing страница — вътрешен линк (напр.{" "}
+          <code>/izberi-sebe-si</code>) или външен URL. Ако линкът е празен,
+          бутонът води към формата за консултация.
+        </p>
+        <div className="mt-4 space-y-4">
+          <div>
+            <label htmlFor="cta_label" className={labelClass}>
+              Текст на бутона
+            </label>
+            <input
+              id="cta_label"
+              disabled={busy}
+              value={values.cta_label}
+              onChange={(e) => update("cta_label", e.target.value)}
+              className={fieldClass}
+              placeholder="Виж лендинг страницата"
+            />
+          </div>
 
-      <div>
-        <label htmlFor="cta_href" className={labelClass}>
-          CTA / външен линк
-        </label>
-        <input
-          id="cta_href"
-          disabled={busy}
-          value={values.cta_href}
-          onChange={(e) => update("cta_href", e.target.value)}
-          className={fieldClass}
-          placeholder="/bezplatna-konsultatsia или https://…"
-        />
+          <div>
+            <label htmlFor="cta_href" className={labelClass}>
+              Линк на бутона
+            </label>
+            <input
+              id="cta_href"
+              disabled={busy}
+              value={values.cta_href}
+              onChange={(e) => update("cta_href", e.target.value)}
+              className={fieldClass}
+              placeholder="/izberi-sebe-si или https://example.com/landing"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

@@ -85,6 +85,13 @@ export type PublicHomeContent = {
 
 const DEFAULT_CTA_LABEL = "Запази безплатна консултация";
 const DEFAULT_CTA_HREF = PUBLIC_CONSULTATION_PATH;
+const SERVICE_DETAIL_CTA_LABEL_FALLBACK = "Виж лендинг страницата";
+
+const LEGACY_CONSULTATION_HREFS = new Set([
+  "#consultation",
+  "/#consultation",
+  "/consultation",
+]);
 
 export function resolveSiteCta(label: string, href: string) {
   const ctaLabel =
@@ -95,19 +102,31 @@ export function resolveSiteCta(label: string, href: string) {
   return { ctaLabel, ctaHref };
 }
 
+/**
+ * Service detail page CTA — label and landing link from CMS (`cta_label`, `cta_href`).
+ * Empty label → «Виж лендинг страницата»; empty href → consultation form with service prefill.
+ */
 export function resolveServiceCta(
   cta_label: string | null,
   cta_href: string | null,
   slug?: string,
 ) {
-  let href = normalizePublicCtaHref(cta_href);
-  if (slug && href === PUBLIC_CONSULTATION_PATH) {
-    href = `${PUBLIC_CONSULTATION_PATH}?usluga=${encodeURIComponent(slug)}`;
+  const label = cta_label?.trim() || SERVICE_DETAIL_CTA_LABEL_FALLBACK;
+  const trimmedHref = (cta_href ?? "").trim();
+
+  if (
+    trimmedHref &&
+    !LEGACY_CONSULTATION_HREFS.has(trimmedHref) &&
+    trimmedHref !== PUBLIC_CONSULTATION_PATH
+  ) {
+    return { label, href: trimmedHref };
   }
-  return {
-    label: cta_label?.trim() || DEFAULT_CTA_LABEL,
-    href,
-  };
+
+  const href = slug
+    ? `${PUBLIC_CONSULTATION_PATH}?usluga=${encodeURIComponent(slug)}`
+    : PUBLIC_CONSULTATION_PATH;
+
+  return { label, href };
 }
 
 export type PublicSiteChrome = {
