@@ -27,7 +27,7 @@ export default async function ContactPage() {
     getPublicSiteChrome(),
     getPublishedCmsPage("kontakti"),
   ]);
-  const { settings, social, ctaHref, ctaLabel, navItems } = chrome;
+  const { settings, social, ctaHref, ctaLabel, navItems, services } = chrome;
   const displayName = settings.display_name || brand.displayName;
   const officialName = settings.official_name || brand.officialName;
   const hasContact = Boolean(settings.phone?.trim() || settings.email?.trim());
@@ -44,6 +44,7 @@ export default async function ContactPage() {
         officialName={officialName}
         ctaHref={ctaHref}
         navItems={navItems}
+        services={services}
       />
 
       <main className="flex-1">

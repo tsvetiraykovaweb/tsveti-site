@@ -4,6 +4,7 @@ import { getPublicEnv } from "@/lib/env";
 import { buildImageRef, type PublicImageRef } from "@/lib/cms/media";
 import {
   buildPublicNavItems,
+  type NavServiceInput,
   type PublicNavItem,
 } from "@/lib/cms/public-nav";
 import {
@@ -115,6 +116,7 @@ export type PublicSiteChrome = {
   ctaLabel: string;
   ctaHref: string;
   navItems: PublicNavItem[];
+  services: NavServiceInput[];
 };
 
 export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
@@ -132,14 +134,22 @@ export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
       ctaLabel,
       ctaHref,
       navItems: buildPublicNavItems(),
+      services: [],
     };
   }
 
   const supabase = await createClient();
-  const settingsRes = await supabase
-    .from("site_settings")
-    .select("key, value")
-    .in("key", [...SITE_SETTING_KEYS]);
+  const [settingsRes, servicesRes] = await Promise.all([
+    supabase
+      .from("site_settings")
+      .select("key, value")
+      .in("key", [...SITE_SETTING_KEYS]),
+    supabase
+      .from("services")
+      .select("slug, title, sort_order")
+      .eq("status", "published")
+      .order("sort_order", { ascending: true }),
+  ]);
 
   const settings =
     !settingsRes.error && settingsRes.data && settingsRes.data.length > 0
@@ -151,6 +161,9 @@ export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
     settings.primary_cta_url,
   );
 
+  const services =
+    !servicesRes.error && servicesRes.data ? servicesRes.data : [];
+
   return {
     settings,
     social: {
@@ -160,6 +173,7 @@ export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
     ctaLabel,
     ctaHref,
     navItems: buildPublicNavItems(),
+    services,
   };
 }
 

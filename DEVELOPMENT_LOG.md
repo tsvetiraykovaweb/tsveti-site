@@ -5,6 +5,36 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-11 — Persistent two-tier public navigation
+
+**Status:** Services subnav is now always visible under the main header on all public pages (not only `/uslugi`). Active service pill derives from URL via `usePathname`.
+
+### Navigation
+- Level 1 (main): Начало, Услуги, За Цвети, Въпроси, Контакти + CTA — unchanged
+- Level 2 (services): always-on pill bar under header, centered, warm cream background, horizontal scroll on mobile
+- `getPublicSiteChrome()` now returns `services` (published, by `sort_order`) for subnav
+- `PublicHeader` renders `ServicesSubnav` centrally — removed duplicate subnav from `/uslugi` pages
+- Active state only on `/uslugi/[slug]`; neutral on `/uslugi` and other pages
+
+### Files
+- `src/components/public/public-header.tsx`
+- `src/components/public/services-subnav.tsx`
+- `src/lib/cms/public-content.ts`
+- `src/app/page.tsx`, `uslugi/page.tsx`, `uslugi/[slug]/page.tsx`
+- `src/app/za-cveti/page.tsx`, `kontakti/page.tsx`, `bezplatna-konsultatsia/page.tsx`, `politika-za-poveritelnost/page.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- Build not run (per task). Lint optional.
+
+### Manual checks
+1. Homepage, About, Contact — services pills visible under header
+2. `/uslugi/[slug]` — correct active pill
+3. Mobile — horizontal scroll, header not broken
+4. No duplicate subnav on service pages
+
+---
+
 ## 2026-08-11 — Public nav: single «Услуги» + secondary services subnav
 
 **Status:** Main header no longer lists each service as a top-level link. One «Услуги» tab → `/uslugi`. Individual services appear in a secondary horizontal nav on `/uslugi` and `/uslugi/[slug]` (no dropdown).

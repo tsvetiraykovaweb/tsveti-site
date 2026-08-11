@@ -1,43 +1,53 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { PublicContainer } from "./public-container";
 import {
   buildServicesSubnavItems,
   type NavServiceInput,
 } from "@/lib/cms/public-nav";
+import { PUBLIC_USLUGI_BASE } from "@/lib/cms/public-paths";
 
 type Props = {
   services: NavServiceInput[];
-  /** Current service slug on detail pages; omit on `/uslugi` overview. */
-  activeSlug?: string | null;
 };
 
+function activeServiceSlug(pathname: string): string | null {
+  const prefix = `${PUBLIC_USLUGI_BASE}/`;
+  if (!pathname.startsWith(prefix)) return null;
+  const slug = pathname.slice(prefix.length).split("/")[0]?.trim();
+  return slug || null;
+}
+
 /**
- * Secondary services navigation under the main header.
- * Horizontal scroll on mobile; no dropdown.
+ * Persistent secondary services nav — visible on all public pages under the main header.
+ * Horizontal scroll on mobile; active pill on `/uslugi/[slug]` only.
  */
-export function ServicesSubnav({ services, activeSlug }: Props) {
+export function ServicesSubnav({ services }: Props) {
+  const pathname = usePathname();
   const items = buildServicesSubnavItems(services);
+  const activeSlug = activeServiceSlug(pathname);
+
   if (items.length === 0) return null;
 
   return (
-    <div className="border-b border-border bg-bg-secondary/80">
-      <PublicContainer className="py-3">
+    <div className="border-t border-primary/10 bg-[#f8f3eb]/95 shadow-[0_4px_16px_-12px_rgba(45,58,42,0.35)]">
+      <PublicContainer className="py-2.5 md:py-3">
         <nav aria-label="Навигация услуги" className="min-w-0">
-          <ul className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="flex justify-center gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] md:flex-wrap md:justify-center [&::-webkit-scrollbar]:hidden">
             {items.map((item) => {
-              const isActive = Boolean(
-                activeSlug && activeSlug === item.slug,
-              );
+              const isActive = activeSlug === item.slug;
               return (
                 <li key={item.slug} className="shrink-0">
                   <Link
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
                     className={[
-                      "inline-flex items-center whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm transition-colors",
+                      "inline-flex items-center whitespace-nowrap rounded-full border px-4 py-2 text-sm transition-colors",
                       isActive
-                        ? "border-primary bg-primary text-sage font-medium"
-                        : "border-border bg-bg text-text-muted hover:border-primary/30 hover:text-primary",
+                        ? "border-primary bg-primary text-sage font-medium shadow-sm underline decoration-sage/40 decoration-2 underline-offset-4"
+                        : "border-primary/15 bg-bg/90 text-text-muted shadow-sm hover:border-primary/35 hover:bg-bg hover:text-primary",
                     ].join(" ")}
                   >
                     {item.label}

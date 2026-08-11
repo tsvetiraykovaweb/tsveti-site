@@ -4,13 +4,19 @@ import { useState } from "react";
 import Link from "next/link";
 import { PublicContainer } from "./public-container";
 import { CtaLink } from "./cta-link";
-import { HEADER_CTA_LABEL, type PublicNavItem } from "@/lib/cms/public-nav";
+import { ServicesSubnav } from "./services-subnav";
+import {
+  HEADER_CTA_LABEL,
+  type NavServiceInput,
+  type PublicNavItem,
+} from "@/lib/cms/public-nav";
 
 type Props = {
   displayName: string;
   officialName: string;
   ctaHref: string;
   navItems: PublicNavItem[];
+  services: NavServiceInput[];
 };
 
 export function PublicHeader({
@@ -18,6 +24,7 @@ export function PublicHeader({
   officialName,
   ctaHref,
   navItems,
+  services,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -95,6 +102,8 @@ export function PublicHeader({
           </PublicContainer>
         </div>
       ) : null}
+
+      <ServicesSubnav services={services} />
     </header>
   );
 }

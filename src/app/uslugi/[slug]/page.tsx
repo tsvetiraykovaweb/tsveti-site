@@ -5,7 +5,6 @@ import { brand } from "@/lib/brand";
 import {
   getPublicSiteChrome,
   getPublishedServiceBySlug,
-  getPublishedServices,
   resolveServiceCta,
 } from "@/lib/cms/public-content";
 import { PublicContainer } from "@/components/public/public-container";
@@ -13,7 +12,6 @@ import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { CtaLink } from "@/components/public/cta-link";
 import { CmsImageSlot } from "@/components/public/cms-image-slot";
-import { ServicesSubnav } from "@/components/public/services-subnav";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -40,9 +38,8 @@ export async function generateMetadata({
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const [service, services, chrome] = await Promise.all([
+  const [service, chrome] = await Promise.all([
     getPublishedServiceBySlug(slug),
-    getPublishedServices(),
     getPublicSiteChrome(),
   ]);
 
@@ -69,8 +66,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         officialName={chrome.settings.official_name}
         ctaHref={chrome.ctaHref}
         navItems={chrome.navItems}
+        services={chrome.services}
       />
-      <ServicesSubnav services={services} activeSlug={service.slug} />
 
       <main className="flex-1">
         <section className="border-b border-border bg-gradient-to-b from-bg-secondary to-bg">

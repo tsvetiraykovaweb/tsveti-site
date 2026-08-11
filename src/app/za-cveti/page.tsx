@@ -80,6 +80,7 @@ export default async function AboutPage() {
         officialName={officialName}
         ctaHref={chrome.ctaHref}
         navItems={chrome.navItems}
+        services={chrome.services}
       />
 
       <main className="flex-1">

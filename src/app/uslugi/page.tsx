@@ -9,7 +9,6 @@ import { PublicContainer } from "@/components/public/public-container";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { ServiceCard } from "@/components/public/service-card";
-import { ServicesSubnav } from "@/components/public/services-subnav";
 import { CtaLink } from "@/components/public/cta-link";
 
 export const metadata: Metadata = {
@@ -32,8 +31,8 @@ export default async function UslugiIndexPage() {
         officialName={chrome.settings.official_name}
         ctaHref={chrome.ctaHref}
         navItems={chrome.navItems}
+        services={chrome.services}
       />
-      <ServicesSubnav services={services} />
 
       <main className="flex-1">
         <section className="border-b border-border bg-gradient-to-b from-bg-secondary to-bg py-16 md:py-20">

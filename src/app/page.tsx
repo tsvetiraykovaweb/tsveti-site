@@ -60,6 +60,7 @@ export default async function HomePage() {
         officialName={settings.official_name}
         ctaHref={ctaHref}
         navItems={navItems}
+        services={services}
       />
 
       <main className="flex-1 overflow-hidden">
