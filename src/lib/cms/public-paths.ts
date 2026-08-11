@@ -5,6 +5,7 @@ export const PUBLIC_USLUGI_BASE = "/uslugi";
 export const PUBLIC_CONSULTATION_PATH = "/bezplatna-konsultatsia";
 
 export const PUBLIC_ABOUT_PATH = "/za-cveti";
+export const PUBLIC_BLOG_PATH = "/blog";
 export const PUBLIC_CONTACT_PATH = "/kontakti";
 export const PUBLIC_PRIVACY_PATH = "/politika-za-poveritelnost";
 

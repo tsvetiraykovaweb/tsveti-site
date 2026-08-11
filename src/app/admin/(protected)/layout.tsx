@@ -83,6 +83,12 @@ export default async function ProtectedAdminLayout({
               Услуги
             </Link>
             <Link
+              href="/admin/blog"
+              className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
+            >
+              Блог
+            </Link>
+            <Link
               href="/admin/faqs"
               className="text-text-muted underline-offset-4 hover:text-primary hover:underline"
             >

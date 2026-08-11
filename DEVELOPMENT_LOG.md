@@ -5,6 +5,41 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-11 — Blog module
+
+**Status:** Added blog CMS with markdown content, public `/blog` routes, and admin CRUD for draft/published posts.
+
+### Scope
+- Migration: `blog_posts` with RLS, status constraint, indexes, timestamps
+- Public: `/blog`, `/blog/[slug]`, SEO metadata, sitemap entries for published posts only
+- Admin: `/admin/blog`, `/admin/blog/new`, `/admin/blog/[id]`
+- Minimal markdown via `react-markdown`: headings, paragraphs, bold, italic, lists, links, blockquote
+- No raw HTML rendering
+
+### Files
+- `supabase/migrations/20260811110000_blog_posts.sql`
+- `src/lib/cms/blog.ts`, `src/components/public/markdown-content.tsx`
+- `src/app/blog/page.tsx`, `src/app/blog/[slug]/page.tsx`
+- `src/app/admin/(protected)/blog/**`
+- `src/app/sitemap.ts`, `src/lib/cms/public-nav.ts`, `src/lib/cms/public-paths.ts`
+- `src/app/admin/(protected)/layout.tsx`, `src/app/admin/(protected)/page.tsx`
+- `src/types/database.ts`, `package.json`, `package-lock.json`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- Build not run (per task). Lint optional.
+
+### Manual checks
+1. Apply `20260811110000_blog_posts.sql` in Supabase SQL Editor
+2. Create draft blog post in `/admin/blog/new`
+3. Add markdown formatting and a link
+4. Publish the post
+5. Check `/blog` and `/blog/[slug]`
+6. Check sitemap includes published blog URLs
+7. Check mobile layout of blog list/detail
+
+---
+
 ## 2026-08-11 — Service detail CTA from admin (landing link)
 
 **Status:** `/uslugi/[slug]` hero and bottom buttons use `services.cta_label` / `services.cta_href` from CMS. Admin can set landing page text and URL per service.

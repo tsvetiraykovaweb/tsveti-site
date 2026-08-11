@@ -177,6 +177,39 @@ export type Database = {
         };
         Update: Partial<Database["public"]["Tables"]["services"]["Insert"]>;
       };
+      blog_posts: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          excerpt: string | null;
+          content: string;
+          featured_image_path: string | null;
+          status: "draft" | "published";
+          published_at: string | null;
+          seo_title: string | null;
+          seo_description: string | null;
+          created_at: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          slug: string;
+          excerpt?: string | null;
+          content: string;
+          featured_image_path?: string | null;
+          status?: "draft" | "published";
+          published_at?: string | null;
+          seo_title?: string | null;
+          seo_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["blog_posts"]["Insert"]>;
+      };
       faqs: {
         Row: {
           id: string;

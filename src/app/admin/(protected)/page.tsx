@@ -20,6 +20,12 @@ const cmsSections = [
     note: "4 seed услуги — редакция по id · публични /uslugi/...",
   },
   {
+    href: "/admin/blog",
+    title: "Блог",
+    status: "Нов",
+    note: "Статии, markdown съдържание, SEO и публични /blog маршрути",
+  },
+  {
     href: "/admin/faqs",
     title: "Въпроси (FAQ)",
     status: "Готов",

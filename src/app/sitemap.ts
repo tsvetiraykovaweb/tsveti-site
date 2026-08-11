@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
+import { getPublishedBlogPosts } from "@/lib/cms/blog";
 import { getPublishedServices } from "@/lib/cms/public-content";
 import {
   PUBLIC_ABOUT_PATH,
+  PUBLIC_BLOG_PATH,
   PUBLIC_CONSULTATION_PATH,
   PUBLIC_CONTACT_PATH,
   PUBLIC_PRIVACY_PATH,
@@ -12,7 +14,10 @@ import {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const origin = getSiteOrigin();
-  const services = await getPublishedServices();
+  const [services, blogPosts] = await Promise.all([
+    getPublishedServices(),
+    getPublishedBlogPosts(),
+  ]);
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -22,6 +27,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
+    },
+    {
+      url: `${origin}${PUBLIC_BLOG_PATH}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.7,
     },
     {
       url: `${origin}${PUBLIC_ABOUT_PATH}`,
@@ -56,5 +67,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...serviceRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${origin}${PUBLIC_BLOG_PATH}/${post.slug}`,
+    lastModified: new Date(post.published_at || post.created_at),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...blogRoutes];
 }

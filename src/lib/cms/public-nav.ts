@@ -1,6 +1,7 @@
 import {
   publicServicePath,
   PUBLIC_ABOUT_PATH,
+  PUBLIC_BLOG_PATH,
   PUBLIC_CONTACT_PATH,
   PUBLIC_USLUGI_BASE,
 } from "@/lib/cms/public-paths";
@@ -33,13 +34,14 @@ export type ServicesSubnavItem = {
 export const HEADER_CTA_LABEL = "Запази консултация";
 
 /**
- * Main public nav: Home, Услуги (index), About, FAQ, Contact.
+ * Main public nav: Home, Услуги (index), Blog, About, FAQ, Contact.
  * Individual services live in secondary services nav — not top-level, no dropdown.
  */
 export function buildPublicNavItems(): PublicNavItem[] {
   return [
     { href: "/", label: "Начало" },
     { href: PUBLIC_USLUGI_BASE, label: "Услуги" },
+    { href: PUBLIC_BLOG_PATH, label: "Блог" },
     { href: PUBLIC_ABOUT_PATH, label: "За Цвети" },
     { href: "/#faq", label: "Въпроси" },
     { href: PUBLIC_CONTACT_PATH, label: "Контакти" },
