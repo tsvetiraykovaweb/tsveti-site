@@ -5,6 +5,54 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-11 — Blog categories, extended post fields, markdown toolbar editor
+
+**Status:** Upgraded blog module with categories, extra post metadata, markdown toolbar with preview, and public category filters.
+
+### Scope
+- Migration: `blog_categories` table with RLS; `blog_posts` gains `category_id`, `author_name`, `reading_time_minutes`, `is_featured`, `is_popular`
+- Admin: `/admin/blog/categories` — CRUD for blog categories
+- Admin: blog post form upgraded with card-based layout, category select, author, reading time, featured/popular checkboxes
+- Markdown editor component with toolbar (B, I, H2, H3, list, link, image, quote) and Edit/Preview tabs
+- Media picker integrated into toolbar for inserting images from media library
+- Admin blog list shows category name, author, featured/popular badges
+- Admin nav includes "Категории" link
+- Public `/blog` shows category filter pills with `?category=slug` param
+- Public `/blog/[slug]` shows category, author, reading time in metadata
+- Breadcrumbs include category on detail page
+
+### Files
+- `supabase/migrations/20260811130000_blog_categories_and_post_extras.sql`
+- `src/types/database.ts` — added `blog_categories` table, extended `blog_posts`
+- `src/lib/cms/blog-shared.ts` — extended types with category, author, reading time, featured, popular
+- `src/lib/cms/blog.ts` — `getBlogCategories()`, extended queries with join to `blog_categories`
+- `src/components/admin/markdown-editor.tsx` — new toolbar editor component
+- `src/app/admin/(protected)/blog/categories/**` — category admin (page, actions, form)
+- `src/app/admin/(protected)/blog/blog-form.tsx` — card-based layout with new fields
+- `src/app/admin/(protected)/blog/actions.ts` — handles new fields
+- `src/app/admin/(protected)/blog/page.tsx` — list with category/author/badges
+- `src/app/admin/(protected)/blog/new/page.tsx` — passes categories + media
+- `src/app/admin/(protected)/blog/[id]/page.tsx` — passes categories + media
+- `src/app/admin/(protected)/layout.tsx` — added Категории nav link
+- `src/app/blog/page.tsx` — category filter pills, extended post meta
+- `src/app/blog/[slug]/page.tsx` — category breadcrumb, author, reading time
+
+### Commands
+- Build not run (per task).
+
+### Manual checks
+1. Apply `20260811130000_blog_categories_and_post_extras.sql` in Supabase SQL Editor
+2. Create blog categories in `/admin/blog/categories`
+3. Create/edit blog post with category, author, reading time
+4. Use markdown toolbar: bold, italic, H2, list, link, image insert
+5. Test Edit/Preview toggle
+6. Publish post and check `/blog` with category pills
+7. Filter by category via `?category=slug`
+8. Check `/blog/[slug]` shows category, author, reading time
+9. Check mobile layout
+
+---
+
 ## 2026-08-11 — Blog module
 
 **Status:** Added blog CMS with markdown content, public `/blog` routes, and admin CRUD for draft/published posts.

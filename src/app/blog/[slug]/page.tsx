@@ -71,12 +71,48 @@ export default async function BlogPostPage({ params }: PageProps) {
               <Link href="/blog" className="hover:text-primary">
                 Блог
               </Link>
+              {post.category_name ? (
+                <>
+                  <span className="mx-2">/</span>
+                  <Link
+                    href={`/blog?category=${post.category_slug}`}
+                    className="hover:text-primary"
+                  >
+                    {post.category_name}
+                  </Link>
+                </>
+              ) : null}
               <span className="mx-2">/</span>
               <span className="text-primary">{post.title}</span>
             </p>
-            <p className="mt-6 text-sm text-text-muted">
-              {formatDate(post.published_at || post.created_at)}
-            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-text-muted">
+              <span>{formatDate(post.published_at || post.created_at)}</span>
+              {post.category_name ? (
+                <>
+                  <span>·</span>
+                  <Link
+                    href={`/blog?category=${post.category_slug}`}
+                    className="text-accent hover:underline"
+                  >
+                    {post.category_name}
+                  </Link>
+                </>
+              ) : null}
+              {post.author_name ? (
+                <>
+                  <span>·</span>
+                  <span>{post.author_name}</span>
+                </>
+              ) : null}
+              {post.reading_time_minutes ? (
+                <>
+                  <span>·</span>
+                  <span>{post.reading_time_minutes} мин. четене</span>
+                </>
+              ) : null}
+            </div>
+
             <h1 className="mt-3 font-heading text-4xl text-primary md:text-5xl">
               {post.title}
             </h1>

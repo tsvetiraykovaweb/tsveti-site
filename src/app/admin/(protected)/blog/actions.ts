@@ -54,6 +54,31 @@ function resolvePublishedAt(values: BlogPostFormValues, current?: string | null)
   return manual || current || null;
 }
 
+function parseReadingTime(value: string): number | null {
+  const n = parseInt(value, 10);
+  return Number.isNaN(n) || n < 0 ? null : n;
+}
+
+function buildRow(values: BlogPostFormValues, userId: string | null, publishedAt: string | null) {
+  return {
+    title: values.title.trim(),
+    slug: values.slug.trim(),
+    excerpt: values.excerpt.trim() || null,
+    content: values.content.trim(),
+    featured_image_path: values.featured_image_path.trim() || null,
+    status: values.status,
+    published_at: publishedAt,
+    seo_title: values.seo_title.trim() || null,
+    seo_description: values.seo_description.trim() || null,
+    category_id: values.category_id.trim() || null,
+    author_name: values.author_name.trim() || null,
+    reading_time_minutes: parseReadingTime(values.reading_time_minutes),
+    is_featured: values.is_featured,
+    is_popular: values.is_popular,
+    updated_by: userId,
+  };
+}
+
 export async function createBlogPost(
   values: BlogPostFormValues,
 ): Promise<SaveBlogPostResult> {
@@ -67,18 +92,7 @@ export async function createBlogPost(
 
   const { data, error } = await gate.supabase
     .from("blog_posts")
-    .insert({
-      title: values.title.trim(),
-      slug: values.slug.trim(),
-      excerpt: values.excerpt.trim() || null,
-      content: values.content.trim(),
-      featured_image_path: values.featured_image_path.trim() || null,
-      status: values.status,
-      published_at: resolvePublishedAt(values),
-      seo_title: values.seo_title.trim() || null,
-      seo_description: values.seo_description.trim() || null,
-      updated_by: gate.userId,
-    })
+    .insert(buildRow(values, gate.userId, resolvePublishedAt(values)))
     .select("id")
     .single();
 
@@ -118,18 +132,7 @@ export async function updateBlogPost(
 
   const { error } = await gate.supabase
     .from("blog_posts")
-    .update({
-      title: values.title.trim(),
-      slug: values.slug.trim(),
-      excerpt: values.excerpt.trim() || null,
-      content: values.content.trim(),
-      featured_image_path: values.featured_image_path.trim() || null,
-      status: values.status,
-      published_at: resolvePublishedAt(values, existing.published_at),
-      seo_title: values.seo_title.trim() || null,
-      seo_description: values.seo_description.trim() || null,
-      updated_by: gate.userId,
-    })
+    .update(buildRow(values, gate.userId, resolvePublishedAt(values, existing.published_at)))
     .eq("id", id);
 
   if (error) {

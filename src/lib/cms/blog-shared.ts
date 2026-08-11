@@ -1,5 +1,13 @@
 export type BlogStatus = "draft" | "published";
 
+export type BlogCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  sort_order: number;
+};
+
 export type BlogPostListItem = {
   id: string;
   title: string;
@@ -11,6 +19,13 @@ export type BlogPostListItem = {
   created_at: string;
   seo_title: string | null;
   seo_description: string | null;
+  category_id: string | null;
+  author_name: string | null;
+  reading_time_minutes: number | null;
+  is_featured: boolean;
+  is_popular: boolean;
+  category_name?: string | null;
+  category_slug?: string | null;
 };
 
 export type BlogPostFormValues = {
@@ -23,6 +38,11 @@ export type BlogPostFormValues = {
   published_at: string;
   seo_title: string;
   seo_description: string;
+  category_id: string;
+  author_name: string;
+  reading_time_minutes: string;
+  is_featured: boolean;
+  is_popular: boolean;
 };
 
 export const EMPTY_BLOG_POST_VALUES: BlogPostFormValues = {
@@ -35,6 +55,11 @@ export const EMPTY_BLOG_POST_VALUES: BlogPostFormValues = {
   published_at: "",
   seo_title: "",
   seo_description: "",
+  category_id: "",
+  author_name: "",
+  reading_time_minutes: "",
+  is_featured: false,
+  is_popular: false,
 };
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

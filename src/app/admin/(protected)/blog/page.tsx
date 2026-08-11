@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import type { BlogPostListItem } from "@/lib/cms/blog";
 
 function formatDate(date: string | null) {
   if (!date) return "—";
@@ -16,12 +15,24 @@ export default async function AdminBlogPage() {
   const { data, error } = await supabase
     .from("blog_posts")
     .select(
-      "id, title, slug, excerpt, featured_image_path, status, published_at, created_at, seo_title, seo_description",
+      "id, title, slug, excerpt, status, published_at, created_at, is_featured, is_popular, author_name, blog_categories ( name )",
     )
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
-  const posts = (data ?? []) as BlogPostListItem[];
+  const posts = (data ?? []) as {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    status: string;
+    published_at: string | null;
+    created_at: string;
+    is_featured: boolean;
+    is_popular: boolean;
+    author_name: string | null;
+    blog_categories: { name: string } | null;
+  }[];
 
   return (
     <section>
@@ -32,12 +43,20 @@ export default async function AdminBlogPage() {
         >
           ← Табло
         </Link>
-        <Link
-          href="/admin/blog/new"
-          className="bg-primary px-4 py-2 text-sm font-medium text-sage hover:opacity-90"
-        >
-          Нова статия
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/admin/blog/categories"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-text hover:border-primary hover:text-primary"
+          >
+            Категории
+          </Link>
+          <Link
+            href="/admin/blog/new"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-sage hover:opacity-90"
+          >
+            Нова статия
+          </Link>
+        </div>
       </div>
 
       <h1 className="font-heading text-3xl text-primary">Блог</h1>
@@ -46,32 +65,50 @@ export default async function AdminBlogPage() {
       </p>
 
       {error ? (
-        <p className="mt-6 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p className="mt-6 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
           Грешка при зареждане: {error.message}
         </p>
       ) : null}
 
       {!error && posts.length === 0 ? (
-        <div className="mt-8 rounded border border-border bg-bg px-4 py-5 text-sm text-text-muted">
+        <div className="mt-8 rounded-2xl border border-border bg-bg px-6 py-8 text-center text-sm text-text-muted">
           Няма blog статии. Създайте първа чернова.
         </div>
       ) : null}
 
       {posts.length > 0 ? (
-        <ul className="mt-8 divide-y divide-border border border-border bg-bg">
+        <div className="mt-8 space-y-3">
           {posts.map((post) => (
-            <li
+            <div
               key={post.id}
-              className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-start sm:justify-between"
+              className="flex flex-col gap-3 rounded-2xl border border-border bg-bg p-5 sm:flex-row sm:items-start sm:justify-between"
             >
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-primary">{post.title}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-heading text-lg text-primary">{post.title}</p>
+                  {post.is_featured ? (
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                      Препоръчана
+                    </span>
+                  ) : null}
+                  {post.is_popular ? (
+                    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+                      Популярна
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-1 text-sm text-text-muted">
                   <span className="font-mono text-xs">{post.slug}</span>
                   {" · "}
                   {post.status === "published" ? "Публикувана" : "Чернова"}
                   {" · "}
                   {formatDate(post.published_at || post.created_at)}
+                  {post.blog_categories?.name ? (
+                    <> · {post.blog_categories.name}</>
+                  ) : null}
+                  {post.author_name ? (
+                    <> · {post.author_name}</>
+                  ) : null}
                 </p>
                 {post.excerpt ? (
                   <p className="mt-2 line-clamp-2 text-sm text-text-muted">
@@ -85,9 +122,9 @@ export default async function AdminBlogPage() {
               >
                 Редактирай
               </Link>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : null}
     </section>
   );

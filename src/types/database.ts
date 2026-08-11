@@ -177,6 +177,27 @@ export type Database = {
         };
         Update: Partial<Database["public"]["Tables"]["services"]["Insert"]>;
       };
+      blog_categories: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          description?: string | null;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["blog_categories"]["Insert"]>;
+      };
       blog_posts: {
         Row: {
           id: string;
@@ -189,6 +210,11 @@ export type Database = {
           published_at: string | null;
           seo_title: string | null;
           seo_description: string | null;
+          category_id: string | null;
+          author_name: string | null;
+          reading_time_minutes: number | null;
+          is_featured: boolean;
+          is_popular: boolean;
           created_at: string;
           updated_at: string;
           updated_by: string | null;
@@ -204,6 +230,11 @@ export type Database = {
           published_at?: string | null;
           seo_title?: string | null;
           seo_description?: string | null;
+          category_id?: string | null;
+          author_name?: string | null;
+          reading_time_minutes?: number | null;
+          is_featured?: boolean;
+          is_popular?: boolean;
           created_at?: string;
           updated_at?: string;
           updated_by?: string | null;

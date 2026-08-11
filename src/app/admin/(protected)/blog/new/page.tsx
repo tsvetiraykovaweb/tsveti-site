@@ -1,8 +1,29 @@
 import Link from "next/link";
-import { EMPTY_BLOG_POST_VALUES } from "@/lib/cms/blog-shared";
+import { createClient } from "@/lib/supabase/server";
+import { EMPTY_BLOG_POST_VALUES, type BlogCategory } from "@/lib/cms/blog-shared";
 import { BlogForm } from "../blog-form";
 
-export default function AdminBlogNewPage() {
+export default async function AdminBlogNewPage() {
+  const supabase = await createClient();
+  const [catRes, mediaRes] = await Promise.all([
+    supabase
+      .from("blog_categories")
+      .select("id, name, slug, description, sort_order")
+      .order("sort_order")
+      .order("name"),
+    supabase
+      .from("media_assets")
+      .select("id, path, alt_text")
+      .order("created_at", { ascending: false })
+      .limit(50),
+  ]);
+
+  const categories = (catRes.data ?? []) as BlogCategory[];
+  const mediaOptions = (mediaRes.data ?? []).map((row) => ({
+    path: row.path as string,
+    label: `${(row.alt_text as string | null) || "Без alt"} · ${row.path}`,
+  }));
+
   return (
     <section>
       <div className="mb-2">
@@ -17,7 +38,12 @@ export default function AdminBlogNewPage() {
       <p className="mt-2 text-text-muted">
         Създай чернова или публикувана статия с markdown съдържание.
       </p>
-      <BlogForm mode="create" initialValues={EMPTY_BLOG_POST_VALUES} />
+      <BlogForm
+        mode="create"
+        initialValues={EMPTY_BLOG_POST_VALUES}
+        categories={categories}
+        mediaOptions={mediaOptions}
+      />
     </section>
   );
 }
