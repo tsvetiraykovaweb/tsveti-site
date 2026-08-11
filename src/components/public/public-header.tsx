@@ -30,8 +30,8 @@ export function PublicHeader({
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary/10 bg-bg/85 backdrop-blur-xl">
-      <PublicContainer className="flex items-center justify-between gap-4 py-5">
-        <div className="flex min-w-0 items-center gap-3">
+      <PublicContainer className="flex items-center justify-between gap-3 py-4 md:gap-4 md:py-5">
+        <div className="flex min-w-0 flex-1 items-center gap-3">
           <Link
             href="/"
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-primary/20 text-primary"
@@ -39,14 +39,16 @@ export function PublicHeader({
           >
             <span className="font-heading text-2xl leading-none">Ц</span>
           </Link>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <Link
               href="/"
-              className="font-heading text-2xl leading-none text-primary"
+              className="block truncate font-heading text-xl leading-none text-primary sm:text-2xl"
             >
               {displayName}
             </Link>
-            <p className="truncate text-xs text-text-muted">{officialName}</p>
+            <p className="hidden truncate text-xs text-text-muted sm:block">
+              {officialName}
+            </p>
           </div>
         </div>
 
@@ -65,13 +67,13 @@ export function PublicHeader({
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <CtaLink href={ctaHref} className="hidden lg:inline-flex">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <CtaLink href={ctaHref} className="hidden xl:inline-flex">
             {HEADER_CTA_LABEL}
           </CtaLink>
           <button
             type="button"
-            className="inline-flex items-center rounded-full border border-primary/20 px-4 py-2 text-sm font-medium text-primary xl:hidden"
+            className="inline-flex h-10 shrink-0 items-center justify-center rounded-full border border-primary/20 px-4 text-sm font-medium text-primary xl:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}

@@ -34,8 +34,8 @@ export function ServicesSubnav({ services }: Props) {
   return (
     <div className="border-t border-primary/10 bg-[#f8f3eb]/95 shadow-[0_4px_16px_-12px_rgba(45,58,42,0.35)]">
       <PublicContainer className="py-2.5 md:py-3">
-        <nav aria-label="Навигация услуги" className="min-w-0">
-          <ul className="flex justify-center gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] md:flex-wrap md:justify-center [&::-webkit-scrollbar]:hidden">
+        <nav aria-label="Навигация услуги" className="min-w-0 overflow-x-auto scroll-px-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="flex min-w-max justify-start gap-2 px-0 pb-0.5 md:min-w-0 md:flex-wrap md:justify-center">
             {items.map((item) => {
               const isActive = activeSlug === item.slug;
               return (

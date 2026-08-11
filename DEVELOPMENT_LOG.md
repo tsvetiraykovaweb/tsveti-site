@@ -35,6 +35,26 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-11 — Mobile header/subnav layout polish
+
+**Status:** Mobile header no longer tries to fit the CTA in the top row. Services subnav scrolls cleanly without clipped first/last pills.
+
+### Changes
+- Top mobile row now keeps only brand/logo at left and `Меню` at right
+- CTA `Запази консултация` stays desktop-only in the top row and remains inside the opened mobile menu
+- Brand area uses safer `min-w-0` / `flex-1`; display name stays visible, subtitle is hidden on small screens instead of being aggressively truncated
+- Services subnav keeps its own row under the header with `overflow-x-auto`, `min-w-max`, `justify-start` on mobile and centered pills on desktop
+
+### Files
+- `src/components/public/public-header.tsx`
+- `src/components/public/services-subnav.tsx`
+- `DEVELOPMENT_LOG.md`
+
+### Commands
+- Build not run (per task). Lint optional.
+
+---
+
 ## 2026-08-11 — Persistent two-tier public navigation
 
 **Status:** Services subnav is now always visible under the main header on all public pages (not only `/uslugi`). Active service pill derives from URL via `usePathname`.
