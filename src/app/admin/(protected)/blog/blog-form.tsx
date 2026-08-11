@@ -2,8 +2,8 @@
 
 import { FormEvent, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import type { BlogPostFormValues } from "@/lib/cms/blog";
-import { normalizeBlogSlug } from "@/lib/cms/blog";
+import type { BlogPostFormValues } from "@/lib/cms/blog-shared";
+import { normalizeBlogSlug } from "@/lib/cms/blog-shared";
 import { createBlogPost, updateBlogPost } from "./actions";
 
 type Props = {

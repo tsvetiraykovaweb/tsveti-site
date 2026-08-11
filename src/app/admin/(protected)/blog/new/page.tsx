@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EMPTY_BLOG_POST_VALUES } from "@/lib/cms/blog";
+import { EMPTY_BLOG_POST_VALUES } from "@/lib/cms/blog-shared";
 import { BlogForm } from "../blog-form";
 
 export default function AdminBlogNewPage() {
