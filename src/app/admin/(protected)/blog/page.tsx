@@ -20,19 +20,33 @@ export default async function AdminBlogPage() {
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
-  const posts = (data ?? []) as {
-    id: string;
-    title: string;
-    slug: string;
-    excerpt: string | null;
-    status: string;
-    published_at: string | null;
-    created_at: string;
-    is_featured: boolean;
-    is_popular: boolean;
-    author_name: string | null;
-    blog_categories: { name: string } | null;
-  }[];
+  function resolveCategoryName(
+    value: { name: string } | { name: string }[] | null | undefined,
+  ): string | null {
+    if (!value) return null;
+    if (Array.isArray(value)) return value[0]?.name ?? null;
+    return value.name ?? null;
+  }
+
+  const posts = (data ?? []).map((row) => ({
+    id: row.id as string,
+    title: row.title as string,
+    slug: row.slug as string,
+    excerpt: (row.excerpt as string | null) ?? null,
+    status: row.status as string,
+    published_at: (row.published_at as string | null) ?? null,
+    created_at: row.created_at as string,
+    is_featured: Boolean(row.is_featured),
+    is_popular: Boolean(row.is_popular),
+    author_name: (row.author_name as string | null) ?? null,
+    category_name: resolveCategoryName(
+      row.blog_categories as
+        | { name: string }
+        | { name: string }[]
+        | null
+        | undefined,
+    ),
+  }));
 
   return (
     <section>
@@ -103,8 +117,8 @@ export default async function AdminBlogPage() {
                   {post.status === "published" ? "Публикувана" : "Чернова"}
                   {" · "}
                   {formatDate(post.published_at || post.created_at)}
-                  {post.blog_categories?.name ? (
-                    <> · {post.blog_categories.name}</>
+                  {post.category_name ? (
+                    <> · {post.category_name}</>
                   ) : null}
                   {post.author_name ? (
                     <> · {post.author_name}</>
