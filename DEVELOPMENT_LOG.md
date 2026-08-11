@@ -5,6 +5,36 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-11 — Public nav: single «Услуги» + secondary services subnav
+
+**Status:** Main header no longer lists each service as a top-level link. One «Услуги» tab → `/uslugi`. Individual services appear in a secondary horizontal nav on `/uslugi` and `/uslugi/[slug]` (no dropdown).
+
+### Navigation
+- Main nav: Начало, Услуги (`/uslugi`), За Цвети, Въпроси, Контакти (+ CTA)
+- Secondary `ServicesSubnav`: published services by `sort_order`, short labels via `NAV_SERVICE_LABELS` (fallback: CMS title)
+- Active service marked with `aria-current="page"` + distinct border/fill (not color-only)
+- Mobile: horizontal scroll, no layout overflow; empty list → no render
+- Homepage services cards unchanged; `#uslugi` anchor kept for in-page CTA
+
+### Files
+- `src/lib/cms/public-nav.ts`
+- `src/lib/cms/public-content.ts`
+- `src/components/public/services-subnav.tsx`
+- `src/app/uslugi/page.tsx`, `src/app/uslugi/[slug]/page.tsx`
+- `docs/launch-checklist.md`, `DEVELOPMENT_LOG.md`
+
+### Commands
+- `npm.cmd run lint` — pass
+- `npm.cmd run build` — pass
+
+### Manual checks
+1. Header shows one «Услуги», not four service links
+2. `/uslugi` and `/uslugi/[slug]` show secondary nav; active slug highlighted
+3. Mobile menu stays short; subnav scrolls horizontally
+4. Public URLs remain `/uslugi/...`
+
+---
+
 ## 2026-08-10 — Homepage visual redesign toward premium holistic reference
 
 **Status:** Homepage now follows the supplied visual direction: warm light background, sage/olive accents, large serif hero, CMS-driven image slots, benefit strip, approach collage, refined service cards, and final green CTA band.

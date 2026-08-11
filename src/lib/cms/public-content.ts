@@ -131,22 +131,15 @@ export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
       social: { instagram: "", facebook: "" },
       ctaLabel,
       ctaHref,
-      navItems: buildPublicNavItems([]),
+      navItems: buildPublicNavItems(),
     };
   }
 
   const supabase = await createClient();
-  const [settingsRes, servicesRes] = await Promise.all([
-    supabase
-      .from("site_settings")
-      .select("key, value")
-      .in("key", [...SITE_SETTING_KEYS]),
-    supabase
-      .from("services")
-      .select("slug, title, sort_order")
-      .eq("status", "published")
-      .order("sort_order", { ascending: true }),
-  ]);
+  const settingsRes = await supabase
+    .from("site_settings")
+    .select("key, value")
+    .in("key", [...SITE_SETTING_KEYS]);
 
   const settings =
     !settingsRes.error && settingsRes.data && settingsRes.data.length > 0
@@ -158,9 +151,6 @@ export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
     settings.primary_cta_url,
   );
 
-  const navServices =
-    !servicesRes.error && servicesRes.data ? servicesRes.data : [];
-
   return {
     settings,
     social: {
@@ -169,7 +159,7 @@ export async function getPublicSiteChrome(): Promise<PublicSiteChrome> {
     },
     ctaLabel,
     ctaHref,
-    navItems: buildPublicNavItems(navServices),
+    navItems: buildPublicNavItems(),
   };
 }
 
@@ -325,7 +315,7 @@ export async function getPublicHomeContent(): Promise<PublicHomeContent> {
       faqs: [],
       testimonials: [],
       home: homeFallback,
-      navItems: buildPublicNavItems([]),
+      navItems: buildPublicNavItems(),
       ctaLabel: DEFAULT_CTA_LABEL,
       ctaHref: DEFAULT_CTA_HREF,
       usedFallbacks: true,
@@ -461,7 +451,7 @@ export async function getPublicHomeContent(): Promise<PublicHomeContent> {
     faqs,
     testimonials,
     home,
-    navItems: buildPublicNavItems(services),
+    navItems: buildPublicNavItems(),
     ctaLabel,
     ctaHref,
     usedFallbacks,

@@ -36,7 +36,7 @@
 - [ ] `/` homepage (hero/about image slots + fallbacks; FAQ/отзиви секции само ако има съдържание)
 - [ ] `/uslugi` and `/uslugi/[slug]` (BG URLs, not `/services`)
 - [ ] `/za-cveti`, `/kontakti`, `/bezplatna-konsultatsia`, `/politika-za-poveritelnost`
-- [ ] Flat nav: separate service items, no dropdown
+- [ ] Main nav: single «Услуги» → `/uslugi`; secondary services nav on `/uslugi` and `/uslugi/[slug]` (no dropdown)
 - [ ] Consultation form validates + inserts into `consultation_requests`
 - [ ] Consultation consent links to privacy policy
 - [ ] Form still succeeds if Resend env is missing
