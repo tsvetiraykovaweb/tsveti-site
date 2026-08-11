@@ -23,7 +23,9 @@ export function CmsImageSlot({
 }: Props) {
   if (image.src) {
     return (
-      <figure className={`relative overflow-hidden ${aspectClassName} ${className}`}>
+      <figure
+        className={`relative overflow-hidden rounded-[2rem] ${aspectClassName} ${className}`}
+      >
         <Image
           src={image.src}
           alt={image.alt}
@@ -41,11 +43,13 @@ export function CmsImageSlot({
 
   return (
     <div
-      className={`flex items-end border border-border bg-gradient-to-br from-bg-secondary to-sage/40 p-5 ${aspectClassName} ${className}`}
+      className={`relative flex items-end overflow-hidden rounded-[2rem] border border-primary/10 bg-gradient-to-br from-bg-secondary via-bg to-sage/60 p-6 shadow-[0_24px_70px_rgba(47,71,55,0.08)] ${aspectClassName} ${className}`}
       role="img"
       aria-label={image.alt}
     >
-      <p className="max-w-xs text-sm text-text-muted">
+      <span className="absolute -right-10 -top-10 h-36 w-36 rounded-full border border-primary/10" />
+      <span className="absolute bottom-8 right-10 h-20 w-20 rounded-full bg-primary/10" />
+      <p className="relative max-w-xs text-sm leading-relaxed text-text-muted">
         Визуалът ще бъде добавен от админ панела.
       </p>
     </div>

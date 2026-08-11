@@ -4,10 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { PublicContainer } from "./public-container";
 import { CtaLink } from "./cta-link";
-import {
-  HEADER_CTA_LABEL,
-  type PublicNavItem,
-} from "@/lib/cms/public-nav";
+import { HEADER_CTA_LABEL, type PublicNavItem } from "@/lib/cms/public-nav";
 
 type Props = {
   displayName: string;
@@ -25,24 +22,36 @@ export function PublicHeader({
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-b border-border/80 bg-bg/90 backdrop-blur-sm">
-      <PublicContainer className="flex items-center justify-between gap-4 py-4">
-        <div className="min-w-0">
-          <Link href="/" className="font-heading text-2xl text-primary">
-            {displayName}
+    <header className="sticky top-0 z-40 border-b border-primary/10 bg-bg/85 backdrop-blur-xl">
+      <PublicContainer className="flex items-center justify-between gap-4 py-5">
+        <div className="flex min-w-0 items-center gap-3">
+          <Link
+            href="/"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-primary/20 text-primary"
+            aria-label={displayName}
+          >
+            <span className="font-heading text-2xl leading-none">Ц</span>
           </Link>
-          <p className="truncate text-xs text-text-muted">{officialName}</p>
+          <div className="min-w-0">
+            <Link
+              href="/"
+              className="font-heading text-2xl leading-none text-primary"
+            >
+              {displayName}
+            </Link>
+            <p className="truncate text-xs text-text-muted">{officialName}</p>
+          </div>
         </div>
 
         <nav
-          className="hidden items-center gap-x-4 gap-y-1 text-sm text-text-muted xl:flex"
+          className="hidden items-center gap-x-6 gap-y-1 text-sm font-medium text-text-muted xl:flex"
           aria-label="Основна навигация"
         >
           {navItems.map((item) => (
             <Link
               key={`${item.href}-${item.label}`}
               href={item.href}
-              className="whitespace-nowrap hover:text-primary"
+              className="whitespace-nowrap transition-colors hover:text-primary"
             >
               {item.label}
             </Link>
@@ -55,7 +64,7 @@ export function PublicHeader({
           </CtaLink>
           <button
             type="button"
-            className="inline-flex items-center border border-border px-3 py-2 text-sm text-primary xl:hidden"
+            className="inline-flex items-center rounded-full border border-primary/20 px-4 py-2 text-sm font-medium text-primary xl:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
@@ -66,16 +75,13 @@ export function PublicHeader({
       </PublicContainer>
 
       {open ? (
-        <div
-          id="mobile-nav"
-          className="border-t border-border bg-bg xl:hidden"
-        >
+        <div id="mobile-nav" className="border-t border-primary/10 bg-bg xl:hidden">
           <PublicContainer className="flex flex-col gap-1 py-4">
             {navItems.map((item) => (
               <Link
                 key={`m-${item.href}-${item.label}`}
                 href={item.href}
-                className="py-2 text-sm text-text-muted hover:text-primary"
+                className="rounded-full px-3 py-2 text-sm text-text-muted hover:bg-sage/60 hover:text-primary"
                 onClick={() => setOpen(false)}
               >
                 {item.label}

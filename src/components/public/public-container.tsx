@@ -14,7 +14,7 @@ export function PublicContainer({
   id,
 }: Props) {
   return (
-    <Tag id={id} className={`mx-auto w-full max-w-5xl px-6 ${className}`}>
+    <Tag id={id} className={`mx-auto w-full max-w-7xl px-6 ${className}`}>
       {children}
     </Tag>
   );

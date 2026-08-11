@@ -5,6 +5,39 @@ Shared project memory for Cursor / Codex / developers.
 
 ---
 
+## 2026-08-10 — Homepage visual redesign toward premium holistic reference
+
+**Status:** Homepage now follows the supplied visual direction: warm light background, sage/olive accents, large serif hero, CMS-driven image slots, benefit strip, approach collage, refined service cards, and final green CTA band.
+
+### Done
+- Redesigned `/` with a large first-viewport hero: text/CTA on the left, admin-managed hero image slot on the right.
+- Preserved CMS data loading for hero copy, intro copy, services, FAQ, testimonials, site settings, and CTA.
+- Kept image handling admin-driven: no hardcoded local/stock images; hero/about/service images still come from CMS/media paths.
+- Improved empty image placeholders so future admin-uploaded photos have intentional reserved visual space.
+- Added a benefit strip under hero, a calmer approach section with collage-style image slots, a 4-column services section, and a final green CTA band.
+- Refined public header, CTA buttons, public container width, and service cards to better match the reference style.
+
+### Files
+- `src/app/page.tsx`
+- `src/components/public/public-header.tsx`
+- `src/components/public/cta-link.tsx`
+- `src/components/public/cms-image-slot.tsx`
+- `src/components/public/service-card.tsx`
+- `src/components/public/public-container.tsx`
+
+### Commands
+- `npm.cmd run lint` — pass
+- `npm.cmd run build` — pass
+- Safety scan in `src` for old name / medical-claim phrases — clean
+
+### Manual checks
+1. Open the homepage on desktop and mobile.
+2. Upload/set the hero and about images via `/admin/pages` → `home`.
+3. Optionally set images per service via `/admin/services`.
+4. Confirm the design still feels balanced after real photos are added.
+
+---
+
 ## 2026-08-10 — Supabase heartbeat cron (3×/week)
 
 **Status:** Vercel cron + protected API route upserts `maintenance_heartbeats` via service role; admin readiness shows cron/heartbeat status.
